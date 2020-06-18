@@ -1,11 +1,9 @@
 module.exports = {
-
     //部署应用程序的基本URL
     publicPath: "/",
 
     //npm run build时 生成文件的目录
     outputDir: "dist",
-
 
     pages: {
         index: {
@@ -13,6 +11,7 @@ module.exports = {
             title: "devtools"
         }
     },
+
     //是否使用eslint
     lintOnSave: true,
 
@@ -23,6 +22,20 @@ module.exports = {
         // port: 8080, // 端口号
         // host: 'localhost',
         // https: false,
-        open: true, //配置自动启动浏览器
+        open: true //配置自动启动浏览器
+    },
+
+    //rem自动转换
+    css: {
+        loaderOptions: {
+            postcss: {
+                plugins: [
+                    require("postcss-px2rem")({
+                        remUnit: 192,
+                        propList: ["*"]
+                    })
+                ]
+            }
+        }
     }
-}
+};

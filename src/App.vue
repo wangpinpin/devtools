@@ -6,3 +6,11 @@
     <router-view />
   </div>
 </template>
+
+<style scoped lang="less">
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+</style>

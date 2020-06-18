@@ -1,7 +1,10 @@
 <template>
   <div class="home">
-    <Header/>
+    <Header />
 
+    <div class="container">
+      <el-button>默认按钮</el-button>
+    </div>
 
     <Footer />
   </div>
