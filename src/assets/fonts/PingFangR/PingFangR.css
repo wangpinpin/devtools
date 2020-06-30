@@ -1,0 +1,11 @@
+@font-face {
+    font-family: "PingFangSC-Regular";
+    src: url("PingFangR.eot"); /* IE9 */
+    src: url("PingFangR.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("PingFangR.woff") format("woff"), /* chrome, firefox */
+    url("PingFangR.ttf") format("truetype"); /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+    font-style: normal;
+    font-weight: normal;
+}
+
+
