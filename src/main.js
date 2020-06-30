@@ -5,17 +5,19 @@ import store from "./store";
 
 //rem转换插件
 import "amfe-flexible";
-
 //完整引入element组件库
 // import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
 // Vue.use(ElementUI);
 
 //按需引入element组件库
-import { Button, Select } from "element-ui";
+import { Button, Select, Loading } from "element-ui";
 
 Vue.use(Button);
 Vue.use(Select);
+// Vue.use(Loading.directive);
+
+Vue.prototype.$loading = Loading;
 
 //阻止启动生产消息
 Vue.config.productionTip = false;
