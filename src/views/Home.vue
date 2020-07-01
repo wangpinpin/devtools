@@ -2,7 +2,7 @@
   <div class="home">
     <Header />
 
-    <div class="container">
+    <div class="home-container">
       <div class="content">
         <div class="slogan">
           <!-- title -->
@@ -27,8 +27,9 @@
             v-for="(bgf, index) in devBackgroundFamily"
             :key="index"
             :style="bgf"
+            @click="go(devText[index].path)"
           >
-            {{ devText[index] }}
+            {{ devText[index].text }}
           </div>
         </div>
       </div>
@@ -67,16 +68,16 @@ export default {
         "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
       ],
       devText: [
-        "JSON格式化",
-        "JSON格式化",
-        "JSON格式化",
-        "JSON格式化",
-        "JSON格式化",
-        "JSON格式化",
-        "JSON格式化",
-        "JSON格式化",
-        "JSON格式化",
-        "JSON格式化",
+        { path: "/unauth/Json", text: "JSON格式化" },
+        { path: "/unauth/Json", text: "JSON格式化" },
+        { path: "/unauth/Json", text: "JSON格式化" },
+        { path: "/unauth/Json", text: "JSON格式化" },
+        { path: "/unauth/Json", text: "JSON格式化" },
+        { path: "/unauth/Json", text: "JSON格式化" },
+        { path: "/unauth/Json", text: "JSON格式化" },
+        { path: "/unauth/Json", text: "JSON格式化" },
+        { path: "/unauth/Json", text: "JSON格式化" },
+        { path: "/unauth/Json", text: "JSON格式化" },
       ],
     };
   },
@@ -94,6 +95,13 @@ export default {
     this.inputAnimation();
   },
   methods: {
+    
+    //路由跳转
+    go(path) {
+      this.$router.push(path)
+    },
+
+    //模拟鼠标光标动画
     inputAnimation() {
       const _this = this;
       setInterval(function() {
@@ -109,7 +117,7 @@ export default {
 };
 </script>
 <style scoped lang="less">
-.container {
+.home-container {
   margin: 40px auto 0;
   text-align: center;
   color: #ffffff;

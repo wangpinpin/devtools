@@ -11,11 +11,11 @@ import "amfe-flexible";
 // Vue.use(ElementUI);
 
 //按需引入element组件库
-import { Button, Select, Loading } from "element-ui";
+import { Button, Select, Loading, Input } from "element-ui";
 
 Vue.use(Button);
 Vue.use(Select);
-// Vue.use(Loading.directive);
+Vue.use(Input);
 
 Vue.prototype.$loading = Loading;
 

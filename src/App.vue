@@ -9,7 +9,7 @@
 
 <style lang="less">
 @import "./assets/fonts/PingFangR/PingFangR.css";
-
+@import "./assets/css/global.css";
 html,
 body {
   margin: 0;
