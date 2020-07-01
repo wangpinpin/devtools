@@ -12,8 +12,11 @@
         </el-input>
       </div>
       <div class="right">
-        <json-view :data="jsonData" />
-        <div class="inputInfo" v-show="inputInfoshow">{{inputMsg}}</div>
+        <json-view :data="jsonData" v-show="!errorInfoShow" />
+        <div class="inputInfo" v-show="errorInfoShow">
+          <p>{{ inputMsg }}</p>
+          <i class="iconfont" v-show="errorInfoShow && iconShow">&#xe729;</i>
+        </div>
       </div>
     </div>
     <Footer />
@@ -22,18 +25,31 @@
 <script>
 import jsonView from "@/components/jsonView";
 import Footer from "@/components/Footer.vue";
-import Vue from 'vue'
+import Vue from "vue";
+var _this;
 
-Vue.config.errorHandler = function(err, vm, info) {
-  const errorMsg = "Unexpected string in JSON at position ";
-  if(err.message.startsWith(errorMsg)) {
-    const errorIndex = err.message.substr(errorMsg.length, 4)
-    this.inputMsg = vm.$options.propsData.value.substr(errorIndex - 10, errorIndex + 10)
+//异常拦截处理
+Vue.config.errorHandler = (err, vm, info) => {
+  const position = "position";
+  const positionIndex = err.message.indexOf(position);
+  if (positionIndex != -1) {
+    const errorIndex = err.message.substr(positionIndex + position.length + 1);
 
+    //正则匹配前后{}
+    const regex =
+      "\\{((?!\\{|\\}).)*" +
+      _this.inputData.substr(errorIndex - 1, 3) +
+      "((?!\\}).)*\\}";
+    _this.inputMsg = _this.inputData.match(regex) ? _this.inputData.match(regex) : _this.inputData.substr(errorIndex - 1, 3);
   }
-  console.log(err)
-}
-
+  _this.errorInfoShow = true;
+  _this.iconShow = true;
+};
+Vue.config.warnHandler = (err, vm, info) => {
+  _this.inputMsg = err;
+  _this.errorInfoShow = true;
+  _this.iconShow = true;
+};
 export default {
   name: "Json",
   components: {
@@ -44,15 +60,24 @@ export default {
     return {
       inputData: null,
       jsonData: {},
-      inputInfoshow: true,
-      inputMsg: ""
+      errorInfoShow: true,
+      iconShow: false,
+      inputMsg: "",
     };
   },
-  created() {},
+  created() {
+    _this = this;
+  },
   methods: {
     jsonformat(val) {
+      console.log(1)
+      if(!val) {
+        return;
+      }
       this.jsonData = JSON.parse(val);
-      this.inputInfoshow = false
+      this.errorInfoShow = false;
+      this.iconShow = false;
+
     },
   },
 };
@@ -91,11 +116,24 @@ export default {
     .right {
       overflow: auto;
       .inputInfo {
-        width: 100%;
+        width: 90%;
         height: 100%;
         position: absolute;
         top: 0;
         background: #fff;
+        letter-spacing: 1.5px;
+        margin: 5%;
+      }
+      p {
+        color: red;
+        font-size: 0.119792rem;
+        margin-top: 4%;
+        word-break: break-all;
+      }
+      i {
+        color: #088d13;
+        margin-left: 77px;
+        font-size: 40px;
       }
     }
   }
