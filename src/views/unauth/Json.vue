@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <div class="title">{{ title }}</div>
     <div class="content">
       <div class="left">
         <el-input
@@ -14,8 +15,8 @@
       <div class="right">
         <json-view :data="jsonData" v-show="!errorInfoShow" />
         <div class="inputInfo" v-show="errorInfoShow">
-          <p>{{ inputMsg }}</p>
-          <i class="iconfont" v-show="errorInfoShow && iconShow">&#xe729;</i>
+          <p class="errorColor">{{errorDesc}}</p>
+          <p v-html="inputMsg"></p>
         </div>
       </div>
     </div>
@@ -33,23 +34,40 @@ Vue.config.errorHandler = (err, vm, info) => {
   const position = "position";
   const positionIndex = err.message.indexOf(position);
   if (positionIndex != -1) {
+    //js报错位置
     const errorIndex = err.message.substr(positionIndex + position.length + 1);
-
+    _this.errorDesc = `在第${errorIndex}位置发生解析错误`
+    //报错文字
+    const errorText = _this.inputData.substr(errorIndex - 1, 3);
     //正则匹配前后{}
-    const regex =
-      "\\{((?!\\{|\\}).)*" +
-      _this.inputData.substr(errorIndex - 1, 3) +
-      "((?!\\}).)*\\}";
-    _this.inputMsg = _this.inputData.match(regex) ? _this.inputData.match(regex) : _this.inputData.substr(errorIndex - 1, 3);
+    const regex = "\\{((?!\\{|\\}).)*" + errorText + "((?!\\}).)*\\}";
+
+    let inputMsg;
+    if (_this.inputData.match(regex)) {
+      inputMsg = _this.inputData.match(regex)[0];
+      inputMsg = inputMsg.replace(
+        errorText,
+        `<span class="errorColor weight">${errorText}</span>`
+      );
+    } else {
+      inputMsg = `<div class="errorColor">${_this.inputData}</div>`;
+    }
+
+    //高亮显示
+    _this.inputMsg = inputMsg;
+    _this.jsonData = {};
   }
   _this.errorInfoShow = true;
-  _this.iconShow = true;
 };
+
 Vue.config.warnHandler = (err, vm, info) => {
-  _this.inputMsg = err;
+  _this.inputMsg = `<p class="errorColor">${err}</p>`;
+  _this.jsonData = {};
+
   _this.errorInfoShow = true;
-  _this.iconShow = true;
 };
+
+
 export default {
   name: "Json",
   components: {
@@ -58,11 +76,12 @@ export default {
   },
   data() {
     return {
+      title: "JSON格式化",
       inputData: null,
       jsonData: {},
       errorInfoShow: true,
-      iconShow: false,
       inputMsg: "",
+      errorDesc: "",
     };
   },
   created() {
@@ -70,25 +89,30 @@ export default {
   },
   methods: {
     jsonformat(val) {
-      console.log(1)
-      if(!val) {
+      if (!val) {
         return;
       }
-      this.jsonData = JSON.parse(val);
+      this.jsonData = JSON.parse(val.replace(/\\/g, ""));
       this.errorInfoShow = false;
-      this.iconShow = false;
-
     },
   },
 };
 </script>
 <style lang="less" scoped>
+
 .container {
   width: 100%;
   height: 100%;
+
+  .title {
+    font-size: 40px;
+    text-align: center;
+    color: #fff;
+    padding-top: 40px;
+  }
   .content {
     width: 100%;
-    height: 100%;
+    height: 88%;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -96,11 +120,10 @@ export default {
     .left,
     .right {
       width: 50%;
-      height: 78%;
+      height: 91%;
       background: #fff;
       border: 0.005208rem solid #999;
       position: relative;
-      margin-top: 3%;
     }
     .left {
       outline: none;
@@ -117,15 +140,16 @@ export default {
       overflow: auto;
       .inputInfo {
         width: 90%;
-        height: 100%;
+        height: 88%;
         position: absolute;
         top: 0;
         background: #fff;
         letter-spacing: 1.5px;
         margin: 5%;
+        overflow: auto;
       }
       p {
-        color: red;
+        color: #999;
         font-size: 0.119792rem;
         margin-top: 4%;
         word-break: break-all;

@@ -17,3 +17,15 @@
 .hide {
     display: none;
 }
+
+.red {
+    color: red;
+}
+
+.errorColor {
+    color: #f1592a !important;
+}
+
+.weight {
+    font-weight: bold;
+}
