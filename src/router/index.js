@@ -13,10 +13,13 @@ const routes = [{
         }
     },
     {
-        path: "/unauth/Json",
-        name: "Json",
+        path: "/JsonFormat",
+        name: "JsonFormat",
+        meta: {
+            title: "JSON格式化"
+        },
         component: () =>
-            import ("../views/unauth/Json.vue")
+            import ("../views/unauth/JsonFormat.vue")
     }
 ];
 
