@@ -10,12 +10,19 @@ import "amfe-flexible";
 // import 'element-ui/lib/theme-chalk/index.css';
 // Vue.use(ElementUI);
 
+//复制到粘贴板插件
+import VueClipboard from 'vue-clipboard2'
+VueClipboard.config.autoSetContainer = true
+Vue.use(VueClipboard)
+
 //按需引入element组件库
-import { Button, Select, Loading, Input } from "element-ui";
+import { Button, Select, Loading, Input, Tooltip, Scrollbar } from "element-ui";
 
 Vue.use(Button);
 Vue.use(Select);
 Vue.use(Input);
+Vue.use(Tooltip);
+Vue.use(Scrollbar);
 
 Vue.prototype.$loading = Loading;
 
