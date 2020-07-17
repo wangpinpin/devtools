@@ -75,6 +75,10 @@ Vue.config.warnHandler = (err, vm, info) => {
   _this.inputMsg = `<p class="errorColor">${err}</p>`;
   _this.jsonData = {};
   _this.errorInfoShow = true;
+  if(!_this.inputData) {
+    _this.inputMsg = "";
+    _this.errorDesc = "";
+  }
 };
 
 export default {
@@ -84,16 +88,11 @@ export default {
   },
   props: {
     json: {
-      type: Object,
-      required: false,
-    },
+      type: Object,    },
   },
 
   watch: {
     json: function(indexVal, oldVal) {
-      if (!indexVal) {
-        return;
-      }
       this.inputData = indexVal;
       this.jsonData = JSON.parse(indexVal.replace(/\\/g, ""));
       this.errorInfoShow = false;
