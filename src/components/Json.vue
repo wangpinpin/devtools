@@ -25,7 +25,7 @@ Vue.config.errorHandler = (err, vm, info) => {
     //报错文字
     const errorText = _this.inputData.substr(errorIndex - 1, 3);
     //正则匹配前后{}
-    let regex = "\\{((?!\\{|\\}).)*" + errorText + "((?!\\}).)*\\}";
+    let regex = "\{[^\{|\}]*" + errorText + "[^\{|\}]*\}";
 
     let inputMsg;
     if (_this.inputData.match(regex)) {

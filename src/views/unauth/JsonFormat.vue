@@ -4,15 +4,17 @@
     <div class="content">
       <div class="left">
         <el-input
+          id="aa"
           type="textarea"
           placeholder="请输入内容"
           resize="none"
           v-model="inputData"
         >
         </el-input>
+
       </div>
       <div class="right">
-        <Json :json = inputData />
+        <Json :json="inputData" />
       </div>
     </div>
     <Footer />
@@ -35,9 +37,9 @@ export default {
     };
   },
   created() {
+   
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>
 <style lang="less" scoped>
