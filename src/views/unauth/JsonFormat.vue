@@ -36,9 +36,8 @@ export default {
       inputData: null,
     };
   },
-  created() {
-   
-  },
+  created() {},
+
   methods: {},
 };
 </script>
@@ -76,6 +75,25 @@ export default {
         /deep/.el-textarea__inner {
           min-height: 100% !important;
           height: 100% !important;
+          border-radius: 0;
+          border: 0;
+          &::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+          }
+          &::-webkit-scrollbar-thumb {
+            border-radius: 3px;
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            background-color: rgba(144, 147, 153, 0.3);
+          }
+          &::-webkit-scrollbar-track {
+            background-color: transparent;
+          }
+          &:focus {
+            -webkit-box-shadow: 0 -1px 10px #3eb0d361;
+            box-shadow: 0 -1px 10px #3eb0d361;
+          }
         }
       }
     }

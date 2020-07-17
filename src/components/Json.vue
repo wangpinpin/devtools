@@ -1,9 +1,35 @@
 <template>
   <div class="container">
-    <json-view :data="jsonData" v-show="!errorInfoShow" />
-    <div class="inputInfo" v-show="errorInfoShow">
-      <p class="errorColor">{{ errorDesc }}</p>
-      <p v-html="inputMsg"></p>
+    <div class="jsonBtn">
+      <el-tooltip
+        class="item"
+        effect="dark"
+        content="压缩"
+        placement="bottom"
+        @click.native="isCompressed = !isCompressed"
+        :class="isCompressed ? 'active' : ''"
+      >
+        <el-button type="text" icon="el-icon-coin"></el-button>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="复制" placement="bottom">
+        <el-button type="text" icon="el-icon-document-copy"></el-button>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="清空" placement="bottom">
+        <el-button
+          type="text"
+          icon="el-icon-delete"
+          @click="clear()"
+        ></el-button>
+      </el-tooltip>
+    </div>
+    <div class="jsonScroll">
+      <el-scrollbar>
+        <json-view :data="jsonData" v-show="!errorInfoShow" />
+        <div class="inputInfo" v-show="errorInfoShow">
+          <p class="errorColor">{{ errorDesc }}</p>
+          <p v-html="inputMsg"></p>
+        </div>
+      </el-scrollbar>
     </div>
   </div>
 </template>
@@ -80,7 +106,18 @@ export default {
       inputMsg: "",
       errorDesc: "",
       jsonData: {},
+      isCompressed: false,
     };
+  },
+  methods: {
+    clear() {
+      (this.inputData = null),
+        (this.errorInfoShow = false),
+        (this.inputMsg = ""),
+        (this.errorDesc = ""),
+        (this.jsonData = ""),
+        this.$emit("clearText", this.inputData);
+    },
   },
   created() {
     _this = this;
@@ -89,6 +126,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .container {
+  position: relative;
   .inputInfo {
     width: 90%;
     height: 88%;
@@ -96,7 +134,7 @@ export default {
     top: 0;
     background: #fff;
     letter-spacing: 1.5px;
-    margin: 5%;
+    margin: 4.4%;
     overflow: auto;
   }
   p {
@@ -109,6 +147,41 @@ export default {
     color: #088d13;
     margin-left: 77px;
     font-size: 40px;
+  }
+  .jsonBtn {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 0.005208rem solid #999;
+    z-index: 2;
+    button {
+      width: 60px;
+      padding: 6px 0;
+      /deep/i {
+        font-size: 24px;
+        color: #999;
+      }
+      &:hover,
+      &:active,
+      &.active {
+        /deep/i {
+          color: #409eff;
+        }
+      }
+    }
+  }
+  .jsonScroll {
+    padding-top: 40px;
+    height: 100%;
+    box-sizing: border-box;
+  }
+  /deep/.el-scrollbar {
+    width: 100%;
+    height: 100%;
+    .el-scrollbar__wrap {
+      overflow: auto;
+    }
   }
 }
 </style>
