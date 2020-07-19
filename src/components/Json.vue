@@ -15,11 +15,7 @@
         <el-button type="text" icon="el-icon-document-copy"></el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="清空" placement="bottom">
-        <el-button
-          type="text"
-          icon="el-icon-delete"
-          @click="clear()"
-        ></el-button>
+        <el-button type="text" icon="el-icon-delete" @click="clear()"></el-button>
       </el-tooltip>
     </div>
     <div class="jsonScroll">
@@ -51,7 +47,7 @@ Vue.config.errorHandler = (err, vm, info) => {
     //报错文字
     const errorText = _this.inputData.substr(errorIndex - 1, 3);
     //正则匹配前后{}
-    let regex = "\{[^\{|\}]*" + errorText + "[^\{|\}]*\}";
+    let regex = "{[^{|}]*" + errorText + "[^{|}]*}";
 
     let inputMsg;
     if (_this.inputData.match(regex)) {
@@ -75,20 +71,21 @@ Vue.config.warnHandler = (err, vm, info) => {
   _this.inputMsg = `<p class="errorColor">${err}</p>`;
   _this.jsonData = {};
   _this.errorInfoShow = true;
-  if(!_this.inputData) {
-    _this.inputMsg = "";
-    _this.errorDesc = "";
+  if (!_this.inputData) {
+      _this.inputMsg = "";
+      _this.errorDesc = "";
   }
 };
 
 export default {
   name: "Json",
   components: {
-    jsonView,
+    jsonView
   },
   props: {
     json: {
-      type: Object,    },
+      type: String
+    }
   },
 
   watch: {
@@ -96,7 +93,7 @@ export default {
       this.inputData = indexVal;
       this.jsonData = JSON.parse(indexVal.replace(/\\/g, ""));
       this.errorInfoShow = false;
-    },
+    }
   },
   data() {
     return {
@@ -105,10 +102,11 @@ export default {
       inputMsg: "",
       errorDesc: "",
       jsonData: {},
-      isCompressed: false,
+      isCompressed: false
     };
   },
   methods: {
+    //清空
     clear() {
       (this.inputData = null),
         (this.errorInfoShow = false),
@@ -116,11 +114,11 @@ export default {
         (this.errorDesc = ""),
         (this.jsonData = ""),
         this.$emit("clearText", this.inputData);
-    },
+    }
   },
   created() {
     _this = this;
-  },
+  }
 };
 </script>
 <style lang="less" scoped>

@@ -14,7 +14,7 @@
 
       </div>
       <div class="right">
-        <Json :json="inputData" />
+        <Json :json="inputData" @clearText = "clearText" />
       </div>
     </div>
     <Footer />
@@ -38,7 +38,12 @@ export default {
   },
   created() {},
 
-  methods: {},
+  methods: {
+    //清空
+    clearText(data) {
+      this.inputData = data
+    }
+  },
 };
 </script>
 <style lang="less" scoped>
