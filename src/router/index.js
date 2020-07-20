@@ -20,6 +20,15 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/JsonFormat.vue")
+    },
+    {
+        path: "/QRcodeCreate",
+        name: "QRcodeCreate",
+        meta: {
+            title: "二维码生成"
+        },
+        component: () =>
+            import ("../views/unauth/QRcodeCreate.vue")
     }
 ];
 
