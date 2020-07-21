@@ -23,13 +23,16 @@
             >生成二维码</el-button
           >
         </div>
-        <div v-if="isSuccess">
+        <div v-else>
           <p class="urlText">{{ inputData }}</p>
           <el-button class="btn" @click="initCode()">再建一个</el-button>
         </div>
       </div>
       <div class="right">
         <div id="qrCode" ref="qrCodeDiv"></div>
+        <span v-show="!isSuccess" class="tip" @click="visible = true"
+          >此处生成二维码</span
+        >
         <el-button
           v-if="isSuccess"
           class="btn-download"
@@ -43,16 +46,54 @@
           v-model="activeName"
           type="border-card"
         >
-          <el-tab-pane label="LOGO" name="first">
-            <el-upload>
-              <el-button>上传LOGO</el-button>
-            </el-upload>
+          <el-tab-pane class="tab-1" label="颜色" name="first">
+            <div class="item">
+              <p>二维码颜色</p>
+              <el-color-picker
+                v-model="colorDark"
+                show-alpha
+                @change="changeColor()"
+              ></el-color-picker>
+            </div>
+            <div class="item">
+              <p>背景色</p>
+              <el-color-picker
+                v-model="colorLight"
+                show-alpha
+                @change="changeColor()"
+              ></el-color-picker>
+            </div>
           </el-tab-pane>
-          <el-tab-pane label="颜色" name="second">
-            <el-button class="" @click="">二维码颜色</el-button>
-            <el-button class="" @click="">背景色</el-button>
+          <el-tab-pane class="tab-2" label="设置" name="second">
+            <div class="item">
+              <span>大小</span>
+              <el-slider
+                class="item-options"
+                v-model="size"
+                :min="50"
+                :max="1000"
+                :format-tooltip="formatTooltip"
+                @change="qrcode()"
+              >
+              </el-slider>
+            </div>
+            <div class="item">
+              <span>容错</span>
+              <el-select
+                class="item-options"
+                v-model="selectLevelValue"
+                @change="qrcode()"
+              >
+                <el-option
+                  v-for="item in levelOptions"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.label"
+                >
+                </el-option>
+              </el-select>
+            </div>
           </el-tab-pane>
-          <el-tab-pane label="设置" name="third"> </el-tab-pane>
         </el-tabs>
       </div>
     </div>
@@ -75,7 +116,12 @@ export default {
       size: 200, // 二维码尺寸
       colorDark: "#333333", //二维码颜色
       colorLight: "#ffffff", //二维码背景色
-      correctLevel: QRCode.CorrectLevel.L, //容错率，L/M/H
+      levelOptions: [
+        { value: "L", label: "7%" },
+        { value: "M", label: "15%" },
+        { value: "H", label: "30%" },
+      ],
+      selectLevelValue: "H", //容错率，L/M/H
       visible: false, // url输入框验证失败提示是否显示
       isSuccess: false, // 是否生成成功
       activeName: "first", // 设置TAB活动页
@@ -83,39 +129,33 @@ export default {
   },
   created() {},
   methods: {
+    qrcode() {
+      document.getElementById("qrCode").innerHTML = "";
+      new QRCode(this.$refs.qrCodeDiv, {
+        text: this.inputData,
+        width: this.size,
+        height: this.size,
+        colorDark: this.colorDark,
+        colorLight: this.colorLight,
+        correctLevel: QRCode.CorrectLevel[this.selectLevelValue],
+      });
+    },
     // 生成二维码
     bindQRCode() {
-      let strRegex =
-        "^((https|http|ftp|rtsp|mms)?://)" +
-        "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?" + //ftp的user@
-        "(([0-9]{1,3}.){3}[0-9]{1,3}" + // IP形式的URL- 199.194.52.184
-        "|" + // 允许IP和DOMAIN（域名）
-        "([0-9a-z_!~*'()-]+.)*" + // 域名- www.
-        "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]." + // 二级域名
-        "[a-z]{2,6})" + // first level domain- .com or .museum
-        "(:[0-9]{1,4})?" + // 端口- :80
-        "((/?)|" + // a slash isn't required if there is no file name
-        "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";
-      let re = new RegExp(strRegex);
-      if (re.test(this.inputData)) {
+      let url = this.inputData.replace(/\s+/g, "").toLowerCase();
+      if (/^(https?|ftp|file):/.test(url)) {
         this.visible = false;
         this.isSuccess = true;
-        document.getElementById("qrCode").innerHTML = "";
-        new QRCode(this.$refs.qrCodeDiv, {
-          text: this.inputData,
-          width: this.size,
-          height: this.size,
-          colorDark: this.colorDark,
-          colorLight: this.colorLight,
-          correctLevel: this.correctLevel,
-        });
+        this.qrcode();
       } else {
-        this.visible = !this.visible;
+        this.visible = true;
       }
     },
     // 重新创建二维码
     initCode() {
-      document.getElementById("qrCode").innerHTML = "";
+      let code = document.getElementById("qrCode");
+      code.title = "";
+      code.innerHTML = "";
       this.isSuccess = false;
       this.inputData = "";
     },
@@ -126,8 +166,17 @@ export default {
       a.href = document.getElementById("qrCode").lastChild.currentSrc;
       a.click();
     },
-    // 二维码设置
-    popSettings() {},
+    // 调整二维码颜色
+    changeColor() {
+      (this.colorDark = null == this.colorDark ? "#333333" : this.colorDark),
+        (this.colorLight =
+          null == this.colorLight ? "#ffffff" : this.colorLight),
+        this.qrcode();
+    },
+    // 格式化尺寸值
+    formatTooltip(val) {
+      return `${val}px`;
+    },
   },
 };
 </script>
@@ -176,11 +225,15 @@ export default {
         }
       }
       .urlText {
-        height: 80px;
-        line-height: 80px;
+        min-height: 80px;
         font-size: 20px;
         background-color: #fff;
         margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        word-break: break-all;
+        padding: 10px 20px;
       }
     }
     .btn {
@@ -188,6 +241,47 @@ export default {
     }
     .right {
       width: 350px;
+      position: relative;
+      .tip {
+        font-size: 0.104167rem;
+        color: #999;
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+      }
+      .tab-1 {
+        .item {
+          width: 40%;
+          display: inline-block;
+          p {
+            color: #000;
+            font-size: 18px;
+            margin: 0;
+            line-height: 40px;
+          }
+        }
+      }
+      .tab-2 {
+        .item {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          span {
+            color: #000;
+            font-size: 18px;
+            margin: 0;
+            line-height: 40px;
+          }
+          .item-options {
+            width: 80%;
+          }
+        }
+      }
     }
     #qrCode {
       width: 350px;
@@ -197,6 +291,10 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
+      /deep/img {
+        max-width: 95%;
+      }
     }
     .btn-download {
       width: 100%;
