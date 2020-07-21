@@ -133,7 +133,7 @@ export default {
   created() {},
   methods: {
     qrcode() {
-      document.getElementById("qrCode").innerHTML = "";
+      this.$refs.qrCodeDiv.innerHTML = "";
       new QRCode(this.$refs.qrCodeDiv, {
         text: this.inputData,
         width: this.size,
@@ -156,9 +156,8 @@ export default {
     },
     // 重新创建二维码
     initCode() {
-      let code = document.getElementById("qrCode");
-      code.title = "";
-      code.innerHTML = "";
+      this.$refs.qrCodeDiv.title = "";
+      this.$refs.qrCodeDiv.innerHTML = "";
       this.isSuccess = false;
       this.inputData = "";
     },
@@ -166,7 +165,7 @@ export default {
     downloadCode() {
       let a = document.createElement("a");
       a.download = "pic";
-      a.href = document.getElementById("qrCode").lastChild.currentSrc;
+      a.href = this.$refs.qrCodeDiv.lastChild.currentSrc;
       a.click();
     },
     // 调整二维码颜色
