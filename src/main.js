@@ -16,7 +16,7 @@ VueClipboard.config.autoSetContainer = true
 Vue.use(VueClipboard)
 
 //按需引入element组件库
-import { Button, Select, Loading, Input, Tooltip, Scrollbar, Popover, Tabs, TabPane, ColorPicker, Option, Slider } from "element-ui";
+import { Button, Select, Loading, Input, Tooltip, Scrollbar, Popover, Tabs, TabPane, ColorPicker, Option, Slider, Table, TableColumn } from "element-ui";
 
 Vue.use(Button);
 Vue.use(Select);
@@ -29,6 +29,8 @@ Vue.use(TabPane);
 Vue.use(ColorPicker);
 Vue.use(Option);
 Vue.use(Slider);
+Vue.use(Table);
+Vue.use(TableColumn);
 
 Vue.prototype.$loading = Loading;
 
