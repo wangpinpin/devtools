@@ -69,7 +69,7 @@ export default {
       ],
       devText: [
         { path: "/JsonFormat", text: "JSON格式化" },
-        { path: "JsonFormat", text: "JSON格式化" },
+        { path: "/QRcodeCreate", text: "二维码生成" },
         { path: "JsonFormat", text: "JSON格式化" },
         { path: "JsonFormat", text: "JSON格式化" },
         { path: "JsonFormat", text: "JSON格式化" },
