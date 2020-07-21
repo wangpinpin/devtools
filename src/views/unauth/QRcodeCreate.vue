@@ -112,7 +112,7 @@ export default {
   data() {
     return {
       title: "二维码生成",
-      inputData: null,
+      inputData: "",
       size: 200, // 二维码尺寸
       colorDark: "#333333", //二维码颜色
       colorLight: "#ffffff", //二维码背景色
