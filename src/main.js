@@ -31,7 +31,7 @@ Vue.use(Option);
 Vue.use(Slider);
 Vue.use(Table);
 Vue.use(TableColumn);
-Vue.use(Message);
+Vue.component(Message);
 
 Vue.prototype.$loading = Loading;
 Vue.prototype.$message = Message;
