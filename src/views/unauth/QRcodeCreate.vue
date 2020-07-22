@@ -18,6 +18,7 @@
               v-model="inputData"
               slot="reference"
               :class="visible ? 'invalid' : ''"
+              @keyup.enter.native="bindQRCode()"
             ></el-input>
           </el-popover>
           <el-button class="btn" type="success" @click="bindQRCode()"
