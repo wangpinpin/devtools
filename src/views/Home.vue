@@ -71,7 +71,7 @@ export default {
         { path: "/JsonFormat", text: "JSON格式化" },
         { path: "/QRcodeCreate", text: "二维码生成" },
         { path: "/ColorTransfer", text: "颜色代码转换" },
-        { path: "JsonFormat", text: "JSON格式化" },
+        { path: "https://nat.wangpinpin.com", text: "内网穿透" },
         { path: "JsonFormat", text: "JSON格式化" },
         { path: "JsonFormat", text: "JSON格式化" },
         { path: "JsonFormat", text: "JSON格式化" },
@@ -98,6 +98,10 @@ export default {
     
     //路由跳转
     go(path) {
+      if(path.startsWith("http")) {
+        window.location.href = path
+        return;
+      }
       this.$router.push(path)
     },
 
