@@ -20,7 +20,26 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/JsonFormat.vue")
+    },
+    {
+        path: "/QRcodeCreate",
+        name: "QRcodeCreate",
+        meta: {
+            title: "二维码生成"
+        },
+        component: () =>
+            import ("../views/unauth/QRcodeCreate.vue")
+    },
+    {
+        path: "/ColorTransfer",
+        name: "ColorTransfer",
+        meta: {
+            title: "颜色代码转换"
+        },
+        component: () =>
+            import ("../views/unauth/ColorTransfer.vue")
     }
+    
 ];
 
 const router = new VueRouter({

@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <Header />
     <div class="title">{{ title }}</div>
     <div class="content">
       <div class="left">
@@ -21,12 +22,14 @@
   </div>
 </template>
 <script>
+import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 import Json from "@/components/Json.vue";
 
 export default {
   name: "JsonFormat",
   components: {
+    Header,
     Json,
     Footer,
   },
@@ -55,11 +58,10 @@ export default {
     font-size: 40px;
     text-align: center;
     color: #fff;
-    padding-top: 40px;
   }
   .content {
     width: 100%;
-    height: 88%;
+    height: 75%;
     display: flex;
     flex-direction: row;
     justify-content: center;
