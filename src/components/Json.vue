@@ -72,8 +72,8 @@ Vue.config.warnHandler = (err, vm, info) => {
   _this.jsonData = {};
   _this.errorInfoShow = true;
   if (!_this.inputData) {
-      _this.inputMsg = "";
-      _this.errorDesc = "";
+    _this.inputMsg = "";
+    _this.errorDesc = "";
   }
 };
 
