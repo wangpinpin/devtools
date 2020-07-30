@@ -10,13 +10,16 @@ import "amfe-flexible";
 // import 'element-ui/lib/theme-chalk/index.css';
 // Vue.use(ElementUI);
 
+import JsonViewer from 'vue-json-viewer'
+Vue.use(JsonViewer)
+
 //复制到粘贴板插件
 import VueClipboard from 'vue-clipboard2'
 VueClipboard.config.autoSetContainer = true
 Vue.use(VueClipboard)
 
 //按需引入element组件库
-import { Button, Select, Loading, Input, Tooltip, Scrollbar, Popover, Tabs, TabPane, ColorPicker, Option, Slider, Table, TableColumn,Message } from "element-ui";
+import { Button, Select, Loading, Input, Tooltip, Scrollbar, Popover, Tabs, TabPane, ColorPicker, Option, Slider, Table, TableColumn, Message } from "element-ui";
 
 Vue.use(Button);
 Vue.use(Select);

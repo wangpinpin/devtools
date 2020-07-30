@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="jsonBtn">
-      <el-tooltip
+      <!-- <el-tooltip
         class="item"
         effect="dark"
         content="压缩"
@@ -10,17 +10,27 @@
         :class="isCompressed ? 'active' : ''"
       >
         <el-button type="text" icon="el-icon-coin"></el-button>
-      </el-tooltip>
+      </el-tooltip> -->
       <el-tooltip class="item" effect="dark" content="复制" placement="bottom">
         <el-button type="text" icon="el-icon-document-copy"></el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="清空" placement="bottom">
-        <el-button type="text" icon="el-icon-delete" @click="clear()"></el-button>
+        <el-button
+          type="text"
+          icon="el-icon-delete"
+          @click="clear()"
+        ></el-button>
       </el-tooltip>
     </div>
     <div class="jsonScroll">
       <el-scrollbar>
-        <json-view :data="jsonData" v-show="!errorInfoShow" />
+        <json-viewer
+          :value="jsonData"
+          copyable
+          sort
+          v-show="!errorInfoShow"
+        ></json-viewer>
+        <!-- <json-view :data="jsonData" v-show="!errorInfoShow" /> -->
         <div class="inputInfo" v-show="errorInfoShow">
           <p class="errorColor">{{ errorDesc }}</p>
           <p v-html="inputMsg"></p>
@@ -31,7 +41,7 @@
 </template>
 
 <script>
-import jsonView from "@/assets/js/jsonView";
+import jsonView from 'vue-json-viewer'
 import Vue from "vue";
 
 var _this;
@@ -72,20 +82,20 @@ Vue.config.warnHandler = (err, vm, info) => {
   _this.jsonData = {};
   _this.errorInfoShow = true;
   if (!_this.inputData) {
-      _this.inputMsg = "";
-      _this.errorDesc = "";
+    _this.inputMsg = "";
+    _this.errorDesc = "";
   }
 };
 
 export default {
   name: "Json",
   components: {
-    jsonView
+    jsonView,
   },
   props: {
     json: {
-      type: String
-    }
+      type: String,
+    },
   },
 
   watch: {
@@ -93,7 +103,7 @@ export default {
       this.inputData = indexVal;
       this.jsonData = JSON.parse(indexVal.replace(/\\/g, ""));
       this.errorInfoShow = false;
-    }
+    },
   },
   data() {
     return {
@@ -102,23 +112,23 @@ export default {
       inputMsg: "",
       errorDesc: "",
       jsonData: {},
-      isCompressed: false
+      isCompressed: false,
     };
   },
   methods: {
     //清空
     clear() {
       (this.inputData = null),
-        (this.errorInfoShow = false),
+        (this.errorInfoShow = true),
         (this.inputMsg = ""),
         (this.errorDesc = ""),
         (this.jsonData = ""),
         this.$emit("clearText", this.inputData);
-    }
+    },
   },
   created() {
     _this = this;
-  }
+  },
 };
 </script>
 <style lang="less" scoped>

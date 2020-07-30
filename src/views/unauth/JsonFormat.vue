@@ -12,9 +12,9 @@
           v-model="inputData"
         >
         </el-input>
-
       </div>
       <div class="right">
+        <!-- <json-viewer :value="jsonData" copyable sort></json-viewer> -->
         <Json :json="inputData" @clearText = "clearText" />
       </div>
     </div>
@@ -44,8 +44,8 @@ export default {
   methods: {
     //清空
     clearText(data) {
-      this.inputData = data
-    }
+      this.inputData = data;
+    },
   },
 };
 </script>
