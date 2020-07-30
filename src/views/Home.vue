@@ -98,7 +98,9 @@ export default {
     
     //路由跳转
     go(path) {
-      this.$router.push(path)
+      const router = this.$router.resolve(path)
+      window.open(router.href, '_blank');
+
     },
 
     //模拟鼠标光标动画
