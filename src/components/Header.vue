@@ -55,4 +55,13 @@ export default {
     }
   }
 }
+@media screen and (max-width: 900px) {
+  .container {
+    padding-top: 0.5rem;
+    font-size: 40px;
+  }
+  .container .right {
+    width: 56%;
+  }
+}
 </style>

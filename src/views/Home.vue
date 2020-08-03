@@ -95,12 +95,10 @@ export default {
     this.inputAnimation();
   },
   methods: {
-    
     //路由跳转
     go(path) {
-      const router = this.$router.resolve(path)
-      window.open(router.href, '_blank');
-
+      const router = this.$router.resolve(path);
+      window.open(router.href, "_blank");
     },
 
     //模拟鼠标光标动画
@@ -192,6 +190,26 @@ export default {
         border: 4px solid #fff;
         box-sizing: border-box;
         line-height: 111px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 900px) {
+  .home-container {
+    .content {
+      .slogan {
+        display: none;
+      }
+      .card {
+        margin-top: 20%;
+        justify-content: center;
+        .card-tool {
+          width: 40%;
+          height: 260px;
+          line-height: 260px;
+          margin-top: 10%;
+        }
+
       }
     }
   }

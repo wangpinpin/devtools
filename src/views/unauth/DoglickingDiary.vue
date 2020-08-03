@@ -78,6 +78,9 @@ export default {
       flex-direction: row;
       margin: 0 auto;
       justify-content: space-between;
+      .date {
+        visibility: hidden;
+      }
     }
     .text {
       background: #fff;
@@ -94,6 +97,35 @@ export default {
         right: 24px;
         color: blue;
         cursor: pointer;
+      }
+    }
+  }
+}
+@media screen and (max-width: 900px) {
+  .container {
+    .title {
+      font-size: 80px;
+      margin-top: 25%;
+    }
+    .content {
+      margin: 22% auto;
+      width: 90%;
+      .condition {
+        .search {
+          height: 200px;
+          width: 400px;
+          font-size: 40px;
+
+          button {
+            width: 100%;
+            height: 100%;
+            font-size: 40px;
+          }
+        }
+      }
+      .text {
+        height: auto;
+        font-size: 40px;
       }
     }
   }
