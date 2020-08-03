@@ -31,8 +31,7 @@ module.exports = {
             postcss: {
                 plugins: [
                     require("postcss-px2rem")({
-                        remUnit: 192,
-                        propList: ["*"]
+                        remUnit: 192
                     })
                 ]
             }

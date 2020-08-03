@@ -29,4 +29,9 @@ export default {
     color: #efeaea !important;
   }
 }
+@media screen and (max-width: 900px) {
+  .container {
+    font-size: 40px;
+  }
+}
 </style>

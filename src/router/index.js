@@ -38,8 +38,17 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/ColorTransfer.vue")
+    },
+    {
+        path: "/DoglickingDiary",
+        name: "DoglickingDiary",
+        meta: {
+            title: "舔狗日记"
+        },
+        component: () =>
+            import ("../views/unauth/DoglickingDiary.vue")
     }
-    
+
 ];
 
 const router = new VueRouter({

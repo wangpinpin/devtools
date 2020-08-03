@@ -71,7 +71,7 @@ export default {
         { path: "/JsonFormat", text: "JSON格式化" },
         { path: "/QRcodeCreate", text: "二维码生成" },
         { path: "/ColorTransfer", text: "颜色代码转换" },
-        { path: "https://nat.wangpinpin.com", text: "内网穿透" },
+        { path: "/DoglickingDiary", text: "舔狗日记" },
         { path: "JsonFormat", text: "JSON格式化" },
         { path: "JsonFormat", text: "JSON格式化" },
         { path: "JsonFormat", text: "JSON格式化" },
@@ -95,14 +95,10 @@ export default {
     this.inputAnimation();
   },
   methods: {
-    
     //路由跳转
     go(path) {
-      if(path.startsWith("http")) {
-        window.location.href = path
-        return;
-      }
-      this.$router.push(path)
+      const router = this.$router.resolve(path);
+      window.open(router.href, "_blank");
     },
 
     //模拟鼠标光标动画
@@ -194,6 +190,26 @@ export default {
         border: 4px solid #fff;
         box-sizing: border-box;
         line-height: 111px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 900px) {
+  .home-container {
+    .content {
+      .slogan {
+        display: none;
+      }
+      .card {
+        margin-top: 20%;
+        justify-content: center;
+        .card-tool {
+          width: 40%;
+          height: 260px;
+          line-height: 260px;
+          margin-top: 10%;
+        }
+
       }
     }
   }
