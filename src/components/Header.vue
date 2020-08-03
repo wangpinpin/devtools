@@ -60,6 +60,9 @@ export default {
     padding-top: 0.5rem;
     font-size: 40px;
   }
+  .container .left {
+    font-size: 40px;
+  }
   .container .right {
     width: 56%;
   }

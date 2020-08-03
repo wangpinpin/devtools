@@ -15,7 +15,7 @@
       </div>
       <div class="right">
         <!-- <json-viewer :value="jsonData" copyable sort></json-viewer> -->
-        <Json :json="inputData" @clearText = "clearText" />
+        <Json :json="inputData" @clearText="clearText" />
       </div>
     </div>
     <Footer />
@@ -106,6 +106,22 @@ export default {
     }
     .right {
       overflow: auto;
+    }
+  }
+}
+@media screen and (max-width: 900px) {
+  .container {
+    .title {
+      font-size: 100px;
+      margin-top: 5%;
+    }
+    .content {
+      flex-direction: column;
+      .left,
+      .right {
+        width: 100%;
+        height: 50%;
+      }
     }
   }
 }

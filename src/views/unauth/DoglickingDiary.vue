@@ -104,7 +104,7 @@ export default {
 @media screen and (max-width: 900px) {
   .container {
     .title {
-      font-size: 80px;
+      font-size: 100px;
       margin-top: 25%;
     }
     .content {
@@ -112,8 +112,8 @@ export default {
       width: 90%;
       .condition {
         .search {
-          height: 200px;
-          width: 400px;
+          height: 150px;
+          width: 300px;
           font-size: 40px;
 
           button {
@@ -124,8 +124,12 @@ export default {
         }
       }
       .text {
+        display: flex;
+        align-items: center;
         height: auto;
         font-size: 40px;
+        padding: 6%;
+        min-height: 400px;
       }
     }
   }

@@ -208,8 +208,11 @@ export default {
           height: 260px;
           line-height: 260px;
           margin-top: 10%;
+          font-size: 40px;
+          &:hover {
+            line-height: 260px;
+          }
         }
-
       }
     }
   }

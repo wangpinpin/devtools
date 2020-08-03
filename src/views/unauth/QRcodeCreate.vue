@@ -307,4 +307,76 @@ export default {
     }
   }
 }
+@media screen and (max-width: 900px) {
+  .container {
+    .title {
+      font-size: 100px;
+      margin-top: 25%;
+    }
+    .content {
+      flex-direction: column;
+      .left {
+        margin: 0;
+        width: 100%;
+
+        .urlText,
+        /deep/.el-input__inner {
+          height: 150px;
+          line-height: 150px;
+          font-size: 40px;
+        }
+      }
+      .btn {
+        width: 8em;
+        line-height: 100px;
+        font-size: 40px;
+      }
+      .right {
+        width: 100%;
+        margin-top: 5%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /deep/.el-tabs--border-card {
+          width: 100%;
+          margin-top: 5%;
+          .el-tabs__nav {
+            height: 120px;
+          }
+          .el-tabs__item {
+            font-size: 40px;
+            height: 120px;
+            line-height: 120px;
+            vertical-align: top;
+          }
+        }
+        .tab-1 {
+          .item {
+            p {
+              font-size: 40px;
+              line-height: 2.5;
+            }
+          }
+        }
+        .tab-2 {
+          .item {
+            span {
+              font-size: 40px;
+              line-height: 2.5;
+            }
+          }
+        }
+      }
+      #qrCode {
+        width: 600px;
+        height: 600px;
+      }
+      .btn-download {
+        width: 600px;
+        line-height: 100px;
+        font-size: 40px;
+      }
+    }
+  }
+}
 </style>

@@ -227,4 +227,44 @@ export default {
     }
   }
 }
+@media screen and (max-width: 900px) {
+  .container {
+    .title {
+      font-size: 100px;
+      margin-top: 25%;
+    }
+    .content {
+      width: 90%;
+
+      .colorInput {
+        align-items: flex-start;
+        .btn-trans {
+          font-size: 35px;
+          padding: 0;
+          line-height: 100px;
+          height: 100px;
+        }
+        /deep/.el-input__inner {
+          font-size: 40px;
+          line-height: 100px;
+          height: 100px;
+        }
+        /deep/.el-color-picker__trigger {
+          width: 100px;
+          height: 100px;
+        }
+      }
+      /deep/.el-table {
+        font-size: 35px;
+        .cell {
+          line-height: 2;
+        }
+        .el-button {
+          font-size: 35px;
+          width: 4em;
+        }
+      }
+    }
+  }
+}
 </style>
