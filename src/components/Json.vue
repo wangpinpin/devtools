@@ -12,7 +12,11 @@
         <el-button type="text" icon="el-icon-coin"></el-button>
       </el-tooltip> -->
       <el-tooltip class="item" effect="dark" content="复制" placement="bottom">
-        <el-button type="text" icon="el-icon-document-copy"></el-button>
+        <el-button
+          type="text"
+          icon="el-icon-document-copy"
+          @click="copy()"
+        ></el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="清空" placement="bottom">
         <el-button
@@ -24,13 +28,7 @@
     </div>
     <div class="jsonScroll">
       <el-scrollbar>
-        <json-viewer
-          :value="jsonData"
-          copyable
-          sort
-          v-show="!errorInfoShow"
-        ></json-viewer>
-        <!-- <json-view :data="jsonData" v-show="!errorInfoShow" /> -->
+        <json-view :data="jsonData" v-show="!errorInfoShow" />
         <div class="inputInfo" v-show="errorInfoShow">
           <p class="errorColor">{{ errorDesc }}</p>
           <p v-html="inputMsg"></p>
@@ -41,8 +39,8 @@
 </template>
 
 <script>
-import jsonView from 'vue-json-viewer'
 import Vue from "vue";
+import jsonView from "@/assets/js/jsonView";
 
 var _this;
 
@@ -124,6 +122,15 @@ export default {
         (this.errorDesc = ""),
         (this.jsonData = ""),
         this.$emit("clearText", this.inputData);
+    },
+    //复制
+    copy() {
+      this.$copyText(JSON.stringify(this.jsonData, null, 2)).then(() => {
+        this.$message({
+          message: "复制成功",
+          type: "success",
+        });
+      });
     },
   },
   created() {

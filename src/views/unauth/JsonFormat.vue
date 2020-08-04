@@ -14,7 +14,6 @@
         </el-input>
       </div>
       <div class="right">
-        <!-- <json-viewer :value="jsonData" copyable sort></json-viewer> -->
         <Json :json="inputData" @clearText="clearText" />
       </div>
     </div>
