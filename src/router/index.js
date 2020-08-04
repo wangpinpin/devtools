@@ -47,8 +47,16 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/DoglickingDiary.vue")
+    },
+    {
+        path: "/ImageToTxt",
+        name: "ImageToTxt",
+        meta: {
+            title: "图片文字提取"
+        },
+        component: () =>
+            import ("../views/unauth/ImageToTxt.vue")
     }
-
 ];
 
 const router = new VueRouter({

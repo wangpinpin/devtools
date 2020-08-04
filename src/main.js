@@ -18,7 +18,7 @@ VueClipboard.config.autoSetContainer = true
 Vue.use(VueClipboard)
 
 //按需引入element组件库
-import { Button, Select, Loading, Input, Tooltip, Scrollbar, Popover, Tabs, TabPane, ColorPicker, Option, Slider, Table, TableColumn, Message, DatePicker } from "element-ui";
+import { Button, Select, Loading, Input, Tooltip, Scrollbar, Popover, Tabs, TabPane, ColorPicker, Option, Slider, Table, TableColumn, Message, DatePicker, Upload } from "element-ui";
 
 Vue.use(Button);
 Vue.use(Select);
@@ -34,6 +34,7 @@ Vue.use(Slider);
 Vue.use(Table);
 Vue.use(TableColumn);
 Vue.use(DatePicker);
+Vue.use(Upload);
 
 Vue.prototype.$loading = Loading;
 Vue.prototype.$message = Message;
@@ -46,9 +47,9 @@ Vue.config.productionTip = false;
 console.log("当前所处环境", process.env.NODE_ENV);
 
 //过滤器
-Vue.filter('formatDate', function(value1, value2) {
+Vue.filter('formatDate', function (value1, value2) {
     let date = new Date(value1);
-    return formatDate(date, value2);　　
+    return formatDate(date, value2);
 })
 new Vue({
     router,

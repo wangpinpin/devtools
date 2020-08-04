@@ -72,7 +72,7 @@ export default {
         { path: "/QRcodeCreate", text: "二维码生成" },
         { path: "/ColorTransfer", text: "颜色代码转换" },
         { path: "/DoglickingDiary", text: "舔狗日记" },
-        { path: "JsonFormat", text: "JSON格式化" },
+        { path: "/ImageToTxt", text: "图片文字提取" },
         { path: "JsonFormat", text: "JSON格式化" },
         { path: "JsonFormat", text: "JSON格式化" },
         { path: "JsonFormat", text: "JSON格式化" },
