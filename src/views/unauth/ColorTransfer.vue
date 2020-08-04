@@ -155,19 +155,12 @@ export default {
     },
     // 复制颜色码
     handleCopy(index, row) {
-      let _this = this;
-      _this.$copyText(this.tableData[index].color).then(
-        function(e) {
-          _this.$message({
-            message: "复制成功",
-            type: "success",
-            duration: 0,
-          });
-        },
-        function(e) {
-          _this.$message.error("复制失败");
-        }
-      );
+      this.$copyText(this.tableData[index].color).then(() => {
+        this.$message({
+          message: "复制成功",
+          type: "success",
+        });
+      });
     },
   },
 };
