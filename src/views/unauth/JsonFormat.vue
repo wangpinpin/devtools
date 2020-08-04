@@ -121,6 +121,12 @@ export default {
         width: 100%;
         height: 50%;
       }
+     
+      .left {
+        /deep/.el-textarea {
+          font-size: 40px;
+        }
+      }
     }
   }
 }

@@ -378,5 +378,8 @@ export default {
       }
     }
   }
+  /deep/.el-popover {
+    font-size: 40px;
+  }
 }
 </style>

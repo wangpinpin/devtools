@@ -161,6 +161,7 @@ export default {
           _this.$message({
             message: "复制成功",
             type: "success",
+            duration: 0,
           });
         },
         function(e) {
@@ -244,14 +245,18 @@ export default {
           line-height: 100px;
           height: 100px;
         }
-        /deep/.el-input__inner {
-          font-size: 40px;
-          line-height: 100px;
-          height: 100px;
+        /deep/.el-input {
+          vertical-align: top;
+          .el-input__inner {
+            font-size: 40px;
+            line-height: 100px;
+            height: 100px;
+          }
         }
         /deep/.el-color-picker__trigger {
           width: 100px;
           height: 100px;
+          vertical-align: top;
         }
       }
       /deep/.el-table {
@@ -265,6 +270,17 @@ export default {
         }
       }
     }
+  }
+  /deep/.el-message {
+    display: flex;
+    justify-content: center;
+    .el-message__icon,
+    .el-message__content {
+      font-size: 40px;
+    }
+  }
+  /deep/.el-popover {
+    font-size: 40px;
   }
 }
 </style>

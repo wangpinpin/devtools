@@ -198,4 +198,34 @@ export default {
     }
   }
 }
+@media screen and (max-width: 900px) {
+  .container {
+    .jsonBtn {
+      height: 150px;
+      button {
+        width: 100px;
+        padding: 0 20px;
+        box-sizing: content-box;
+        vertical-align: top;
+        line-height: 160px;
+        /deep/i {
+          font-size: 80px;
+        }
+      }
+    }
+    .jsonScroll {
+      padding-top: 150px;
+      width: 98%;
+      margin: 0 auto;
+    }
+  }
+  /deep/.el-message {
+    display: flex;
+    justify-content: center;
+    .el-message__icon,
+    .el-message__content {
+      font-size: 40px;
+    }
+  }
+}
 </style>

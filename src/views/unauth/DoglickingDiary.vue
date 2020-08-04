@@ -133,5 +133,13 @@ export default {
       }
     }
   }
+  /deep/.el-message {
+    display: flex;
+    justify-content: center;
+    .el-message__icon,
+    .el-message__content {
+      font-size: 40px;
+    }
+  }
 }
 </style>
