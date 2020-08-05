@@ -114,7 +114,7 @@ export default {
         // 3. 官网获取的 Secret Key
         "&client_secret=" +
         BAIDU_SECRET_KEY;
-      this.$jsonp(getAccessTokenUrl, {
+      this.$http.get(getAccessTokenUrl, {
         callback: "jsonpCallback",
       }).then((data) => {
         console.log(data);

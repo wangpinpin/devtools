@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 axios.defaults.timeout = 5000;
-axios.defaults.baseURL = process.env.BASE_URL;
-
+axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 //http request 拦截器
 axios.interceptors.request.use(
     config => {
@@ -19,7 +18,11 @@ axios.interceptors.request.use(
 
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
-    return response
+    if (response.data.code == 0) {
+        return response.data
+    } else {
+        //打印response.data.msg
+    }
 }, err => {
     if (err && err.response) {
         switch (err.response.status) {
@@ -79,8 +82,8 @@ axios.interceptors.response.use(response => {
 export function get(url, params = {}) {
     return new Promise((resolve, reject) => {
         axios.get(url, {
-            params: params
-        })
+                params: params
+            })
             .then(response => {
                 resolve(response.data);
             })

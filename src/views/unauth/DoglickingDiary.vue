@@ -40,7 +40,7 @@ export default {
   created() {},
   methods: {
     search() {
-      this.$http.get("https://v1.alapi.cn/api/dog?format=text").then((data) => {
+      this.$http.get("unAuth/getDoglickingDiary").then((data) => {
         this.text =
           this.$options.filters["formatDate"](this.date, "yyyy-MM-dd") +
           " " +
@@ -78,9 +78,6 @@ export default {
       flex-direction: row;
       margin: 0 auto;
       justify-content: space-between;
-      .date {
-        visibility: hidden;
-      }
     }
     .text {
       background: #fff;
@@ -120,6 +117,10 @@ export default {
             width: 100%;
             height: 100%;
             font-size: 40px;
+          }
+
+          .date {
+            visibility: hidden;
           }
         }
       }
