@@ -6,7 +6,7 @@
       <el-upload
         class="upload-demo"
         drag
-        action="https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic"
+        action="https://api.wangpinpin.com/unAuth/imgToText"
         multiple
         :auto-upload="false"
       >
@@ -103,20 +103,8 @@ export default {
   },
   methods: {
     getToken() {
-      // 获取token地址
-      const getAccessTokenUrl =
-        "https://aip.baidubce.com/oauth/2.0/token?" +
-        // 1. grant_type为固定参数
-        "grant_type=client_credentials" +
-        // 2. 官网获取的 API Key
-        "&client_id=" +
-        BAIDU_API_KEY +
-        // 3. 官网获取的 Secret Key
-        "&client_secret=" +
-        BAIDU_SECRET_KEY;
-      this.$http.get(getAccessTokenUrl, {
-        callback: "jsonpCallback",
-      }).then((data) => {
+
+      this.$http.post("unAuth/imgToText").then((data) => {
         console.log(data);
       });
     },
