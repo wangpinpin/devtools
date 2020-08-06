@@ -63,7 +63,7 @@ export default {
         "background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);",
         "background-image: linear-gradient(to top, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%);",
         "background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);",
-        "background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);",
+        "background-image: linear-gradient(to top, #d299c2 0%, #fef9d7 100%);",
         "background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);",
         "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
       ],
@@ -120,7 +120,7 @@ export default {
 .home-container {
   margin: 40px auto 0;
   text-align: center;
-  color: #ffffff;
+  color: #7c96b1;
   display: flex;
   .content {
     width: 100%;
@@ -146,7 +146,7 @@ export default {
         margin: 0.208333rem auto 0;
         display: flex;
         flex-direction: row;
-        border: 0.005208rem solid #ffffff;
+        border: 0.005208rem solid #7c96b1;
         width: 58%;
         height: 54px;
         border-radius: 50px;
@@ -160,10 +160,10 @@ export default {
           width: 57%;
           font-size: 0.109375rem;
           line-height: 0.265625rem;
-          color: #e8e8e8;
+          color: #7c96b1;
         }
         .searchButton {
-          border-left: 1px solid #fff;
+          border-left: 1px solid #7c96b1;
           font-size: 16px;
           padding-left: 18px;
           cursor: pointer;
@@ -177,6 +177,7 @@ export default {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+      color: #fff;
       .card-tool {
         width: 15%;
         height: 120px;

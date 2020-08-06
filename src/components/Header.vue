@@ -32,10 +32,10 @@ export default {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  color: #efefef;
+  color: #333;
   font-size: 18px;
   .item:hover {
-    color: #fff;
+    color: #7c96b1;
   }
   .left {
     width: 10%;

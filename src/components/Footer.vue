@@ -23,10 +23,10 @@ export default {
   bottom: 20px;
   left: 0;
   right: 0;
-  color: #efeaea;
+  color: #333;
 
   a {
-    color: #efeaea !important;
+    color: #333 !important;
   }
 }
 @media screen and (max-width: 900px) {
