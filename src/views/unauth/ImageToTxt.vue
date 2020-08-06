@@ -16,7 +16,7 @@
         </div>
       </el-upload>
       <div class="">
-        <el-select v-model="value" placeholder="请选择语言">
+        <el-select v-model="value">
           <el-option
             v-for="item in languages"
             :key="item.value"
@@ -89,7 +89,7 @@ export default {
           label: "俄语",
         },
       ],
-      value: "",
+      value: "CHN_ENG",
     };
   },
   created() {},
