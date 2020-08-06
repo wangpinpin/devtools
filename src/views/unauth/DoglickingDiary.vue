@@ -66,7 +66,7 @@ export default {
   .title {
     font-size: 40px;
     text-align: center;
-    color: #fff;
+    color: #7c96b1;
   }
 
   .content {
