@@ -5,6 +5,7 @@ import store from "./store";
 import http from "@/util/http";
 import { formatDate } from '@/util/date'
 
+
 //rem转换插件
 import "amfe-flexible";
 //完整引入element组件库
@@ -44,10 +45,11 @@ Vue.prototype.$http = http;
 Vue.config.productionTip = false;
 
 //打印当前所处环境
-console.log("当前所处环境", process.env.NODE_ENV);
+console.log("当前所处环境: ", process.env.NODE_ENV);
+console.log("当前环境API: ", process.env.VUE_APP_BASE_URL);
 
 //过滤器
-Vue.filter('formatDate', function (value1, value2) {
+Vue.filter('formatDate', function(value1, value2) {
     let date = new Date(value1);
     return formatDate(date, value2);
 })

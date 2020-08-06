@@ -6,8 +6,9 @@
       <el-upload
         class="upload-demo"
         drag
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action="https://api.wangpinpin.com/unAuth/imgToText"
         multiple
+        :auto-upload="false"
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -92,21 +93,18 @@ export default {
       value: "CHN_ENG",
     };
   },
-  created() {},
+  created() {
+    this.value = this.languages[0].value;
+  },
+  mounted() {
+    window.jsonpCallback = (data) => {
+      console.log(data);
+    };
+  },
   methods: {
     getToken() {
-      // 获取token地址
-      const getAccessTokenUrl =
-        "https://aip.baidubce.com/oauth/2.0/token?" +
-        // 1. grant_type为固定参数
-        "grant_type=client_credentials" +
-        // 2. 官网获取的 API Key
-        "&client_id=" +
-        BAIDU_API_KEY +
-        // 3. 官网获取的 Secret Key
-        "&client_secret=" +
-        BAIDU_SECRET_KEY;
-      this.$http.get(getAccessTokenUrl).then((data) => {
+
+      this.$http.post("unAuth/imgToText").then((data) => {
         console.log(data);
       });
     },
