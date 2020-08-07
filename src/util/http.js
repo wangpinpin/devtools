@@ -15,59 +15,70 @@ axios.interceptors.request.use(
         return Promise.reject(err);
     }
 );
-
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
+
     if (response.data.code == 0) {
         return response.data
     } else {
-        //打印response.data.msg
+        window.$notify.error({
+            title: '异常',
+            message: response.data.msg,
+            position: 'bottom-right'
+        });
     }
 }, err => {
+    let msg = "";
     if (err && err.response) {
         switch (err.response.status) {
             case 400:
-                console.log('错误请求')
+                msg = '错误请求';
                 break;
             case 401:
-                console.log('未授权，请重新登录')
+                msg = '未授权，请重新登录';
                 break;
             case 403:
-                console.log('拒绝访问')
+                msg = '拒绝访问';
                 break;
             case 404:
-                console.log('请求错误,未找到该资源')
+                msg = '请求错误,未找到该资源';
                 break;
             case 405:
-                console.log('请求方法未允许')
+                msg = '请求方法未允许';
                 break;
             case 408:
-                console.log('请求超时')
+                msg = '请求超时';
                 break;
             case 500:
-                console.log('服务器端出错')
+                msg = '服务器端出错';
                 break;
             case 501:
-                console.log('网络未实现')
+                msg = '网络未实现';
                 break;
             case 502:
-                console.log('网络错误')
+                msg = '网络错误';
                 break;
             case 503:
-                console.log('服务不可用')
+                msg = '服务不可用';
                 break;
             case 504:
-                console.log('网络超时')
+                msg = '网络超时';
                 break;
             case 505:
-                console.log('http版本不支持该请求')
+                msg = 'http版本不支持该请求';
                 break;
             default:
-                console.log(`连接错误${err.response.status}`)
+                msg = `连接错误${err.response.status}`;
         }
+
     } else {
-        console.log('连接到服务器失败')
+        msg = '连接到服务器失败';
     }
+    window.$notify.error({
+        title: '异常',
+        message: msg,
+        position: 'bottom-right'
+    });
     return Promise.resolve(err.response)
 })
 
