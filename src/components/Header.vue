@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <div class="left">
-        <div class="item">菜单</div>
+        <div class="item"><a href="/">首页</a></div>
       </div>
       <div class="right">
         <div class="item">菜单1</div>
@@ -43,6 +43,10 @@ export default {
     font-weight: bold;
     .item {
       cursor: pointer;
+      a {
+        color: #efefef;
+        text-decoration: none;
+      }
     }
   }
   .right {
