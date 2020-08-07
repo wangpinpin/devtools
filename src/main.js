@@ -50,7 +50,7 @@ console.log("当前所处环境: ", process.env.NODE_ENV);
 console.log("当前环境API: ", process.env.VUE_APP_BASE_URL);
 
 //过滤器
-Vue.filter('formatDate', function(value1, value2) {
+Vue.filter('formatDate', function (value1, value2) {
     let date = new Date(value1);
     return formatDate(date, value2);
 })

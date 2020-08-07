@@ -15,6 +15,8 @@
           :data="uploadData"
           :file-list="fileList"
           :on-success="uploadSuccess"
+          :on-remove="removeFile"
+          :on-exceed="exceedFile"
         >
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -34,11 +36,14 @@
           </el-select>
           <el-button type="success" @click="upload">提取文字</el-button>
         </div>
-        <p class="result">{{ result }}</p>
       </div>
       <div class="right">
         <div class="copy" @click="copy">复制</div>
-        <div class="text" ref="text" v-html="text"></div>
+        <div class="textScroll" ref="textscroll">
+          <el-scrollbar>
+            <div class="text" ref="text" v-html="text"></div>
+          </el-scrollbar>
+        </div>
       </div>
     </div>
     <Footer />
@@ -57,7 +62,6 @@ export default {
   data() {
     return {
       title: "图片文字提取",
-      result: "",
       uploadData: {},
       fileList: [],
       languages: [
@@ -105,6 +109,7 @@ export default {
       value: "",
       formMaxSize: 3,
       text: "",
+      loading: "",
     };
   },
   created() {
@@ -113,6 +118,8 @@ export default {
   methods: {
     //上传前操作
     beforUpload(file) {
+      this.fileList.push(file);
+
       // 验证文件大小
       if (file.size / 1024 / 1024 > this.formMaxSize) {
         this.$message({
@@ -135,18 +142,30 @@ export default {
       }
 
       this.uploadData.languageType = this.value;
+      this.loading = this.$loading.service({
+        target: this.$refs.textscroll,
+      });
       return true;
     },
 
     //上传图片到服务器
     upload() {
       this.$refs.upload.submit();
+      if (this.fileList.length == 0) {
+        this.loading.close();
+        this.$message({
+          message: "请先上传图片！",
+          type: "warning",
+        });
+      }
     },
 
     //上传成功之后
     uploadSuccess(res) {
       //清空列表
-      this.$refs.upload.clearFiles();
+      // this.$refs.upload.clearFiles();
+      // this.fileList.length = 0;
+      this.loading.close();
       if (res.data.words_result) {
         let words = "";
         res.data.words_result.forEach((e) => {
@@ -154,6 +173,20 @@ export default {
         });
         this.text = words;
       }
+    },
+
+    //移除图片
+    removeFile() {
+      this.fileList.length = 0;
+      this.loading.close();
+      this.$refs.upload.abort();
+    },
+
+    exceedFile() {
+      this.$message({
+        message: "单次仅支持识别一张图片！",
+        type: "warning",
+      });
     },
 
     copy() {
@@ -175,7 +208,7 @@ export default {
   .title {
     font-size: 40px;
     text-align: center;
-    color: #fff;
+    color: #7c96b1;
   }
   .content {
     width: 70%;
@@ -201,14 +234,20 @@ export default {
         cursor: pointer;
         font-size: 18px;
       }
-      .text {
+      .textScroll {
         background: #fff;
         height: 100%;
         margin: 5% auto;
         font-size: 17px;
         color: #616161;
-        padding: 0 3%;
         overflow: auto;
+      }
+      /deep/.el-scrollbar {
+        height: 100%;
+        .el-scrollbar__wrap {
+          overflow-x: hidden;
+          padding: 0 3%;
+        }
       }
     }
   }
