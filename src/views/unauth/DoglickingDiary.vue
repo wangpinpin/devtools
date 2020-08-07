@@ -40,11 +40,12 @@ export default {
   created() {},
   methods: {
     search() {
-      this.$http.get("unAuth/getDoglickingDiary").then((data) => {
-        this.text =
-          this.$options.filters["formatDate"](this.date, "yyyy-MM-dd") +
-          " " +
-          data;
+      this.$http.get("unAuth/getDoglickingDiary").then((res) => {
+        const date = this.$options.filters["formatDate"](
+          this.date,
+          "yyyy年MM月dd日"
+        );
+        this.text = date + " "+ res;
       });
     },
     copy() {
