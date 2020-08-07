@@ -12,11 +12,10 @@
           :limit="1"
           :auto-upload="false"
           :before-upload="beforUpload"
-          :data="uploadData"
           :file-list="fileList"
-          :on-success="uploadSuccess"
           :on-remove="removeFile"
           :on-exceed="exceedFile"
+          :http-request="coustomUpload"
         >
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -52,6 +51,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import axios from "axios";
 
 export default {
   name: "ColorTransfer",
@@ -62,7 +62,6 @@ export default {
   data() {
     return {
       title: "图片文字提取",
-      uploadData: {},
       fileList: [],
       languages: [
         {
@@ -118,8 +117,6 @@ export default {
   methods: {
     //上传前操作
     beforUpload(file) {
-      this.fileList.push(file);
-
       // 验证文件大小
       if (file.size / 1024 / 1024 > this.formMaxSize) {
         this.$message({
@@ -141,7 +138,6 @@ export default {
         return false;
       }
 
-      this.uploadData.languageType = this.value;
       this.loading = this.$loading.service({
         target: this.$refs.textscroll,
       });
@@ -151,28 +147,24 @@ export default {
     //上传图片到服务器
     upload() {
       this.$refs.upload.submit();
-      if (this.fileList.length == 0) {
-        this.loading.close();
-        this.$message({
-          message: "请先上传图片！",
-          type: "warning",
-        });
-      }
     },
-
-    //上传成功之后
-    uploadSuccess(res) {
-      //清空列表
-      // this.$refs.upload.clearFiles();
-      // this.fileList.length = 0;
-      this.loading.close();
-      if (res.data.words_result) {
-        let words = "";
-        res.data.words_result.forEach((e) => {
-          words += e.words + "<br />";
-        });
-        this.text = words;
-      }
+    
+    //自定义上传方法
+    coustomUpload(data) {
+      var formData = new FormData();
+      formData.append("file", data.file);
+      formData.append("languageType", this.value);
+      
+      this.$http.post("unAuth/imgToText", formData).then((res) => {
+        this.loading.close();
+        if (res.words_result) {
+          let words = "";
+          res.words_result.forEach((e) => {
+            words += e.words + "<br />";
+          });
+          this.text = words;
+        }
+      });
     },
 
     //移除图片
@@ -197,6 +189,7 @@ export default {
         });
       });
     },
+
   },
 };
 </script>
