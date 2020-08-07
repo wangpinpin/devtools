@@ -4,10 +4,9 @@ import router from "./router";
 import store from "./store";
 import http from "@/util/http";
 import { formatDate } from '@/util/date'
-
-
 //rem转换插件
 import "amfe-flexible";
+
 //完整引入element组件库
 // import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
@@ -19,7 +18,7 @@ VueClipboard.config.autoSetContainer = true
 Vue.use(VueClipboard)
 
 //按需引入element组件库
-import { Button, Select, Loading, Input, Tooltip, Scrollbar, Popover, Tabs, TabPane, ColorPicker, Option, Slider, Table, TableColumn, Message, DatePicker, Upload } from "element-ui";
+import { Button, Select, Loading, Input, Tooltip, Scrollbar, Popover, Tabs, TabPane, ColorPicker, Option, Slider, Table, TableColumn, Message, DatePicker, Upload, Notification } from "element-ui";
 
 Vue.use(Button);
 Vue.use(Select);
@@ -39,7 +38,9 @@ Vue.use(Upload);
 
 Vue.prototype.$loading = Loading;
 Vue.prototype.$message = Message;
+Vue.prototype.$notify = Notification;
 Vue.prototype.$http = http;
+window.$notify = Notification;
 
 //阻止启动生产消息
 Vue.config.productionTip = false;
