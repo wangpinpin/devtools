@@ -45,7 +45,7 @@ export default {
           this.date,
           "yyyy年MM月dd日"
         );
-        this.text = date + " "+ res;
+        this.text = date + " " + res;
       });
     },
     copy() {
@@ -71,7 +71,7 @@ export default {
   }
 
   .content {
-    margin: 10% auto;
+    margin: 10% auto 0;
     width: 27%;
 
     .condition {
@@ -79,6 +79,9 @@ export default {
       flex-direction: row;
       margin: 0 auto;
       justify-content: space-between;
+      .date {
+        visibility: hidden;
+      }
     }
     .text {
       background: #fff;
@@ -101,6 +104,8 @@ export default {
 }
 @media screen and (max-width: 900px) {
   .container {
+    // background: url(../../assets/imgs/dog.jpg) no-repeat;
+    // background-size: 100% 100%;
     .title {
       font-size: 100px;
       margin-top: 25%;

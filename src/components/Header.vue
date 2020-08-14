@@ -44,7 +44,7 @@ export default {
     .item {
       cursor: pointer;
       a {
-        color: #efefef;
+        color: #333;
         text-decoration: none;
       }
     }
@@ -54,6 +54,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+    visibility: hidden;
     div {
       cursor: pointer;
     }
