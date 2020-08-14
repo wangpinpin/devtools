@@ -104,8 +104,6 @@ export default {
 }
 @media screen and (max-width: 900px) {
   .container {
-    // background: url(../../assets/imgs/dog.jpg) no-repeat;
-    // background-size: 100% 100%;
     .title {
       font-size: 100px;
       margin-top: 25%;
