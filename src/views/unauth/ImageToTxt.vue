@@ -106,7 +106,7 @@ export default {
         },
       ],
       value: "",
-      formMaxSize: 3,
+      formMaxSize: 1,
       text: "",
       loading: "",
     };
@@ -156,8 +156,9 @@ export default {
       formData.append("languageType", this.value);
       
       this.$http.post("unAuth/imgToText", formData).then((res) => {
+        debugger
         this.loading.close();
-        if (res.words_result) {
+        if (res && res.words_result) {
           let words = "";
           res.words_result.forEach((e) => {
             words += e.words + "<br />";
