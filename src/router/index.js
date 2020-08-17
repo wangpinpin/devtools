@@ -56,6 +56,15 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/ImageToTxt.vue")
+    },
+    {
+        path: "/MessageBoard",
+        name: "MessageBoard",
+        meta: {
+            title: "留言板"
+        },
+        component: () =>
+            import ("../views/unauth/MessageBoard.vue")
     }
 ];
 

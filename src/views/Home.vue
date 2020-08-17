@@ -73,7 +73,7 @@ export default {
         { path: "/ColorTransfer", text: "颜色代码转换" },
         { path: "/DoglickingDiary", text: "舔狗日记" },
         { path: "/ImageToTxt", text: "图片文字提取" },
-        { path: "JsonFormat", text: "JSON格式化" },
+        { path: "MessageBoard", text: "留言板" },
         { path: "JsonFormat", text: "JSON格式化" },
         { path: "JsonFormat", text: "JSON格式化" },
         { path: "JsonFormat", text: "JSON格式化" },
