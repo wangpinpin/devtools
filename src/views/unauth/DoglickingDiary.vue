@@ -2,11 +2,21 @@
   <div class="container">
     <Header />
     <div class="title">{{ title }}</div>
+    <div class="qrcode">
+      <div>
+        网站域名可能因费用随时更换
+        <br />扫描二维码关注公众号不迷路
+        <br />更多内容正在建设中...
+        <br />
+      </div>
+      <div>
+        <img src="@/assets/imgs/qrcode.png" />
+      </div>
+    </div>
     <div class="content">
       <div class="condition">
         <div class="date">
-          <el-date-picker v-model="date" type="date" placeholder="选择日期">
-          </el-date-picker>
+          <el-date-picker v-model="date" type="date" placeholder="选择日期"></el-date-picker>
         </div>
         <div class="search" @click="search">
           <el-button type="success">开舔</el-button>
@@ -28,19 +38,19 @@ export default {
   name: "ColorTransfer",
   components: {
     Header,
-    Footer,
+    Footer
   },
   data() {
     return {
       title: "舔狗日记",
       date: new Date(),
-      text: "",
+      text: ""
     };
   },
   created() {},
   methods: {
     search() {
-      this.$http.get("unAuth/getDoglickingDiary").then((res) => {
+      this.$http.get("unAuth/getDoglickingDiary").then(res => {
         const date = this.$options.filters["formatDate"](
           this.date,
           "yyyy年MM月dd日"
@@ -52,24 +62,34 @@ export default {
       this.$copyText(this.text).then(() => {
         this.$message({
           message: "复制成功",
-          type: "success",
+          type: "success"
         });
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
 .container {
   width: 100%;
   height: 100%;
+  position: relative;
 
   .title {
     font-size: 40px;
     text-align: center;
     color: #7c96b1;
   }
-
+  .qrcode {
+    position: absolute;
+    right: 100px;
+    bottom: 20px;
+    font-size: 24px;
+    img {
+      margin-top: 20px;
+      width: 200px;
+    }
+  }
   .content {
     margin: 10% auto 0;
     width: 27%;
@@ -104,9 +124,24 @@ export default {
 }
 @media screen and (max-width: 900px) {
   .container {
+    position: relative;
+
     .title {
       font-size: 100px;
       margin-top: 25%;
+    }
+    .qrcode {
+      position: absolute;
+      right: 0;
+      bottom: 5%;
+      font-size: 0.125rem;
+      left: 0;
+      margin: 0 auto;
+      text-align: center;
+      img {
+        margin-top: 20px;
+        width: 30%;
+      }
     }
     .content {
       margin: 22% auto;
