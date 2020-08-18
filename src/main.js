@@ -12,6 +12,9 @@ import { HappyScroll } from 'vue-happy-scroll'
 import 'vue-happy-scroll/docs/happy-scroll.css'
 Vue.component('happy-scroll', HappyScroll)
 
+//无限滚动
+import infiniteScroll from "vue-infinite-scroll";
+Vue.use(infiniteScroll);
 //完整引入element组件库
 // import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';

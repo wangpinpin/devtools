@@ -2,15 +2,19 @@
   <div>
     <div class="container">
       <div class="left">
-        <div class="item"><a href="/">首页</a></div>
+        <div class="item">
+          <a href="/">首页</a>
+        </div>
       </div>
       <div class="right">
-        <div class="item">菜单1</div>
-        <div class="item">菜单2</div>
+        <div class="item">
+          <a href="MessageBoard">留言板</a>
+        </div>
+        <!-- <div class="item">菜单2</div>
         <div class="item">菜单3</div>
         <div class="item">菜单4</div>
         <div class="item">菜单5</div>
-        <div class="item">菜单6</div>
+        <div class="item">菜单6</div>-->
       </div>
     </div>
   </div>
@@ -20,8 +24,8 @@
 export default {
   name: "Header",
   props: {
-    msg: String,
-  },
+    msg: String
+  }
 };
 </script>
 
@@ -54,9 +58,15 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    visibility: hidden;
     div {
       cursor: pointer;
+    }
+    .item {
+      cursor: pointer;
+      a {
+        color: #333;
+        text-decoration: none;
+      }
     }
   }
 }

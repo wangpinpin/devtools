@@ -16,6 +16,7 @@
     "postcss-px2rem": "^0.3.0",
     "qrcodejs2": "0.0.2",
     "vue": "^2.6.11",
+    "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^3.2.0",
     "vue-wechat-title": "^2.0.7",
     "vuex": "^3.4.0"
