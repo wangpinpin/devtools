@@ -26,15 +26,15 @@ module.exports = {
     },
 
     //rem自动转换
-    css: {
-        loaderOptions: {
-            postcss: {
-                plugins: [
-                    require("postcss-px2rem")({
-                        remUnit: 192
-                    })
-                ]
-            }
-        }
-    }
+    // css: {
+    //     loaderOptions: {
+    //         postcss: {
+    //             plugins: [
+    //                 require("postcss-px2rem")({
+    //                     remUnit: 192
+    //                 })
+    //             ]
+    //         }
+    //     }
+    // }
 };

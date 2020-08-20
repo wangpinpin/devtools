@@ -148,15 +148,15 @@ export default {
     upload() {
       this.$refs.upload.submit();
     },
-    
+
     //自定义上传方法
     coustomUpload(data) {
       var formData = new FormData();
       formData.append("file", data.file);
       formData.append("languageType", this.value);
-      
+
       this.$http.post("unAuth/imgToText", formData).then((res) => {
-        debugger
+        debugger;
         this.loading.close();
         if (res && res.words_result) {
           let words = "";
@@ -190,7 +190,6 @@ export default {
         });
       });
     },
-
   },
 };
 </script>
@@ -200,7 +199,7 @@ export default {
   height: 100%;
 
   .title {
-    font-size: 40px;
+    font-size: 0.4rem;
     text-align: center;
     color: #7c96b1;
   }
@@ -212,27 +211,27 @@ export default {
     justify-content: space-around;
     .left {
       .language {
-        margin-top: 20px;
+        line-height: 0;
       }
     }
     .right {
       width: 50%;
-      height: 500px;
+      height: 5rem;
       background: #fff;
       position: relative;
       .copy {
         position: absolute;
-        top: 10px;
-        right: 24px;
+        top: 0.1rem;
+        right: 0.24rem;
         color: blue;
         cursor: pointer;
-        font-size: 18px;
+        font-size: 0.18rem;
       }
       .textScroll {
         background: #fff;
         height: 100%;
         margin: 5% auto;
-        font-size: 17px;
+        font-size: 0.17rem;
         color: #616161;
         overflow: auto;
       }
@@ -247,5 +246,25 @@ export default {
   }
 }
 @media screen and (max-width: 900px) {
+  .container {
+    .content {
+      flex-direction: column;
+      width: unset;
+      margin: 0;
+      .left {
+        text-align: center;
+        .language {
+          line-height: 0;
+        }
+      }
+      .right {
+        width: unset;
+        margin: 5%;
+        .textScroll {
+          height: unset;
+        }
+      }
+    }
+  }
 }
 </style>

@@ -20,18 +20,13 @@ export default {
   margin: 0 auto;
   text-align: center;
   position: absolute;
-  bottom: 20px;
+  bottom: 0.2rem;
   left: 0;
   right: 0;
   color: #333;
-
+  font-size: 0.1rem;
   a {
     color: #333 !important;
-  }
-}
-@media screen and (max-width: 900px) {
-  .container {
-    font-size: 40px;
   }
 }
 </style>

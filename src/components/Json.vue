@@ -11,14 +11,24 @@
       >
         <el-button type="text" icon="el-icon-coin"></el-button>
       </el-tooltip> -->
-      <el-tooltip class="item" effect="dark" content="复制" placement="bottom">
+      <el-tooltip
+        class="item one"
+        effect="dark"
+        content="复制"
+        placement="bottom"
+      >
         <el-button
           type="text"
           icon="el-icon-document-copy"
           @click="copy()"
         ></el-button>
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="清空" placement="bottom">
+      <el-tooltip
+        class="item two"
+        effect="dark"
+        content="清空"
+        placement="bottom"
+      >
         <el-button
           type="text"
           icon="el-icon-delete"
@@ -129,6 +139,7 @@ export default {
         this.$message({
           message: "复制成功",
           type: "success",
+          duration: 0
         });
       });
     },
@@ -159,21 +170,24 @@ export default {
   }
   i {
     color: #088d13;
-    margin-left: 77px;
-    font-size: 40px;
+    margin-left: 0.77rem;
+    font-size: 0.4rem;
   }
   .jsonBtn {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    border-bottom: 0.005208rem solid #999;
+    border-bottom: 0.01rem solid #999;
     z-index: 2;
+    height: 0.5rem;
     button {
-      width: 60px;
-      padding: 6px 0;
+      position: absolute;
+      top: 0.05rem;
+      width: 0.6rem;
+      padding: 0.06rem 0;
       /deep/i {
-        font-size: 24px;
+        font-size: 0.24rem;
         color: #999;
       }
       &:hover,
@@ -184,9 +198,12 @@ export default {
         }
       }
     }
+    .two {
+      left: 0.4rem;
+    }
   }
   .jsonScroll {
-    padding-top: 40px;
+    padding-top: 0.7rem;
     height: 100%;
     box-sizing: border-box;
   }
@@ -195,36 +212,6 @@ export default {
     height: 100%;
     .el-scrollbar__wrap {
       overflow: auto;
-    }
-  }
-}
-@media screen and (max-width: 900px) {
-  .container {
-    .jsonBtn {
-      height: 150px;
-      button {
-        width: 100px;
-        padding: 0 20px;
-        box-sizing: content-box;
-        vertical-align: top;
-        line-height: 160px;
-        /deep/i {
-          font-size: 80px;
-        }
-      }
-    }
-    .jsonScroll {
-      padding-top: 150px;
-      width: 98%;
-      margin: 0 auto;
-    }
-  }
-  /deep/.el-message {
-    display: flex;
-    justify-content: center;
-    .el-message__icon,
-    .el-message__content {
-      font-size: 40px;
     }
   }
 }

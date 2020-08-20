@@ -54,7 +54,7 @@ export default {
   height: 100%;
 
   .title {
-    font-size: 40px;
+    font-size: .4rem;
     text-align: center;
     color: #7c96b1;
   }
@@ -70,7 +70,7 @@ export default {
       width: 50%;
       height: 91%;
       background: #fff;
-      border: 0.005208rem solid #999;
+      border: 0.01rem solid #999;
       position: relative;
     }
     .left {
@@ -84,13 +84,13 @@ export default {
           border-radius: 0;
           border: 0;
           &::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 0.06rem;
+            height: 0.06rem;
           }
           &::-webkit-scrollbar-thumb {
-            border-radius: 3px;
-            -moz-border-radius: 3px;
-            -webkit-border-radius: 3px;
+            border-radius: 0.03rem;
+            -moz-border-radius: 0.03rem;
+            -webkit-border-radius: 0.03rem;
             background-color: rgba(144, 147, 153, 0.3);
           }
           &::-webkit-scrollbar-track {
@@ -105,28 +105,6 @@ export default {
     }
     .right {
       overflow: auto;
-    }
-  }
-}
-@media screen and (max-width: 900px) {
-  .container {
-    .title {
-      font-size: 100px;
-      margin-top: 5%;
-    }
-    .content {
-      flex-direction: column;
-      .left,
-      .right {
-        width: 100%;
-        height: 50%;
-      }
-     
-      .left {
-        /deep/.el-textarea {
-          font-size: 40px;
-        }
-      }
     }
   }
 }

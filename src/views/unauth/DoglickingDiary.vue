@@ -5,8 +5,7 @@
     <div class="qrcode">
       <div>
         网站域名可能因费用随时更换
-        <br />扫描二维码关注公众号不迷路
-        <br />更多内容正在建设中...
+        <br />扫描二维码关注公众号不迷路 <br />更多内容正在建设中...
         <br />
       </div>
       <div>
@@ -16,7 +15,11 @@
     <div class="content">
       <div class="condition">
         <div class="date">
-          <el-date-picker v-model="date" type="date" placeholder="选择日期"></el-date-picker>
+          <el-date-picker
+            v-model="date"
+            type="date"
+            placeholder="选择日期"
+          ></el-date-picker>
         </div>
         <div class="search" @click="search">
           <el-button type="success">开舔</el-button>
@@ -38,19 +41,19 @@ export default {
   name: "ColorTransfer",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
       title: "舔狗日记",
       date: new Date(),
-      text: ""
+      text: "",
     };
   },
   created() {},
   methods: {
     search() {
-      this.$http.get("unAuth/getDoglickingDiary").then(res => {
+      this.$http.get("unAuth/getDoglickingDiary").then((res) => {
         const date = this.$options.filters["formatDate"](
           this.date,
           "yyyy年MM月dd日"
@@ -62,11 +65,11 @@ export default {
       this.$copyText(this.text).then(() => {
         this.$message({
           message: "复制成功",
-          type: "success"
+          type: "success",
         });
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -76,18 +79,18 @@ export default {
   position: relative;
 
   .title {
-    font-size: 40px;
+    font-size: 0.4rem;
     text-align: center;
     color: #7c96b1;
   }
   .qrcode {
     position: absolute;
-    right: 100px;
-    bottom: 20px;
-    font-size: 24px;
+    right: 1rem;
+    bottom: 0.2rem;
+    font-size: 0.24rem;
     img {
-      margin-top: 20px;
-      width: 200px;
+      margin-top: 0.2rem;
+      width: 2rem;
     }
   }
   .content {
@@ -99,25 +102,27 @@ export default {
       flex-direction: row;
       margin: 0 auto;
       justify-content: space-between;
+      line-height: 0;
       .date {
-        visibility: hidden;
+        // visibility: hidden;
       }
     }
     .text {
       background: #fff;
-      height: 1.5625rem;
+      height: 3rem;
       margin: 5% auto;
       padding: 11% 5% 5% 5%;
-      font-size: 17px;
+      font-size: 0.17rem;
       color: #616161;
       position: relative;
 
       .copy {
         position: absolute;
-        top: 10px;
-        right: 24px;
+        top: 0.1rem;
+        right: 0.24rem;
         color: blue;
         cursor: pointer;
+        font-size: 0.2rem;
       }
     }
   }
@@ -126,10 +131,6 @@ export default {
   .container {
     position: relative;
 
-    .title {
-      font-size: 100px;
-      margin-top: 25%;
-    }
     .qrcode {
       position: absolute;
       right: 0;
@@ -139,46 +140,13 @@ export default {
       margin: 0 auto;
       text-align: center;
       img {
-        margin-top: 20px;
+        margin-top: 0.2rem;
         width: 30%;
       }
     }
     .content {
-      margin: 22% auto;
+      margin: 13% auto;
       width: 90%;
-      .condition {
-        .search {
-          height: 150px;
-          width: 300px;
-          font-size: 40px;
-
-          button {
-            width: 100%;
-            height: 100%;
-            font-size: 40px;
-          }
-
-          .date {
-            visibility: hidden;
-          }
-        }
-      }
-      .text {
-        display: flex;
-        align-items: center;
-        height: auto;
-        font-size: 40px;
-        padding: 6%;
-        min-height: 400px;
-      }
-    }
-  }
-  /deep/.el-message {
-    display: flex;
-    justify-content: center;
-    .el-message__icon,
-    .el-message__content {
-      font-size: 40px;
     }
   }
 }

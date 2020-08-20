@@ -188,7 +188,7 @@ export default {
   height: 100%;
 
   .title {
-    font-size: 40px;
+    font-size: .4rem;
     text-align: center;
     color: #7c96b1;
   }
@@ -215,9 +215,9 @@ export default {
         }
       }
       /deep/.el-input__inner {
-        height: 80px;
-        line-height: 80px;
-        font-size: 20px;
+        height: .8rem;
+        line-height: .8rem;
+        font-size: .2rem;
         outline: none;
         border: 1px dashed transparent;
         &:focus {
@@ -226,25 +226,26 @@ export default {
         }
       }
       .urlText {
-        min-height: 80px;
-        font-size: 20px;
+        min-height: .8rem;
+        font-size: .2rem;
         background-color: #fff;
         margin: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         word-break: break-all;
-        padding: 10px 20px;
+        padding: .1rem .2rem;
       }
     }
     .btn {
-      margin-top: 40px;
+      margin-top: .4rem;
     }
     .right {
-      width: 350px;
+      width: 3.5rem;
       position: relative;
+          line-height: 0;
       .tip {
-        font-size: 0.104167rem;
+        font-size: 0.1rem;
         color: #999;
         cursor: pointer;
         position: absolute;
@@ -260,9 +261,9 @@ export default {
           display: inline-block;
           p {
             color: #000;
-            font-size: 18px;
+            font-size: .18rem;
             margin: 0;
-            line-height: 40px;
+            line-height: .4rem;
           }
         }
       }
@@ -274,9 +275,9 @@ export default {
           align-items: center;
           span {
             color: #000;
-            font-size: 18px;
+            font-size: .18rem;
             margin: 0;
-            line-height: 40px;
+            line-height: .4rem;
           }
           .item-options {
             width: 80%;
@@ -285,8 +286,8 @@ export default {
       }
     }
     #qrCode {
-      width: 350px;
-      height: 350px;
+      width: 3.5rem;
+      height: 3.5rem;
       background-color: #fff;
       margin: 0 auto;
       display: flex;
@@ -302,84 +303,16 @@ export default {
     }
     .settings {
       .el-button {
-        margin: 5px 10px;
+        margin: 0.05rem .1rem;
       }
     }
   }
 }
-@media screen and (max-width: 900px) {
-  .container {
-    .title {
-      font-size: 100px;
-      margin-top: 25%;
-    }
-    .content {
-      flex-direction: column;
-      .left {
-        margin: 0;
-        width: 100%;
-
-        .urlText,
-        /deep/.el-input__inner {
-          height: 150px;
-          line-height: 150px;
-          font-size: 40px;
-        }
-      }
-      .btn {
-        width: 8em;
-        line-height: 100px;
-        font-size: 40px;
-      }
-      .right {
-        width: 100%;
-        margin-top: 5%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        /deep/.el-tabs--border-card {
-          width: 100%;
-          margin-top: 5%;
-          .el-tabs__nav {
-            height: 120px;
-          }
-          .el-tabs__item {
-            font-size: 40px;
-            height: 120px;
-            line-height: 120px;
-            vertical-align: top;
-          }
-        }
-        .tab-1 {
-          .item {
-            p {
-              font-size: 40px;
-              line-height: 2.5;
-            }
-          }
-        }
-        .tab-2 {
-          .item {
-            span {
-              font-size: 40px;
-              line-height: 2.5;
-            }
-          }
-        }
-      }
-      #qrCode {
-        width: 600px;
-        height: 600px;
-      }
-      .btn-download {
-        width: 600px;
-        line-height: 100px;
-        font-size: 40px;
-      }
-    }
-  }
-  /deep/.el-popover {
-    font-size: 40px;
-  }
+/deep/.el-color-picker {
+    height: unset;
+}
+/deep/.el-slider__button-wrapper {
+  top: -14px !important;
+  line-height: 0;
 }
 </style>

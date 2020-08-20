@@ -32,18 +32,18 @@ export default {
 <style scoped lang="less">
 .container {
   width: 100%;
-  height: 120px;
+  height: 1.2rem;
   display: flex;
   justify-content: space-around;
   align-items: center;
   color: #333;
-  font-size: 18px;
+  font-size: .18rem;
   .item:hover {
     color: #7c96b1;
   }
   .left {
     width: 10%;
-    font-size: 20px;
+    font-size: .2rem;
     font-weight: bold;
     .item {
       cursor: pointer;
@@ -70,16 +70,16 @@ export default {
     }
   }
 }
-@media screen and (max-width: 900px) {
-  .container {
-    padding-top: 0.5rem;
-    font-size: 40px;
-  }
-  .container .left {
-    font-size: 40px;
-  }
-  .container .right {
-    width: 56%;
-  }
-}
+// @media screen and (max-width: 900px) {
+//   .container {
+//     padding-top: 0.5rem;
+//     font-size: 40px;
+//   }
+//   .container .left {
+//     font-size: 40px;
+//   }
+//   .container .right {
+//     width: 56%;
+//   }
+// }
 </style>

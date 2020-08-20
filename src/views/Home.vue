@@ -74,10 +74,10 @@ export default {
         { path: "/DoglickingDiary", text: "舔狗日记" },
         { path: "/ImageToTxt", text: "图片文字提取" },
         { path: "MessageBoard", text: "留言板" },
-        { path: "JsonFormat", text: "JSON格式化" },
-        { path: "JsonFormat", text: "JSON格式化" },
-        { path: "JsonFormat", text: "JSON格式化" },
-        { path: "JsonFormat", text: "JSON格式化" },
+        { path: "/", text: "正在开发" },
+        { path: "/", text: "正在开发" },
+        { path: "/", text: "正在开发" },
+        { path: "/", text: "正在开发" },
       ],
     };
   },
@@ -118,7 +118,7 @@ export default {
 </script>
 <style scoped lang="less">
 .home-container {
-  margin: 40px auto 0;
+  margin: 0.4rem auto 0;
   text-align: center;
   color: #7c96b1;
   display: flex;
@@ -129,28 +129,28 @@ export default {
       margin: 0 auto;
       width: 35%;
       .title {
-        font-size: 48px;
+        font-size: 0.48rem;
       }
       .inputText {
         position: absolute;
-        right: 140px;
-        top: 12px;
-        font-size: 32px;
+        right: 1.4rem;
+        top: 0.12rem;
+        font-size: 0.32rem;
       }
       .sub-title {
-        margin-top: 20px;
-        font-size: 16px;
-        line-height: 30px;
+        margin-top: 0.2rem;
+        font-size: 0.16rem;
+        line-height: 0.3rem;
       }
       .search {
         margin: 0.208333rem auto 0;
         display: flex;
         flex-direction: row;
-        border: 0.005208rem solid #7c96b1;
+        border: 0.01rem solid #7c96b1;
         width: 58%;
-        height: 54px;
-        border-radius: 50px;
-        line-height: 54px;
+        height: 0.54rem;
+        border-radius: 0.5rem;
+        line-height: 0.54rem;
         justify-content: space-around;
         .searchText {
           background: none;
@@ -158,39 +158,40 @@ export default {
           outline: none;
           height: 0.265625rem;
           width: 57%;
-          font-size: 0.109375rem;
-          line-height: 0.265625rem;
+          font-size: 0.1rem;
+          line-height: 0.26rem;
           color: #7c96b1;
         }
         .searchButton {
-          border-left: 1px solid #7c96b1;
-          font-size: 16px;
-          padding-left: 18px;
+          border-left: 0.01rem solid #7c96b1;
+          font-size: 0.16rem;
+          padding-left: 0.18rem;
           cursor: pointer;
         }
       }
     }
     .card {
-      margin: 80px auto 0;
-      width: 80%;
-      height: 400px;
+      margin: 0.8rem auto 0;
+      width: 68%;
+      height: 4rem;
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
       color: #fff;
       .card-tool {
-        width: 15%;
-        height: 120px;
-        line-height: 120px;
-        border-radius: 30px;
-        margin-left: 60px;
-        font-size: 24px;
+        width: 2rem;
+        height: 1.2rem;
+        line-height: 1.2rem;
+        border-radius: 0.3rem;
+        margin: 0.2rem 0.3rem;
+        font-size: 0.24rem;
         cursor: pointer;
+        text-align: center;
       }
       .card-tool:hover {
-        border: 4px solid #fff;
+        border: 0.04rem solid #fff;
         box-sizing: border-box;
-        line-height: 111px;
+        line-height: 1.11rem;
       }
     }
   }
@@ -202,18 +203,8 @@ export default {
         display: none;
       }
       .card {
-        margin-top: 20%;
+        width: 100%;
         justify-content: center;
-        .card-tool {
-          width: 40%;
-          height: 260px;
-          line-height: 260px;
-          margin-top: 10%;
-          font-size: 40px;
-          &:hover {
-            line-height: 260px;
-          }
-        }
       }
     }
   }

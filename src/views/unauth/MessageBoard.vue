@@ -5,15 +5,37 @@
 
     <div class="content">
       <div class="cr">
-        <div class="infinite-list-wrapper record" style="overflow-y:auto;overflow-x: hidden;">
-          <happy-scroll color="rgba(0,0,0,0.2)" size="3" :hide-horizontal="true" resize>
-            <ul class="list" v-infinite-scroll="load" infinite-scroll-disabled="disabled">
-              <li v-for="(item,index) in list" class="list-item" v-bind:key="index">
+        <div
+          class="infinite-list-wrapper record"
+          style="overflow-y:auto;overflow-x: hidden;"
+        >
+          <happy-scroll
+            color="rgba(0,0,0,0.2)"
+            size="3"
+            :hide-horizontal="true"
+            resize
+          >
+            <ul
+              class="list"
+              v-infinite-scroll="load"
+              infinite-scroll-disabled="disabled"
+            >
+              <li
+                v-for="(item, index) in list"
+                class="list-item"
+                v-bind:key="index"
+              >
                 <div class="name">
-                  <img :src="require('../../assets/imgs/head/'+ getHeadImgIndex(index + 1)+'.png')" />
+                  <img
+                    :src="
+                      require('../../assets/imgs/head/' +
+                        getHeadImgIndex(index + 1) +
+                        '.png')
+                    "
+                  />
                 </div>
-                <div class="text">{{item.content}}</div>
-                <div class="time">{{item.createTime}}</div>
+                <div class="text">{{ item.content }}</div>
+                <div class="time">{{ item.createTime }}</div>
               </li>
             </ul>
             <p v-if="loading" class="loading">加载中...</p>
@@ -23,12 +45,18 @@
       </div>
 
       <div class="message">
-        <el-button type="primary" @click="dialogFormVisible = true">点击留言</el-button>
+        <el-button type="primary" @click="dialogFormVisible = true"
+          >点击留言</el-button
+        >
       </div>
       <el-dialog title="请输入留言" :visible.sync="dialogFormVisible">
         <el-form>
           <el-form-item label="">
-            <el-input type="textarea" v-model="text" autocomplete="off"></el-input>
+            <el-input
+              type="textarea"
+              v-model="text"
+              autocomplete="off"
+            ></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -48,7 +76,7 @@ export default {
   name: "MessageBoard",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
@@ -60,7 +88,7 @@ export default {
       formLabelWidth: "120px",
       text: "",
       pageNo: -1,
-      pageSize: 10
+      pageSize: 10,
     };
   },
   created() {
@@ -69,7 +97,7 @@ export default {
   computed: {
     disabled() {
       return this.loading || this.noMore;
-    }
+    },
   },
   methods: {
     //下滑加載數據
@@ -90,7 +118,7 @@ export default {
       if (this.text) {
         var formData = new FormData();
         formData.append("msg", this.text);
-        this.$http.post("unAuth/addMsgBoard", formData).then(res => {
+        this.$http.post("unAuth/addMsgBoard", formData).then((res) => {
           this.dialogFormVisible = false;
           this.text = "";
           //刷新列表
@@ -101,7 +129,7 @@ export default {
       } else {
         this.$message({
           message: "留言内容不能为空",
-          type: "warning"
+          type: "warning",
         });
       }
     },
@@ -109,17 +137,17 @@ export default {
     initTextList() {
       let param = {
         pageNo: this.pageNo,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
       };
-      this.$http.get("unAuth/findMsgBoard", param).then(res => {
+      this.$http.get("unAuth/findMsgBoard", param).then((res) => {
         this.loading = false;
         if (res.length < this.pageSize) {
           this.noMore = true;
         }
         this.list.push(...res);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -128,7 +156,7 @@ export default {
   height: 100%;
 
   .title {
-    font-size: 40px;
+    font-size: 0.4rem;
     text-align: center;
     color: #7c96b1;
   }
@@ -141,7 +169,7 @@ export default {
       width: 100%;
       height: 100%;
       .record {
-        margin-top: 20px;
+        margin-top: 0.2rem;
         height: 100%;
         width: 100%;
         /deep/infinite-list-wrapper {
@@ -149,38 +177,40 @@ export default {
         }
         .loading {
           text-align: center;
+          font-size: 0.16rem;
         }
         .no-more {
           text-align: center;
-          line-height: 49px;
+          font-size: 0.16rem;
+          line-height: 0.49rem;
         }
         .list {
           width: 88%;
           .list-item {
             position: relative;
-            margin-top: 45px;
-            padding-bottom: 10px;
-            padding-left: 6px;
-            margin-right: 20px;
+            margin-top: 0.45rem;
+            padding-bottom: 0.1rem;
+            padding-left: 0.06rem;
+            margin-right: 0.2rem;
             width: 100%;
             list-style-type: none;
             .name {
-              font-size: 20px;
+              font-size: 0.2rem;
               img {
-                width: 40px;
+                width: 0.4rem;
                 position: absolute;
-                left: -42px;
+                left: -0.42rem;
               }
             }
             .text {
               color: #565656;
-              line-height: 24px;
+              line-height: 0.24rem;
               text-align: justify;
               word-break: break-all;
-              font-size: 16px;
+              font-size: 0.16rem;
             }
             .time {
-              font-size: 12px;
+              font-size: 0.12rem;
               text-align: right;
               color: #6b6b6b;
               margin-right: 2%;
@@ -192,55 +222,47 @@ export default {
     .message {
       margin: 0 auto;
       text-align: center;
-      margin-top: 30px;
+      margin-top: 0.3rem;
+      line-height: 0;
       button {
-        width: 200px;
-        height: 50px;
+        width: 2rem;
+        height: 0.5rem;
       }
     }
     /deep/.el-textarea__inner {
-      height: 100px;
+      height: 1rem;
+    }
+    /deep/.el-dialog {
+      line-height: 0;
     }
   }
 }
 @media screen and (max-width: 900px) {
   .container {
-    .title {
-      font-size: 100px;
-      margin-top: 10%;
-      margin-bottom: 5%;
-    }
     .content {
-      width: 95%;
+      width: 90%;
+      height: 65%;
       .cr {
         .record {
-          .loading,
-          .no-more {
-            font-size: 20px;
-            margin-bottom: 1rem;
-          }
           .list {
             .list-item {
-              .name {
-                img {
-                  width: 12%;
-                  position: absolute;
-                  left: -13%;
-                }
-              }
-              .text {
-                line-height: 100px;
-              }
+              width: 88%;
             }
           }
         }
       }
+
+      .message {
+        /deep/.el-button {
+          width: 2rem !important;
+          height: 0.7rem !important;
+          border-radius: 0.7rem !important;
+        }
+      }
     }
   }
-  /deep/.el-button--primary {
-    width: 3rem !important;
-    height: 1rem !important;
-    border-radius: 1rem !important;
+  /deep/.el-dialog {
+    width: 95%;
   }
 }
 </style>

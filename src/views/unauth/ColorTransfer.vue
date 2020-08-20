@@ -171,7 +171,7 @@ export default {
   height: 100%;
 
   .title {
-    font-size: 40px;
+    font-size: 0.4rem;
     text-align: center;
     color: #7c96b1;
   }
@@ -182,14 +182,15 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 20px 0;
+      margin: 0.2rem 0;
       .btn-trans {
-        width: 120px;
+        width: 1.2rem;
         letter-spacing: 2px;
-        margin-left: 30px;
+        margin-left: 0.3rem;
+        margin-top: 0.6rem;
       }
       /deep/.el-input__inner {
-        font-size: 20px;
+        font-size: 0.2rem;
         border: 1px dashed transparent;
       }
       .el-input {
@@ -221,59 +222,23 @@ export default {
     }
   }
 }
+/deep/.el-color-picker {
+  position: relative;
+}
+/deep/.el-color-picker__trigger {
+  position: absolute;
+  top: 0.3rem;
+  left: -0.08rem;
+}
 @media screen and (max-width: 900px) {
   .container {
-    .title {
-      font-size: 100px;
-      margin-top: 25%;
-    }
     .content {
-      width: 90%;
-
       .colorInput {
-        align-items: flex-start;
-        .btn-trans {
-          font-size: 35px;
-          padding: 0;
-          line-height: 100px;
-          height: 100px;
-        }
-        /deep/.el-input {
-          vertical-align: top;
-          .el-input__inner {
-            font-size: 40px;
-            line-height: 100px;
-            height: 100px;
-          }
-        }
-        /deep/.el-color-picker__trigger {
-          width: 100px;
-          height: 100px;
-          vertical-align: top;
-        }
-      }
-      /deep/.el-table {
-        font-size: 35px;
-        .cell {
-          line-height: 2;
-        }
-        .el-button {
-          font-size: 35px;
-          width: 4em;
+        span {
+          width: 55%;
         }
       }
     }
-  }
-  /deep/.el-message {
-    display: flex;
-    justify-content: center;
-    .el-message__icon,
-    .el-message__content {
-      font-size: 40px;
-    }
-  }
-  /deep/.el-popover {
-    font-size: 40px;
   }
 }
 </style>

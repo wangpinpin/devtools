@@ -4,8 +4,9 @@ import router from "./router";
 import store from "./store";
 import http from "@/util/http";
 import { formatDate } from '@/util/date'
+import "@/assets/js/rem"
 //rem转换插件
-import "amfe-flexible";
+// import "amfe-flexible";
 import VueWechatTitle from 'vue-wechat-title';
 //滚动条
 import { HappyScroll } from 'vue-happy-scroll'
@@ -29,8 +30,29 @@ Vue.use(VueWechatTitle)
 
 //按需引入element组件库
 import {
-    Button, Select, Loading, Input, Tooltip, Scrollbar, Popover, Tabs, TabPane, ColorPicker, Dialog, Form, FormItem,
-    Option, Slider, Table, TableColumn, Message, DatePicker, Upload, Notification, Collapse, CollapseItem
+    Button,
+    Select,
+    Loading,
+    Input,
+    Tooltip,
+    Scrollbar,
+    Popover,
+    Tabs,
+    TabPane,
+    ColorPicker,
+    Dialog,
+    Form,
+    FormItem,
+    Option,
+    Slider,
+    Table,
+    TableColumn,
+    Message,
+    DatePicker,
+    Upload,
+    Notification,
+    Collapse,
+    CollapseItem
 } from "element-ui";
 
 Vue.use(Button);
@@ -68,22 +90,33 @@ console.log("当前所处环境: ", process.env.NODE_ENV);
 console.log("当前环境API: ", process.env.VUE_APP_BASE_URL);
 
 //过滤器
-Vue.filter('formatDate', function (value1, value2) {
+Vue.filter('formatDate', function(value1, value2) {
     let date = new Date(value1);
     return formatDate(date, value2);
 })
+
+//百度统计
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?2032706202016ae71e8b76fb2b5f86b5";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+
+// 路由之前动态修改title
+// 单独打开的页面此方法不可用
+router.beforeEach((to, from, next) => {
+    if (_hmt) {
+        if (to.path) {
+            _hmt.push(['_trackPageview', to.fullPath]);
+        }
+    }
+    next();
+});
+
 new Vue({
     router,
     store,
     render: h => h(App)
 }).$mount("#app");
-
-//路由之前动态修改title
-//单独打开的页面此方法不可用
-// router.beforeEach((to, from, next) => {
-//     debugger
-//     if (to.meta.title) {
-//         document.title = to.meta.title;
-//     }
-//     next();
-// });
