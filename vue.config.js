@@ -22,7 +22,8 @@ module.exports = {
         // port: 8080, // 端口号
         // host: 'localhost',
         // https: false,
-        open: true //配置自动启动浏览器
+        open: true, //配置自动启动浏览器
+        disableHostCheck: true
     },
 
     //rem自动转换

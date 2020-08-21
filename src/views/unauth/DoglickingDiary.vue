@@ -5,7 +5,7 @@
     <div class="qrcode">
       <div>
         网站域名可能因费用随时更换
-        <br />扫描二维码关注公众号不迷路 <br />更多内容正在建设中...
+        <br />长按或扫描二维码关注公众号<br />更多内容正在建设中...
         <br />
       </div>
       <div>
@@ -26,9 +26,25 @@
         </div>
       </div>
       <div class="text">
-        <div class="readDogText" @click="readDogText" id="readDogText">
-          <i v-if="!readLoading" class="iconfont">&#xe6fd;</i>
-          <i v-if="readLoading" class="el-icon-loading"></i>
+        <div class="audio" ref="audioDiv">
+          <audio id="ttsAudio">
+            <source :src="musicUrl" type="audio/mp3" />
+          </audio>
+        </div>
+        <div class="readDogText">
+          <i
+            v-if="!readLoading"
+            @click="readDogText"
+            id="readDogText"
+            class="iconfont"
+            >&#xe6fd;</i
+          >
+          <i
+            v-if="readLoading"
+            @click="noReadDogText"
+            id="noReadDogText"
+            class="el-icon-loading"
+          ></i>
         </div>
 
         <div class="copy" @click="copy" id="copy">
@@ -56,11 +72,15 @@ export default {
       date: new Date(),
       text: "",
       readLoading: false,
+      musicUrl:
+        "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&&text=舔狗日记",
     };
   },
   created() {},
   methods: {
     search() {
+      this.noReadDogText();
+
       this.$http.get("unAuth/getDoglickingDiary").then((res) => {
         const date = this.$options.filters["formatDate"](
           this.date,
@@ -81,15 +101,37 @@ export default {
     readDogText() {
       if (this.text) {
         this.readLoading = true;
-        const url =
+        let url =
           "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&&text=舔狗日记，" +
           this.text +
           "哈哈 今天也是一只合格的舔狗呢。";
-        var n = new Audio(url);
-        n.src = url;
-        n.play();
-        this.readLoading = false;
+
+        let audioDiv = this.$refs.audioDiv;
+        let ttsAudio = document.getElementById("ttsAudio");
+        audioDiv.removeChild(ttsAudio);
+
+        const audio = `<audio id="ttsAudio">
+              <source src="${url}" type="audio/mp3">
+              </audio>`;
+        audioDiv.innerHTML = audio;
+        ttsAudio = document.getElementById("ttsAudio");
+        ttsAudio.play();
+
+        //添加监听
+        ttsAudio.addEventListener(
+          "ended",
+          () => {
+            this.readLoading = false;
+          },
+          false
+        );
       }
+    },
+    //不读了
+    noReadDogText() {
+      let ttsAudio = document.getElementById("ttsAudio");
+      ttsAudio.pause();
+      this.readLoading = false;
     },
   },
 };
@@ -141,6 +183,7 @@ export default {
       .copy,
       .readDogText {
         position: absolute;
+        z-index: 999;
         top: 0.1rem;
         right: 0.24rem;
         cursor: pointer;
@@ -151,6 +194,7 @@ export default {
       }
       .readDogText {
         right: 0.84rem;
+        z-index: 997;
       }
     }
   }

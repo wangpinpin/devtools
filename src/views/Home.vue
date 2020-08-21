@@ -29,7 +29,7 @@
             :style="bgf"
             @click="go(devText[index].path)"
           >
-            {{ devText[index].text }}
+            <div>{{ devText[index].text }}</div>
           </div>
         </div>
       </div>
@@ -98,7 +98,7 @@ export default {
     //路由跳转
     go(path) {
       const router = this.$router.resolve(path);
-      window.open(router.href, "_blank");
+      window.open(router.href);
     },
 
     //模拟鼠标光标动画
@@ -205,6 +205,9 @@ export default {
       .card {
         width: 100%;
         justify-content: center;
+        .card-tool {
+          width: 32%;
+        }
       }
     }
   }

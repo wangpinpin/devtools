@@ -29,7 +29,7 @@
                   <img
                     :src="
                       require('../../assets/imgs/head/' +
-                        getHeadImgIndex(index + 1) +
+                        getHeadImgIndex(index) +
                         '.png')
                     "
                   />
@@ -61,7 +61,9 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="addMsg" id="add-message">确 定</el-button>
+          <el-button type="primary" @click="addMsg" id="add-message"
+            >确 定</el-button
+          >
         </div>
       </el-dialog>
     </div>
@@ -108,8 +110,9 @@ export default {
     },
     //獲取頭像
     getHeadImgIndex(val) {
-      if (val > 35) {
-        return val % 35;
+
+      if (val > 34) {
+        return val % 34;
       }
       return val;
     },
@@ -175,6 +178,9 @@ export default {
         /deep/infinite-list-wrapper {
           height: 100%;
         }
+        /deep/.happy-scroll-content {
+          width: 100%;
+        }
         .loading {
           text-align: center;
           font-size: 0.16rem;
@@ -237,6 +243,7 @@ export default {
     }
   }
 }
+
 @media screen and (max-width: 900px) {
   .container {
     .content {

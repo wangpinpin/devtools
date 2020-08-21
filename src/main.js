@@ -5,13 +5,15 @@ import store from "./store";
 import http from "@/util/http";
 import { formatDate } from '@/util/date'
 import "@/assets/js/rem"
-//rem转换插件
-// import "amfe-flexible";
 import VueWechatTitle from 'vue-wechat-title';
 //滚动条
 import { HappyScroll } from 'vue-happy-scroll'
 import 'vue-happy-scroll/docs/happy-scroll.css'
 Vue.component('happy-scroll', HappyScroll)
+
+//VCONSOLE
+import Vconsole from 'vconsole';
+
 
 //无限滚动
 import infiniteScroll from "vue-infinite-scroll";
@@ -88,6 +90,11 @@ Vue.config.productionTip = false;
 //打印当前所处环境
 console.log("当前所处环境: ", process.env.NODE_ENV);
 console.log("当前环境API: ", process.env.VUE_APP_BASE_URL);
+
+//测试环境
+if (process.env.NODE_ENV == "development") {
+    new Vconsole();
+}
 
 //过滤器
 Vue.filter('formatDate', function(value1, value2) {
