@@ -50,7 +50,7 @@
         <div class="copy" @click="copy" id="copy">
           <i class="iconfont">&#xe65b;</i>
         </div>
-        {{ text }}
+        <div class="text-content">{{ text }}</div>
       </div>
     </div>
     <Footer />
@@ -179,7 +179,9 @@ export default {
       font-size: 0.17rem;
       color: #616161;
       position: relative;
-
+      .text-content {
+        text-indent: 2em;
+      }
       .copy,
       .readDogText {
         position: absolute;

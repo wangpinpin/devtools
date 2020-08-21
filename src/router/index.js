@@ -74,6 +74,15 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/GoddessLetter.vue")
+    },
+    {
+        path: "/EveryDayText",
+        name: "EveryDayText",
+        meta: {
+            title: "每日一文"
+        },
+        component: () =>
+            import ("../views/unauth/EveryDayText.vue")
     }
 ];
 

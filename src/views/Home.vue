@@ -68,12 +68,13 @@ export default {
         "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
       ],
       devText: [
-        { path: "/JsonFormat", text: "JSON格式化" },
-        { path: "/QRcodeCreate", text: "二维码生成" },
-        { path: "/ColorTransfer", text: "颜色代码转换" },
         { path: "/DoglickingDiary", text: "舔狗日记" },
+        { path: "/everyDayText", text: "每日一文" },
+        { path: "/MessageBoard", text: "留言板" },
+        { path: "/QRcodeCreate", text: "二维码生成" },
         { path: "/ImageToTxt", text: "图片文字提取" },
-        { path: "MessageBoard", text: "留言板" },
+        { path: "/JsonFormat", text: "JSON格式化" },
+        { path: "/ColorTransfer", text: "颜色代码转换" },
         { path: "/", text: "正在开发" },
         { path: "/", text: "正在开发" },
         { path: "/", text: "正在开发" },
@@ -82,10 +83,6 @@ export default {
     };
   },
   beforeCreate() {
-    // this.loading = this.$loading.service({
-    //   lock: true, //是否锁定
-    //   background: "rgba(212, 212, 212, 0.9)", //遮罩背景色
-    // });
   },
   created() {
     this.devBackgroundFamily.sort(function() {
@@ -97,8 +94,7 @@ export default {
   methods: {
     //路由跳转
     go(path) {
-      const router = this.$router.resolve(path);
-      window.open(router.href);
+      this.$router.push({path: path});
     },
 
     //模拟鼠标光标动画
