@@ -21,12 +21,19 @@
             placeholder="选择日期"
           ></el-date-picker>
         </div>
-        <div class="search" @click="search">
+        <div class="search" @click="search" id="start">
           <el-button type="success">开舔</el-button>
         </div>
       </div>
       <div class="text">
-        <div class="copy" @click="copy">复制</div>
+        <div class="readDogText" @click="readDogText" id="readDogText">
+          <i v-if="!readLoading" class="iconfont">&#xe6fd;</i>
+          <i v-if="readLoading" class="el-icon-loading"></i>
+        </div>
+
+        <div class="copy" @click="copy" id="copy">
+          <i class="iconfont">&#xe65b;</i>
+        </div>
         {{ text }}
       </div>
     </div>
@@ -48,6 +55,7 @@ export default {
       title: "舔狗日记",
       date: new Date(),
       text: "",
+      readLoading: false,
     };
   },
   created() {},
@@ -68,6 +76,20 @@ export default {
           type: "success",
         });
       });
+    },
+    //读一读
+    readDogText() {
+      if (this.text) {
+        this.readLoading = true;
+        const url =
+          "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&&text=舔狗日记，" +
+          this.text +
+          "哈哈 今天也是一只合格的舔狗呢。";
+        var n = new Audio(url);
+        n.src = url;
+        n.play();
+        this.readLoading = false;
+      }
     },
   },
 };
@@ -116,13 +138,19 @@ export default {
       color: #616161;
       position: relative;
 
-      .copy {
+      .copy,
+      .readDogText {
         position: absolute;
         top: 0.1rem;
         right: 0.24rem;
-        color: blue;
         cursor: pointer;
-        font-size: 0.2rem;
+        color: rgb(32, 162, 221);
+        i {
+          font-size: 0.25rem;
+        }
+      }
+      .readDogText {
+        right: 0.84rem;
       }
     }
   }

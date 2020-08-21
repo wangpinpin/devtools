@@ -65,6 +65,15 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/MessageBoard.vue")
+    },
+    {
+        path: "/GoddessLetter",
+        name: "GoddessLetter",
+        meta: {
+            title: "给女神的信"
+        },
+        component: () =>
+            import ("../views/unauth/GoddessLetter.vue")
     }
 ];
 

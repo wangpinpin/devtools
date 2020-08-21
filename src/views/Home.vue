@@ -172,14 +172,14 @@ export default {
     }
     .card {
       margin: 0.8rem auto 0;
-      width: 68%;
+      width: 66%;
       height: 4rem;
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
       color: #fff;
       .card-tool {
-        width: 2rem;
+        width: 15%;
         height: 1.2rem;
         line-height: 1.2rem;
         border-radius: 0.3rem;

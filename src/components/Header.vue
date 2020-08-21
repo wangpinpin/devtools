@@ -10,11 +10,11 @@
         <div class="item">
           <a href="MessageBoard">留言板</a>
         </div>
-        <!-- <div class="item">菜单2</div>
-        <div class="item">菜单3</div>
-        <div class="item">菜单4</div>
-        <div class="item">菜单5</div>
-        <div class="item">菜单6</div>-->
+        <div class="item"><a href="GoddessLetter">给女神订阅日记</a></div>
+        <div class="item" style="visibility: hidden;">菜单3</div>
+        <div class="item" style="visibility: hidden;">菜单4</div>
+        <div class="item" style="visibility: hidden;">菜单5</div>
+        <div class="item" style="visibility: hidden;">菜单6</div>
       </div>
     </div>
   </div>
@@ -24,8 +24,8 @@
 export default {
   name: "Header",
   props: {
-    msg: String
-  }
+    msg: String,
+  },
 };
 </script>
 
@@ -37,13 +37,13 @@ export default {
   justify-content: space-around;
   align-items: center;
   color: #333;
-  font-size: .18rem;
+  font-size: 0.18rem;
   .item:hover {
     color: #7c96b1;
   }
   .left {
     width: 10%;
-    font-size: .2rem;
+    font-size: 0.2rem;
     font-weight: bold;
     .item {
       cursor: pointer;
@@ -70,16 +70,17 @@ export default {
     }
   }
 }
-// @media screen and (max-width: 900px) {
-//   .container {
-//     padding-top: 0.5rem;
-//     font-size: 40px;
-//   }
-//   .container .left {
-//     font-size: 40px;
-//   }
-//   .container .right {
-//     width: 56%;
-//   }
-// }
+@media screen and (max-width: 900px) {
+  .container {
+    .left {
+      font-size: 0.22rem;
+    }
+    .right {
+      font-size: 0.22rem;
+      width: 60%;
+      margin-top: 5%;
+      flex-wrap: wrap;
+    }
+  }
+}
 </style>

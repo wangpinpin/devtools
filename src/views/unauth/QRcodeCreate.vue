@@ -20,7 +20,7 @@
               :class="visible ? 'invalid' : ''"
             ></el-input>
           </el-popover>
-          <el-button class="btn" type="success" @click="bindQRCode()"
+          <el-button class="btn" type="success" @click="bindQRCode()" id="create-qrcode"
             >生成二维码</el-button
           >
         </div>

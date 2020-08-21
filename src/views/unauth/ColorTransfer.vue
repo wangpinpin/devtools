@@ -25,7 +25,7 @@
           show-alpha
           @change="inputColor = color ? color.replace(/rgba\(|\)/g, '') : null"
         ></el-color-picker>
-        <el-button class="btn-trans" @click="handleTransfer()">转换</el-button>
+        <el-button class="btn-trans" @click="handleTransfer()" id="transformation-color">转换</el-button>
       </div>
       <el-table
         class="resultTable"

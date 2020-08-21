@@ -33,7 +33,7 @@
             >
             </el-option>
           </el-select>
-          <el-button type="success" @click="upload">提取文字</el-button>
+          <el-button type="success" @click="upload" id="img-to-text">提取文字</el-button>
         </div>
       </div>
       <div class="right">
