@@ -8,7 +8,7 @@ module.exports = {
     pages: {
         index: {
             entry: "src/main.js",
-            title: "devtools"
+            title: "舔狗小胖"
         }
     },
 
