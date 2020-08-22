@@ -10,7 +10,7 @@
         <div class="item">
           <a href="MessageBoard">留言板</a>
         </div>
-        <div class="item"><a href="V">看一看</a></div>
+        <div class="item"><a href="v">看一看</a></div>
         <div class="item"><a href="EveryDayText">每日一文</a></div>
         <div class="item"><a href="GoddessLetter">给女神订阅日记</a></div>
         <div class="item" style="visibility: hidden;">菜单5</div>
