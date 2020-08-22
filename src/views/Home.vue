@@ -11,7 +11,7 @@
           <div class="sub-title">{{ subTitle }}</div>
 
           <!-- 搜索框 -->
-          <div class="search">
+          <div class="search" style="display:none;">
             <input class="searchText" />
             <div class="searchButton">Search</div>
           </div>
@@ -47,10 +47,10 @@ export default {
   },
   data() {
     return {
-      title: "I love to Explore",
+      title: "网站持续建设中",
       inputText: "",
       subTitle:
-        " Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in",
+        "恐惧来源于未知。",
       devBackgroundFamily: [
         "background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);",
         "background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);",

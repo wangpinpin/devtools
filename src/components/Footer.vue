@@ -1,7 +1,14 @@
 <template>
   <div>
     <div class="container">
-      © 2020 某某品 <a href="http://www.miitbeian.gov.cn/">皖ICP备19011468号</a>
+      <div>
+        <a href="mailto:wppwangpinpin@qq.com">联系我们</a>
+      </div>
+      <div class="gang">|</div>
+      <div>
+        © 2020
+        <a href="https://beian.miit.gov.cn">皖ICP备19011468号</a>
+      </div>
     </div>
   </div>
 </template>
@@ -10,8 +17,8 @@
 export default {
   name: "Footer",
   props: {
-    msg: String,
-  },
+    msg: String
+  }
 };
 </script>
 
@@ -25,6 +32,13 @@ export default {
   right: 0;
   color: #333;
   font-size: 0.1rem;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  justify-content: center;
+  div {
+    margin: 0 0.1rem;
+  }
   a {
     color: #333 !important;
   }
