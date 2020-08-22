@@ -69,11 +69,12 @@ export default {
   }
 
   .content {
-    margin: 5%;
+    margin: 3%;
     .next {
       line-height: 0;
     }
     video {
+      width: 30vh;
       height: 54vh;
     }
   }
