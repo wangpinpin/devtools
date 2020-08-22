@@ -83,6 +83,15 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/EveryDayText.vue")
+    },
+    {
+        path: "/v",
+        name: "v",
+        meta: {
+            title: "看一看"
+        },
+        component: () =>
+            import ("../views/unauth/V.vue")
     }
 ];
 

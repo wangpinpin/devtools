@@ -6,18 +6,14 @@
       <div class="content">
         <div class="slogan">
           <!-- title -->
-          <div class="title">
-            {{ title }}
-          </div>
+          <div class="title">{{ title }}</div>
           <div class="inputText">{{ inputText }}</div>
           <div class="sub-title">{{ subTitle }}</div>
 
           <!-- 搜索框 -->
           <div class="search">
             <input class="searchText" />
-            <div class="searchButton">
-              Search
-            </div>
+            <div class="searchButton">Search</div>
           </div>
         </div>
         <!-- 功能标签 -->
@@ -47,7 +43,7 @@ export default {
   name: "Home",
   components: {
     Header,
-    Footer,
+    Footer
   },
   data() {
     return {
@@ -65,10 +61,11 @@ export default {
         "background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);",
         "background-image: linear-gradient(to top, #d299c2 0%, #fef9d7 100%);",
         "background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);",
-        "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
+        "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);"
       ],
       devText: [
         { path: "/DoglickingDiary", text: "舔狗日记" },
+        { path: "/v", text: "看一看" },
         { path: "/EveryDayText", text: "每日一文" },
         { path: "/MessageBoard", text: "留言板" },
         { path: "/QRcodeCreate", text: "二维码生成" },
@@ -77,13 +74,11 @@ export default {
         { path: "/ColorTransfer", text: "颜色代码转换" },
         { path: "/", text: "正在开发" },
         { path: "/", text: "正在开发" },
-        { path: "/", text: "正在开发" },
-        { path: "/", text: "正在开发" },
-      ],
+        { path: "/", text: "正在开发" }
+      ]
     };
   },
-  beforeCreate() {
-  },
+  beforeCreate() {},
   created() {
     this.devBackgroundFamily.sort(function() {
       return Math.random() - 0.5;
@@ -94,7 +89,7 @@ export default {
   methods: {
     //路由跳转
     go(path) {
-      this.$router.push({path: path});
+      this.$router.push({ path: path });
     },
 
     //模拟鼠标光标动画
@@ -108,8 +103,8 @@ export default {
           _this.inputText += inputText;
         }
       }, 800);
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped lang="less">
