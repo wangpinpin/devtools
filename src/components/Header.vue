@@ -127,7 +127,8 @@ export default {
           "<strong>139.196.199.233 即将暂停使用, 请更换域名</strong><div>本站地址永久更新到<a href='https://wangpinpin.com'>https://wangpinpin.com</a></div>",
           "",
           {
-            dangerouslyUseHTMLString: true
+            dangerouslyUseHTMLString: true,
+            customClass: "width9"
           }
         );
       }
