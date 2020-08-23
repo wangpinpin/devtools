@@ -5,25 +5,14 @@
 
     <div class="content">
       <div class="cr">
-        <div
-          class="infinite-list-wrapper record"
-          style="overflow-y:auto;overflow-x: hidden;"
-        >
-          <happy-scroll
-            color="rgba(0,0,0,0.2)"
-            size="3"
-            :hide-horizontal="true"
-            resize
-          >
-            <ul
-              class="list"
-              v-infinite-scroll="load"
-              infinite-scroll-disabled="disabled"
-            >
+        <div class="infinite-list-wrapper record" style="overflow-y:auto;overflow-x: hidden;">
+          <happy-scroll color="rgba(0,0,0,0.2)" size="3" :hide-horizontal="true" resize>
+            <ul class="list" v-infinite-scroll="load" infinite-scroll-disabled="disabled">
               <li
                 v-for="(item, index) in list"
                 class="list-item"
-                v-bind:key="index"
+                v-bind:key="item.id"
+                ref="{{item.id}}"
               >
                 <div class="name">
                   <img
@@ -35,7 +24,21 @@
                   />
                 </div>
                 <div class="text">{{ item.content }}</div>
-                <div class="time">{{ item.createTime }}</div>
+                <div class="operation">
+                  <div class="reply" id="reply" @click="reply(item.id)">
+                    <s>回复</s>
+                  </div>
+                  <div
+                    class="praise"
+                    :class="{ red1: item.praise }"
+                    id="praise"
+                    @click="praise(item)"
+                  >
+                    <i class="iconfont">&#xe60c;</i>
+                    ({{item.praiseCount}})
+                  </div>
+                  <div class="time">{{ item.createTime }}</div>
+                </div>
               </li>
             </ul>
             <p v-if="loading" class="loading">加载中...</p>
@@ -45,25 +48,17 @@
       </div>
 
       <div class="message">
-        <el-button type="primary" @click="dialogFormVisible = true"
-          >点击留言</el-button
-        >
+        <el-button type="primary" @click="dialogFormVisible = true">点击留言</el-button>
       </div>
       <el-dialog title="请输入留言" :visible.sync="dialogFormVisible">
         <el-form>
-          <el-form-item label="">
-            <el-input
-              type="textarea"
-              v-model="text"
-              autocomplete="off"
-            ></el-input>
+          <el-form-item label>
+            <el-input type="textarea" v-model="text" autocomplete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="addMsg" id="add-message"
-            >确 定</el-button
-          >
+          <el-button type="primary" @click="addMsg" id="add-message">确 定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -78,7 +73,7 @@ export default {
   name: "MessageBoard",
   components: {
     Header,
-    Footer,
+    Footer
   },
   data() {
     return {
@@ -90,7 +85,7 @@ export default {
       formLabelWidth: "120px",
       text: "",
       pageNo: -1,
-      pageSize: 10,
+      pageSize: 10
     };
   },
   created() {
@@ -99,7 +94,7 @@ export default {
   computed: {
     disabled() {
       return this.loading || this.noMore;
-    },
+    }
   },
   methods: {
     //下滑加載數據
@@ -110,7 +105,6 @@ export default {
     },
     //獲取頭像
     getHeadImgIndex(val) {
-
       if (val > 34) {
         return val % 34;
       }
@@ -121,7 +115,7 @@ export default {
       if (this.text) {
         var formData = new FormData();
         formData.append("msg", this.text);
-        this.$http.post("unAuth/addMsgBoard", formData).then((res) => {
+        this.$http.post("unAuth/addMsgBoard", formData).then(res => {
           this.dialogFormVisible = false;
           this.text = "";
           //刷新列表
@@ -132,7 +126,7 @@ export default {
       } else {
         this.$message({
           message: "留言内容不能为空",
-          type: "warning",
+          type: "warning"
         });
       }
     },
@@ -140,9 +134,9 @@ export default {
     initTextList() {
       let param = {
         pageNo: this.pageNo,
-        pageSize: this.pageSize,
+        pageSize: this.pageSize
       };
-      this.$http.get("unAuth/findMsgBoard", param).then((res) => {
+      this.$http.get("unAuth/findMsgBoard", param).then(res => {
         this.loading = false;
         if (res.length < this.pageSize) {
           this.noMore = true;
@@ -150,7 +144,26 @@ export default {
         this.list.push(...res);
       });
     },
-  },
+    //点赞
+    praise(item) {
+      if (item.praise == 0) {
+        var formData = new FormData();
+        formData.append("msgId", item.id);
+        this.$http.post("unAuth/msgBoardPraise", formData).then(res => {
+          item.praise = 1;
+          item.praiseCount++;
+        });
+      }
+    },
+    //回复
+    reply(id) {
+      this.$alert("回复功能开发中", {
+        confirmButtonText: "确定",
+        closeOnClickModal: true,
+        customClass: "width9"
+      });
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -215,11 +228,22 @@ export default {
               word-break: break-all;
               font-size: 0.16rem;
             }
-            .time {
-              font-size: 0.12rem;
+            .operation {
+              display: flex;
+              flex-direction: row;
               text-align: right;
+              font-size: 0.12rem;
+              justify-content: flex-end;
+              margin-top: 0.1rem;
               color: #6b6b6b;
-              margin-right: 2%;
+              cursor: pointer;
+              div {
+                margin-right: 2%;
+              }
+              .praise {
+                width: 0.4rem;
+                text-align: left;
+              }
             }
           }
         }
@@ -233,6 +257,7 @@ export default {
       button {
         width: 2rem;
         height: 0.5rem;
+        line-height: 0;
       }
     }
     /deep/.el-textarea__inner {
@@ -254,6 +279,11 @@ export default {
           .list {
             .list-item {
               width: 88%;
+              .operation {
+                .praise {
+                  width: 0.7rem;
+                }
+              }
             }
           }
         }

@@ -2,10 +2,14 @@
   <div>
     <div class="container">
       <div>
-        <a href="mailto:wppwangpinpin@qq.com">联系我们</a>
+        <a @click="subscription" id="subscription">公众号</a>
       </div>
       <div class="gang">|</div>
       <div>
+        <a id="contactus" href="mailto:wppwangpinpin@qq.com">联系我们</a>
+      </div>
+      <div class="gang">|</div>
+      <div id="beian">
         © 2020
         <a href="https://beian.miit.gov.cn">皖ICP备19011468号</a>
       </div>
@@ -18,6 +22,19 @@ export default {
   name: "Footer",
   props: {
     msg: String
+  },
+  methods: {
+    //公众号二维码
+    subscription() {
+      this.$alert(
+        "<strong>公众号二维码</strong><div style='text-align: center;'><img src='/subscription.jpg' /></div>",
+        "",
+        {
+          dangerouslyUseHTMLString: true,
+          customClass: "width9"
+        }
+      );
+    }
   }
 };
 </script>
@@ -41,6 +58,14 @@ export default {
   }
   a {
     color: #333 !important;
+    cursor: pointer;
+  }
+}
+</style>
+<style lang="less">
+@media screen and (max-width: 900px) {
+  /deep/.el-message-box {
+    width: 95%;
   }
 }
 </style>

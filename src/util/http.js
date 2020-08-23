@@ -21,8 +21,8 @@ axios.interceptors.response.use(response => {
     if (response.data.code == 0) {
         return response.data
     } else {
-        window.$notify.error({
-            title: '异常',
+        window.$notify.warning({
+            title: '警告',
             message: response.data.msg,
             position: 'bottom-right'
         });

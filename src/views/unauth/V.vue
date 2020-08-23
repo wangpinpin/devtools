@@ -14,8 +14,8 @@
         webkit-playsinline
         playsinline
       ></video>
-      <div class="next" @click="getVideo" id="next">
-        <el-button type="success">换一个</el-button>
+      <div class="next" id="next">
+        <el-button type="success" @click="getVideo">换一个</el-button>
       </div>
     </div>
     <Footer class="footer" />

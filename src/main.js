@@ -54,7 +54,8 @@ import {
     Upload,
     Notification,
     Collapse,
-    CollapseItem
+    CollapseItem,
+    MessageBox
 } from "element-ui";
 
 Vue.use(Button);
@@ -81,6 +82,10 @@ Vue.use(FormItem);
 Vue.prototype.$loading = Loading;
 Vue.prototype.$message = Message;
 Vue.prototype.$notify = Notification;
+Vue.prototype.$msgbox = MessageBox;
+Vue.prototype.$alert = MessageBox.alert;
+Vue.prototype.$confirm = MessageBox.confirm;
+Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$http = http;
 window.$notify = Notification;
 
@@ -97,14 +102,14 @@ if (process.env.NODE_ENV == "development") {
 }
 
 //过滤器
-Vue.filter('formatDate', function(value1, value2) {
+Vue.filter('formatDate', function (value1, value2) {
     let date = new Date(value1);
     return formatDate(date, value2);
 })
 
 //百度统计
 var _hmt = _hmt || [];
-(function() {
+(function () {
     var hm = document.createElement("script");
     hm.src = "https://hm.baidu.com/hm.js?2032706202016ae71e8b76fb2b5f86b5";
     var s = document.getElementsByTagName("script")[0];
@@ -114,6 +119,9 @@ var _hmt = _hmt || [];
 // 路由之前动态修改title
 // 单独打开的页面此方法不可用
 router.beforeEach((to, from, next) => {
+    if (to.meta.title) {
+        document.title = to.meta.title;
+    }
     if (_hmt) {
         if (to.path) {
             _hmt.push(['_trackPageview', to.fullPath]);

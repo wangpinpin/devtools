@@ -8,7 +8,11 @@
           <!-- title -->
           <div class="title">{{ title }}</div>
           <div class="inputText">{{ inputText }}</div>
-          <div class="sub-title">{{ subTitle }}</div>
+          <div class="sub-title">网站每周更新功能, 欢迎收藏关注转发</div>
+          <div class="sub-title">
+            代码已在github开源
+            <a href="https://github.com/wangpinpin/devtools-server" target="_blank">点击这里</a>
+          </div>
 
           <!-- 搜索框 -->
           <div class="search" style="display:none;">
@@ -23,9 +27,10 @@
             v-for="(bgf, index) in devBackgroundFamily"
             :key="index"
             :style="bgf"
-            @click="go(devText[index].path)"
           >
-            <div>{{ devText[index].text }}</div>
+            <a :href="devText[index].path">
+              <div>{{ devText[index].text }}</div>
+            </a>
           </div>
         </div>
       </div>
@@ -47,10 +52,8 @@ export default {
   },
   data() {
     return {
-      title: "网站持续建设中",
+      title: "本站已上线",
       inputText: "",
-      subTitle:
-        "恐惧来源于未知。",
       devBackgroundFamily: [
         "background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);",
         "background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);",
@@ -80,6 +83,8 @@ export default {
   },
   beforeCreate() {},
   created() {
+    this.title = this.title + this.getDay() + "天";
+
     this.devBackgroundFamily.sort(function() {
       return Math.random() - 0.5;
     });
@@ -87,11 +92,14 @@ export default {
     this.inputAnimation();
   },
   methods: {
-    //路由跳转
-    go(path) {
-      this.$router.push({ path: path });
+    //获取天数
+    getDay() {
+      let s1 = "2020-08-01";
+      s1 = new Date(s1.replace(/-/g, "/"));
+      const s2 = new Date();
+      const days = s2.getTime() - s1.getTime();
+      return parseInt(days / (1000 * 60 * 60 * 24));
     },
-
     //模拟鼠标光标动画
     inputAnimation() {
       const _this = this;
@@ -178,6 +186,9 @@ export default {
         font-size: 0.24rem;
         cursor: pointer;
         text-align: center;
+        a {
+          color: #fff;
+        }
       }
       .card-tool:hover {
         border: 0.04rem solid #fff;

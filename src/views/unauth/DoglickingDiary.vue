@@ -2,16 +2,6 @@
   <div class="container">
     <Header />
     <div class="title">{{ title }}</div>
-    <div class="qrcode">
-      <div>
-        网站域名可能因费用随时更换
-        <br />长按或扫描二维码关注公众号<br />更多内容正在建设中...
-        <br />
-      </div>
-      <div>
-        <img src="@/assets/imgs/qrcode.png" />
-      </div>
-    </div>
     <div class="content">
       <div class="condition">
         <div class="date">
@@ -146,16 +136,6 @@ export default {
     font-size: 0.4rem;
     text-align: center;
     color: #7c96b1;
-  }
-  .qrcode {
-    position: absolute;
-    right: 1rem;
-    bottom: 0.2rem;
-    font-size: 0.24rem;
-    img {
-      margin-top: 0.2rem;
-      width: 2rem;
-    }
   }
   .content {
     margin: 10% auto 0;

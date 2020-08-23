@@ -3,8 +3,8 @@
     <div id="nav">
       <router-link to="/"></router-link>
     </div>
-    <router-view v-wechat-title="$route.meta.title"></router-view>
-    <!-- <router-view /> -->
+    <!-- <router-view v-wechat-title="$route.meta.title"></router-view> -->
+    <router-view />
   </div>
 </template>
 
