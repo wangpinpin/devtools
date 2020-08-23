@@ -42,9 +42,7 @@
 .weight {
     font-weight: bold;
 }
-.width9 {
-    width: 90% !important;
-}
+
 .gang {
     color: #999;
 }
@@ -68,4 +66,9 @@ a:hover {
 /* 正在点击的链接*/
 a:active {
     text-decoration: none;
+}
+@media screen and (max-width: 900px) {
+    .width9 {
+        width: 90% !important;
+    }
 }
