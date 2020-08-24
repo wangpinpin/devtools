@@ -4,12 +4,10 @@
     <div class="title">{{ title }}</div>
     <div class="content">
       <div class="condition">
-        <div class="date">
-          <el-date-picker
-            v-model="date"
-            type="date"
-            placeholder="选择日期"
-          ></el-date-picker>
+        <div class="select">
+          <el-select v-model="value">
+            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
         </div>
         <div class="search" @click="search" id="start">
           <el-button type="success">开舔</el-button>
@@ -22,19 +20,8 @@
           </audio>
         </div>
         <div class="readDogText">
-          <i
-            v-if="!readLoading"
-            @click="readDogText"
-            id="readDogText"
-            class="iconfont"
-            >&#xe6fd;</i
-          >
-          <i
-            v-if="readLoading"
-            @click="noReadDogText"
-            id="noReadDogText"
-            class="el-icon-loading"
-          ></i>
+          <i v-if="!readLoading" @click="readDogText" id="readDogText" class="iconfont">&#xe6fd;</i>
+          <i v-if="readLoading" @click="noReadDogText" id="noReadDogText" class="el-icon-loading"></i>
         </div>
 
         <div class="copy" @click="copy" id="copy">
@@ -54,7 +41,7 @@ export default {
   name: "ColorTransfer",
   components: {
     Header,
-    Footer,
+    Footer
   },
   data() {
     return {
@@ -62,16 +49,28 @@ export default {
       date: new Date(),
       text: "",
       readLoading: false,
-      musicUrl:
-        "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&&text=舔狗日记",
+      musicUrl: "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&&text=",
+      options: [],
+      value: ""
     };
   },
-  created() {},
+  created() {
+    this.getTypeList();
+  },
   methods: {
+    //获取类型列表
+    getTypeList() {
+      this.$http.get("unAuth/findTypeList", { t: "DOG" }).then(res => {
+        this.options = res;
+        this.value = res[0].id;
+      });
+    },
     search() {
+
+      //关闭读一读
       this.noReadDogText();
 
-      this.$http.get("unAuth/getDoglickingDiary").then((res) => {
+      this.$http.get("unAuth/getDoglickingDiary", {typeId: this.value}).then(res => {
         const date = this.$options.filters["formatDate"](
           this.date,
           "yyyy年MM月dd日"
@@ -83,7 +82,7 @@ export default {
       this.$copyText(this.text).then(() => {
         this.$message({
           message: "复制成功",
-          type: "success",
+          type: "success"
         });
       });
     },
@@ -92,9 +91,8 @@ export default {
       if (this.text) {
         this.readLoading = true;
         let url =
-          "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&&text=舔狗日记，" +
-          this.text +
-          "哈哈 今天也是一只合格的舔狗呢。";
+          "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&&text=" +
+          this.text;
 
         let audioDiv = this.$refs.audioDiv;
         let ttsAudio = document.getElementById("ttsAudio");
@@ -122,8 +120,8 @@ export default {
       let ttsAudio = document.getElementById("ttsAudio");
       ttsAudio.pause();
       this.readLoading = false;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -147,9 +145,6 @@ export default {
       margin: 0 auto;
       justify-content: space-between;
       line-height: 0;
-      .date {
-        // visibility: hidden;
-      }
     }
     .text {
       background: #fff;
