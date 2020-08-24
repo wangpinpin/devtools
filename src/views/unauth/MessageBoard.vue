@@ -241,7 +241,7 @@ export default {
                 margin-right: 2%;
               }
               .praise {
-                width: 0.4rem;
+                width: 7%;;
                 text-align: left;
               }
             }
