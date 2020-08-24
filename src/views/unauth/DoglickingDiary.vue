@@ -66,17 +66,22 @@ export default {
       });
     },
     search() {
-
       //关闭读一读
       this.noReadDogText();
 
-      this.$http.get("unAuth/getDoglickingDiary", {typeId: this.value}).then(res => {
-        const date = this.$options.filters["formatDate"](
-          this.date,
-          "yyyy年MM月dd日"
-        );
-        this.text = date + " " + res;
-      });
+      this.$http
+        .get("unAuth/getDoglickingDiary", { typeId: this.value })
+        .then(res => {
+          if (this.value == "0c97d296-e5b1-11ea-9d4b-00163e1e93a5") {
+            const date = this.$options.filters["formatDate"](
+              this.date,
+              "yyyy年MM月dd日"
+            );
+            this.text = date + " " + res;
+          } else {
+            this.text = res;
+          }
+        });
     },
     copy() {
       this.$copyText(this.text).then(() => {

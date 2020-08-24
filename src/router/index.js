@@ -9,7 +9,7 @@ const routes = [{
         name: "Home",
         component: Home,
         meta: {
-            title: "首页"
+            title: "小破站"
         }
     },
     {
