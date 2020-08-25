@@ -68,9 +68,10 @@ export default {
       ],
       devText: [
         { path: "/DoglickingDiary", text: "舔狗日记" },
-        { path: "/v", text: "看一看" },
-        { path: "/EveryDayText", text: "每日一文" },
+
         { path: "/MessageBoard", text: "留言板" },
+        { path: "/Music", text: "听一听" },
+        { path: "/v", text: "看一看" },
         { path: "/QRcodeCreate", text: "二维码生成" },
         { path: "/ImageToTxt", text: "图片文字提取" },
         { path: "/JsonFormat", text: "JSON格式化" },

@@ -18,6 +18,13 @@ axios.interceptors.request.use(
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {
 
+    //单独处理别的网站返回结果
+    if(response.config.url == "https://api.uomg.com/api/rand.music") {
+        if(response.data.code == 1) {
+            response.data.code = 0
+        }
+    }
+
     if (response.data.code == 0) {
         return response.data
     } else {

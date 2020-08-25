@@ -92,6 +92,24 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/V.vue")
+    },
+    {
+        path: "/Music",
+        name: "Music",
+        meta: {
+            title: "听一听"
+        },
+        component: () =>
+            import ("../views/unauth/Music.vue")
+    },
+    {
+        path: "/Statement",
+        name: "Statement",
+        meta: {
+            title: "免责声明"
+        },
+        component: () =>
+            import ("../views/unauth/Statement.vue")
     }
 ];
 
