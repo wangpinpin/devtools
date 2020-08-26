@@ -55,7 +55,8 @@ import {
     Notification,
     Collapse,
     CollapseItem,
-    MessageBox
+    MessageBox,
+    Switch
 } from "element-ui";
 
 Vue.use(Button);
@@ -78,6 +79,7 @@ Vue.use(CollapseItem);
 Vue.use(Dialog);
 Vue.use(Form);
 Vue.use(FormItem);
+Vue.use(Switch);
 
 Vue.prototype.$loading = Loading;
 Vue.prototype.$message = Message;

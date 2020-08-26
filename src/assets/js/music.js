@@ -21,8 +21,11 @@ function AudioSystem() {
         sound.getOutput().connect(analyser);
         sound.play();
         // sound.play();
+        document.querySelector('.tips').style.display = 'none';
         document.querySelector('.loading').style.display = 'none';
-        document.querySelector('.operation').style.display = 'block';
+        document.querySelector(".song-info").style.display = "block";
+
+        // document.querySelector('.operation').style.display = 'block';
         soundwave.transitionShowSoundwave();
     });
 
@@ -149,7 +152,6 @@ function ParticleBufferGeometry(options) {
     A.addAttribute("pid", T);
     A.addAttribute("seed", E);
     A.addAttribute("position", M);
-    console.log(1)
     Object.defineProperties(A, {
         particleCount: {
             value: options.particleCount,
@@ -757,23 +759,15 @@ function init() {
             sound.setVolume(.5);
             sound.play();
             document.querySelector('.loading').style.display = 'none';
-            document.querySelector('.operation').style.display = 'block';
+            document.querySelector('.tips').style.display = 'none';
+            document.querySelector(".song-info").style.display = "block";
+
+            // document.querySelector('.operation').style.display = 'block';
         })
 
     } else {
         audio = new AudioSystem();
     }
-    // if (!audio) {
-    //     audio = new AudioSystem();
-    // } else {
-    //     sound.stop();
-    //     loader.load(URL, function(buffer) {
-    //         console.log('audio loaded.')
-    //         sound.play();
-    //         document.querySelector('.loading').style.display = 'none';
-    //         document.querySelector('.operation').style.display = 'block';
-    //     });
-    // }
     bridge.start();
 }
 
