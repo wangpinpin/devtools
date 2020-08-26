@@ -2,7 +2,7 @@
   <div class="container">
     <Header />
     <div class="title">{{ title }}</div>
-
+    <div style="text-align: center;">即将上线</div>
     <div class="content" id="content">
       <div class="operation">
         <div class="song-info">
@@ -15,7 +15,7 @@
       <div class="loading">
         <img src="@/assets/imgs/loading.gif" />
       </div>
-      <div class="choice">
+      <div class="choice" style="display:none;">
         <div class="operation-title">搜索</div>
         <div class="select">
           <el-select
@@ -84,8 +84,8 @@ export default {
 
   created() {},
   mounted() {
-    this.search("Lemon");
-    this.$refs.select.$el.click();
+    // this.search("Lemon");
+    // this.$refs.select.$el.click();
   },
   methods: {
     singSong(url) {
@@ -100,7 +100,7 @@ export default {
         this.loading = true;
 
         this.$http
-          .get("http://www.hjmin.com/search?keywords=" + query)
+          .get("unAuth/findSongInfoByKeyWord",{keyword: query})
           .then((res) => {
             if (res.code == 200) {
               this.songs = res.result.songs;
