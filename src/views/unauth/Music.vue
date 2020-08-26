@@ -41,7 +41,7 @@
           </el-select>
         </div>
         <div class="switch">
-          <div class="switch-title">开启随心听</div>
+          <div class="switch-title">开启随心听(暂未开放)</div>
           <div class="switch-btn">
             <el-switch v-model="switchValue" disabled id="musicSwitch"></el-switch>
             <!-- active-color="#13ce66"
