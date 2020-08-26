@@ -88,9 +88,8 @@ Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$http = http;
 window.$notify = Notification;
-
 //阻止启动生产消息
-Vue.config.productionTip = false;
+window.Vue = Vue;
 
 //打印当前所处环境
 console.log("当前所处环境: ", process.env.NODE_ENV);
@@ -102,14 +101,14 @@ if (process.env.NODE_ENV == "development") {
 }
 
 //过滤器
-Vue.filter('formatDate', function (value1, value2) {
+Vue.filter('formatDate', function(value1, value2) {
     let date = new Date(value1);
     return formatDate(date, value2);
 })
 
 //百度统计
 var _hmt = _hmt || [];
-(function () {
+(function() {
     var hm = document.createElement("script");
     hm.src = "https://hm.baidu.com/hm.js?2032706202016ae71e8b76fb2b5f86b5";
     var s = document.getElementsByTagName("script")[0];

@@ -9,6 +9,8 @@
         <a id="contactus" href="mailto:wppwangpinpin@qq.com">联系我们</a>
       </div>
       <div class="gang">|</div>
+      <div><a id="Statement" href="Statement">免责声明</a></div>
+      <div class="gang">|</div>
       <div id="beian">
         © 2020
         <a href="https://beian.miit.gov.cn">皖ICP备19011468号</a>
@@ -21,7 +23,7 @@
 export default {
   name: "Footer",
   props: {
-    msg: String
+    msg: String,
   },
   methods: {
     //公众号二维码
@@ -31,11 +33,11 @@ export default {
         "",
         {
           dangerouslyUseHTMLString: true,
-          customClass: "width9"
+          customClass: "width9",
         }
       );
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -5,10 +5,10 @@ axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 //http request 拦截器
 axios.interceptors.request.use(
     // config => {
-    //     config.data = JSON.stringify(config.data);
-    //     config.headers = {
-    //         'Content-Type': 'application/x-www-form-urlencoded'
-    //     }
+    //     // config.data = JSON.stringify(config.data);
+    //     // config.headers = {
+    //     //     'Content-Type': 'application/x-www-form-urlencoded'
+    //     // }
     //     return config;
     // },
     // error => {
@@ -19,10 +19,8 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(response => {
 
     //单独处理别的网站返回结果
-    if(response.config.url == "https://api.uomg.com/api/rand.music") {
-        if(response.data.code == 1) {
-            response.data.code = 0
-        }
+    if (response.config.url.startsWith("http")) {
+        return response;
     }
 
     if (response.data.code == 0) {

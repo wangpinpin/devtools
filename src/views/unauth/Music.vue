@@ -5,12 +5,37 @@
 
     <div class="content" id="content">
       <div class="operation">
-        <div class="name">{{name}}</div>
-        <div class="author">{{author}}</div>
-        <a href="javascript:;" class="play" id="play">PLAY</a>
+        <div class="name">{{ name }}</div>
+        <div class="author">{{ author }}</div>
       </div>
       <div class="loading">
         <img src="@/assets/imgs/loading.gif" />
+      </div>
+      <div class="choice">
+        <div class="select">
+          <el-select
+            v-model="value"
+            filterable
+            remote
+            reserve-keyword
+            :remote-method="search"
+            :loading="loading"
+            placeholder="请输入歌名或歌手名"
+            @change="onchange"
+          >
+            <el-option
+              v-for="item in songs"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
+              <span style="float: left">{{ item.name }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{
+                item.artists[0].name
+              }}</span>
+            </el-option>
+          </el-select>
+        </div>
       </div>
     </div>
     <Footer class="footer" />
@@ -19,57 +44,69 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import { renderWebGL, AudioSystem } from "@/assets/js/music";
-
+import {setUrl, init} from "@/assets/js/music";
 export default {
   name: "Music",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
       title: "听一听",
       name: "",
-      author: ""
+      author: "",
+      keyword: "",
+      songs: [],
+      value: "",
+      loading: false,
+      audio: {},
+      bridge: {},
     };
   },
-  created() {
-    this.init();
-  },
 
+  created() {},
+  mounted() {
+  },
   methods: {
-    init() {
-      var formData = new FormData();
-      formData.append("sort", "热歌榜");
-      formData.append("format", "json");
-      this.$http
-        .post("https://api.uomg.com/api/rand.music", formData)
-        .then(res => {
-          this.name = res.name;
-          this.author = res.artistsname;
-          console.log(res.url);
-          this.$http.get("/" + res.url).then(res => {
-            this.singSong(url);
+    singSong(url) {
+
+      document.querySelector(".loading").style.display = "block";
+      setUrl(url);
+      init();
+    },
+    //查询歌曲
+    search(query) {
+      if (query !== "") {
+        this.loading = true;
+
+        this.$http
+          .get("http://www.hjmin.com/search?keywords=" + query)
+          .then((res) => {
+            if (res.code == 200) {
+              this.songs = res.result.songs;
+              this.loading = false;
+            }
           });
+      }
+    },
+    onchange() {
+      this.$http
+        .get("https://bird.ioliu.cn/netease/song?id=" + this.value)
+        .then((res) => {
+          if (res.status.code == 200) {
+            if (res.data.mp3.url) {
+              this.singSong(res.data.mp3.url);
+            } else {
+              this.$message({
+                message: "这首歌有点问题, 请换一首别人唱的。",
+                type: "warning",
+              });
+            }
+          }
         });
     },
-    singSong(url) {
-      var bridge = renderWebGL(document.getElementById("content"), {
-        audioSrc: url
-      });
-
-      var audio = new AudioSystem();
-      bridge.start(audio);
-
-      var btn = document.getElementById("play");
-
-      btn.onclick = function() {
-        btn.style.display = "none";
-        audio.play();
-      };
-    }
-  }
+  },
 };
 </script>
 <style lang="less">
@@ -106,17 +143,6 @@ canvas {
       .author {
         color: #7c96b1;
       }
-      .play {
-        background-color: #7c96b1;
-        border-radius: 0.1rem;
-        color: #fff;
-        margin-top: 3%;
-        margin: 0.8rem auto;
-        width: 46%;
-        height: 0.4rem;
-        line-height: 0.4rem;
-        display: block;
-      }
     }
     .loading {
       position: absolute;
@@ -127,11 +153,32 @@ canvas {
       width: 20%;
       top: 50%;
       transform: translateY(-50%);
+      display: none;
       img {
         width: 100%;
       }
     }
+    .choice {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      right: 0;
+      left: 0;
+      align-content: center;
+      top: 75%;
+      z-index: 99;
+      text-align: center;
+      .select {
+        line-height: 0;
+      }
+    }
   }
+}
+/deep/.el-select-dropdown__item {
+  width: 30%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 @media screen and (max-width: 900px) {
   .container {
