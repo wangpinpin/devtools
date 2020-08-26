@@ -4,16 +4,16 @@ axios.defaults.timeout = 5000;
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 //http request 拦截器
 axios.interceptors.request.use(
-    // config => {
-    //     // config.data = JSON.stringify(config.data);
-    //     // config.headers = {
-    //     //     'Content-Type': 'application/x-www-form-urlencoded'
-    //     // }
-    //     return config;
-    // },
-    // error => {
-    //     return Promise.reject(err);
-    // }
+    config => {
+        // config.data = JSON.stringify(config.data);
+        // config.headers = {
+        //     'Content-Type': 'application/x-www-form-urlencoded'
+        // }
+        return config;
+    },
+    error => {
+        return Promise.reject(err);
+    }
 );
 //响应拦截器即异常处理
 axios.interceptors.response.use(response => {

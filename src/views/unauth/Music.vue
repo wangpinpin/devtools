@@ -2,7 +2,6 @@
   <div class="container">
     <Header />
     <div class="title">{{ title }}</div>
-    <div style="text-align: center;">即将上线</div>
     <div class="content" id="content">
       <div class="operation">
         <div class="song-info">
@@ -15,7 +14,7 @@
       <div class="loading">
         <img src="@/assets/imgs/loading.gif" />
       </div>
-      <div class="choice" style="display:none;">
+      <div class="choice">
         <div class="operation-title">搜索</div>
         <div class="select">
           <el-select
@@ -31,25 +30,22 @@
             id="musicSelect"
             ref="select"
           >
-            <el-option
-              v-for="item in songs"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            >
+            <el-option v-for="item in songs" :key="item.id" :label="item.name" :value="item.id">
               <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{
+              <span style="float: right; color: #8492a6; font-size: 13px">
+                {{
                 item.artists[0].name
-              }}</span>
+                }}
+              </span>
             </el-option>
           </el-select>
         </div>
         <div class="switch">
           <div class="switch-title">开启随心听</div>
           <div class="switch-btn">
-            <el-switch v-model="switchValue" disabled id="musicSwitch"> </el-switch>
+            <el-switch v-model="switchValue" disabled id="musicSwitch"></el-switch>
             <!-- active-color="#13ce66"
-              inactive-color="#ff4949" -->
+            inactive-color="#ff4949"-->
           </div>
         </div>
       </div>
@@ -65,7 +61,7 @@ export default {
   name: "Music",
   components: {
     Header,
-    Footer,
+    Footer
   },
   data() {
     return {
@@ -78,19 +74,21 @@ export default {
       loading: false,
       audio: {},
       bridge: {},
-      switchValue: false,
+      switchValue: false
     };
   },
 
   created() {},
   mounted() {
-    // this.search("Lemon");
-    // this.$refs.select.$el.click();
+    this.search("Lemon");
+    this.$refs.select.$el.click();
   },
   methods: {
     singSong(url) {
+      if (url.indexOf("https") < 0) {
+        url = url.replace("http:", "https:");
+      }
       this.showHide();
-
       setUrl(url);
       init();
     },
@@ -100,8 +98,10 @@ export default {
         this.loading = true;
 
         this.$http
-          .get("unAuth/findSongInfoByKeyWord",{keyword: query})
-          .then((res) => {
+          .get("unAuth/crossDomain", {
+            url: "https://wyy.wangpinpin.com/search?keywords=" + query
+          })
+          .then(res => {
             if (res.code == 200) {
               this.songs = res.result.songs;
               this.loading = false;
@@ -111,20 +111,27 @@ export default {
     },
     onchange(item) {
       this.$http
-        .get("https://bird.ioliu.cn/netease/song?id=" + this.value)
-        .then((res) => {
-          if (res.status.code == 200) {
-            if (res.data.mp3.url) {
-              const obj = this.songs.find((d) => d.id === item);
+        .get("unAuth/crossDomain", {
+          url: "https://wyy.wangpinpin.com/song/url?id=" + this.value
+        })
+        .then(res => {
+          if (res.code == 200) {
+            if (res.data[0].url) {
+              const obj = this.songs.find(d => d.id === item);
               this.name = obj.name;
               this.author = obj.artists[0].name;
-              this.singSong(res.data.mp3.url);
+              this.singSong(res.data[0].url);
             } else {
               this.$message({
-                message: "这首歌有点问题, 请换一首别人唱的。",
-                type: "warning",
+                message: "木有资源",
+                type: "warning"
               });
             }
+          } else {
+            this.$message({
+              message: res.message,
+              type: "warning"
+            });
           }
         });
     },
@@ -132,8 +139,8 @@ export default {
       document.querySelector(".loading").style.display = "block";
       document.querySelector(".tips").style.display = "block";
       document.querySelector(".song-info").style.display = "none";
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less">
