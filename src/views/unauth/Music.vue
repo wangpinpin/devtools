@@ -30,12 +30,15 @@
             id="musicSelect"
             ref="select"
           >
-            <el-option v-for="item in songs" :key="item.id" :label="item.name" :value="item.id">
+            <el-option
+              v-for="item in songs"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
               <span style="float: left">{{ item.name }}</span>
               <span style="float: right; color: #8492a6; font-size: 13px">
-                {{
-                item.artists[0].name
-                }}
+                {{ item.artists[0].name }}
               </span>
             </el-option>
           </el-select>
@@ -43,7 +46,11 @@
         <div class="switch">
           <div class="switch-title">开启随心听(暂未开放)</div>
           <div class="switch-btn">
-            <el-switch v-model="switchValue" disabled id="musicSwitch"></el-switch>
+            <el-switch
+              v-model="switchValue"
+              disabled
+              id="musicSwitch"
+            ></el-switch>
             <!-- active-color="#13ce66"
             inactive-color="#ff4949"-->
           </div>
@@ -56,12 +63,12 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import { setUrl, init } from "@/assets/js/music";
+import { init } from "@/assets/js/music";
 export default {
   name: "Music",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
@@ -74,7 +81,8 @@ export default {
       loading: false,
       audio: {},
       bridge: {},
-      switchValue: false
+      switchValue: false,
+      url: "",
     };
   },
 
@@ -84,13 +92,8 @@ export default {
     this.$refs.select.$el.click();
   },
   methods: {
-    singSong(url) {
-      if (url.indexOf("https") < 0) {
-        url = url.replace("http:", "https:");
-      }
-      this.showHide();
-      setUrl(url);
-      init();
+    singSong() {
+      init(this);
     },
     //查询歌曲
     search(query) {
@@ -99,9 +102,9 @@ export default {
 
         this.$http
           .get("unAuth/crossDomain", {
-            url: "https://wyy.wangpinpin.com/search?keywords=" + query
+            url: "https://wyy.wangpinpin.com/search?keywords=" + query,
           })
-          .then(res => {
+          .then((res) => {
             if (res.code == 200) {
               this.songs = res.result.songs;
               this.loading = false;
@@ -112,35 +115,51 @@ export default {
     onchange(item) {
       this.$http
         .get("unAuth/crossDomain", {
-          url: "https://wyy.wangpinpin.com/song/url?id=" + this.value
+          url: "https://wyy.wangpinpin.com/song/url?id=" + this.value,
         })
-        .then(res => {
+        .then((res) => {
           if (res.code == 200) {
-            if (res.data[0].url) {
-              const obj = this.songs.find(d => d.id === item);
+            let url = res.data[0].url;
+            if (url) {
+              const obj = this.songs.find((d) => d.id === item);
               this.name = obj.name;
               this.author = obj.artists[0].name;
-              this.singSong(res.data[0].url);
+              if (url.indexOf("https") < 0) {
+                url = url.replace("http:", "https:");
+              }
+              this.url = url;
+              this.singSong();
             } else {
               this.$message({
                 message: "木有资源",
-                type: "warning"
+                type: "warning",
               });
             }
           } else {
             this.$message({
               message: res.message,
-              type: "warning"
+              type: "warning",
             });
           }
         });
     },
-    showHide() {
-      document.querySelector(".loading").style.display = "block";
-      document.querySelector(".tips").style.display = "block";
-      document.querySelector(".song-info").style.display = "none";
-    }
-  }
+    //音乐结束
+    musicEnd() {
+      console.log("audio end")
+    },
+
+    showHide(show) {
+      if (show) {
+        document.querySelector(".loading").style.display = "block";
+        document.querySelector(".tips").style.display = "block";
+        document.querySelector(".song-info").style.display = "none";
+      } else {
+        document.querySelector(".loading").style.display = "none";
+        document.querySelector(".tips").style.display = "none";
+        document.querySelector(".song-info").style.display = "block";
+      }
+    },
+  },
 };
 </script>
 <style lang="less">

@@ -10,25 +10,27 @@ function AudioSystem() {
     var FFT_SIZE = 2048;
     var MASTER_VOLUME = .8;
     var audioContext = sound.context;
-    var analyser = audioContext.createAnalyser();
+    analyser = audioContext.createAnalyser();
 
     listener.setMasterVolume(MASTER_VOLUME);
-    loader.load(URL, function(buffer) {
-        console.log('audio loaded.')
-        sound.setBuffer(buffer);
-        sound.setLoop(false);
-        sound.setVolume(.5);
-        sound.getOutput().connect(analyser);
-        sound.play();
-        // sound.play();
-        document.querySelector('.tips').style.display = 'none';
-        document.querySelector('.loading').style.display = 'none';
-        document.querySelector(".song-info").style.display = "block";
+    // loader.load(URL, function(buffer) {
+    //     console.log('audio loaded.')
+    //     sound.setBuffer(buffer);
+    //     sound.setLoop(false);
+    //     sound.setVolume(.5);
+    //     sound.getOutput().connect(analyser);
+    //     sound.play();
+    //     // sound.play();
+    //     document.querySelector('.tips').style.display = 'none';
+    //     document.querySelector('.loading').style.display = 'none';
+    //     document.querySelector(".song-info").style.display = "block";
+    //     sound.source.onended = function() {
+    //         console.log('sound1 ended #1');
+    //     };
+    //     // document.querySelector('.operation').style.display = 'block';
+    //     soundwave.transitionShowSoundwave();
 
-        // document.querySelector('.operation').style.display = 'block';
-        soundwave.transitionShowSoundwave();
-    });
-
+    // });
     this.waveform = new Uint8Array(analyser.frequencyBinCount);
     this.frequency = new Uint8Array(analyser.frequencyBinCount);
 
@@ -649,7 +651,6 @@ Application.prototype.getDelta = function() {
 }
 
 // =====================================================
-var app, audio, dolly, soundwave, URL;
 
 function RewindApplication(options) {
     app = new Application();
@@ -739,38 +740,47 @@ function setUrl(url) {
     URL = url;
 }
 
-var bridge, sound, loader;
+var app, audio, dolly, soundwave, URL;
 
-function init() {
+var bridge, sound, loader, analyser;
+
+function init(_this) {
+    setUrl(_this.url)
+
+    _this.showHide(true);
     if (!bridge) {
         bridge = renderWebGL(document.getElementById("content"));
     }
 
-    if (audio) {
-        if (sound.isPlaying) {
-            sound.stop();
-        }
-        sound.setBuffer(0);
-
-        loader.load(URL, function(buffer) {
-            console.log('audio loaded.')
-            sound.setBuffer(buffer);
-            sound.setLoop(false);
-            sound.setVolume(.5);
-            sound.play();
-            document.querySelector('.loading').style.display = 'none';
-            document.querySelector('.tips').style.display = 'none';
-            document.querySelector(".song-info").style.display = "block";
-
-            // document.querySelector('.operation').style.display = 'block';
-        })
-
-    } else {
+    if (!audio) {
         audio = new AudioSystem();
     }
+    if (sound.isPlaying) {
+        sound.stop();
+    }
+
+    sound.setBuffer(0);
+
+    loader.load(URL, function(buffer) {
+        console.log('audio loaded.')
+        sound.setBuffer(buffer);
+        sound.setLoop(false);
+        sound.setVolume(.5);
+        sound.getOutput().connect(analyser);
+
+        _this.showHide(false);
+        sound.play();
+
+        sound.source.onended = function() {
+            _this.musicEnd();
+        };
+        soundwave.transitionShowSoundwave();
+
+    })
+
     bridge.start();
 }
 
 
 
-export { setUrl, init }
+export { init }
