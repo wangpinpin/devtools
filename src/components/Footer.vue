@@ -55,6 +55,7 @@ export default {
   flex-direction: row;
   text-align: center;
   justify-content: center;
+  flex-wrap: wrap;
   div {
     margin: 0 0.1rem;
   }

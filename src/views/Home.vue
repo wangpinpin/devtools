@@ -11,7 +11,11 @@
           <div class="sub-title">网站每周更新功能, 欢迎收藏关注转发</div>
           <div class="sub-title">
             代码已在github开源
-            <a href="https://github.com/wangpinpin/devtools-server" target="_blank">点击这里</a>
+            <a
+              href="https://github.com/wangpinpin/devtools-server"
+              target="_blank"
+              >点击这里</a
+            >
           </div>
 
           <!-- 搜索框 -->
@@ -48,7 +52,7 @@ export default {
   name: "Home",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
@@ -71,14 +75,14 @@ export default {
         { path: "/MessageBoard", text: "留言板" },
         { path: "/Music", text: "听一听" },
         // { path: "/v", text: "看一看" },
+        { path: "/Wyy", text: "网易云音乐API" },
         { path: "/QRcodeCreate", text: "二维码生成" },
         { path: "/ImageToTxt", text: "图片文字提取" },
         { path: "/JsonFormat", text: "JSON格式化" },
         { path: "/ColorTransfer", text: "颜色代码转换" },
         { path: "/", text: "正在开发" },
         { path: "/", text: "正在开发" },
-        { path: "/", text: "正在开发" }
-      ]
+      ],
     };
   },
   beforeCreate() {},
@@ -111,8 +115,8 @@ export default {
           _this.inputText += inputText;
         }
       }, 800);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="less">

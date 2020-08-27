@@ -104,7 +104,8 @@ if (process.env.NODE_ENV == "development") {
 
 //过滤器
 Vue.filter('formatDate', function(value1, value2) {
-    let date = new Date(value1);
+    // let date = new Date(value1);
+    let date = new Date(value1.substr(0, 10) + "T" + value1.substr(11, 8));
     return formatDate(date, value2);
 })
 

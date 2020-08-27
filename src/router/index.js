@@ -110,6 +110,15 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/Statement.vue")
+    },
+    {
+        path: "/Wyy",
+        name: "Wyy",
+        meta: {
+            title: "网易云API"
+        },
+        component: () =>
+            import ("../views/unauth/Wyy.vue")
     }
 ];
 

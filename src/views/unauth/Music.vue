@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Header />
-    <div class="title">{{ title }}</div>
+    <!-- <div class="title">{{ title }}</div> -->
     <div class="content" id="content">
       <div class="operation">
         <div class="song-info">
