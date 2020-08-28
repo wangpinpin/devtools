@@ -54,7 +54,7 @@
                     ({{ item.praiseCount }})
                   </div>
                   <div class="time">
-                    {{ item.createTime | formatDate("yyyy-MM-dd") }}
+                    {{ item.createTime | formatDateIos("yyyy-MM-dd") }}
                   </div>
                 </div>
               </li>
