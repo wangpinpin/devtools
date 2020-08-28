@@ -37,8 +37,12 @@
                 </div>
                 <div class="text">{{ item.content }}</div>
                 <div class="operation">
-                  <div class="reply" id="reply" @click="reply(item.id)">
-                    <s>回复</s>
+                  <div
+                    class="reply"
+                    id="reply"
+                    @click="dialogForm(item.id)"
+                  >
+                    回复
                   </div>
                   <div
                     class="praise"
@@ -62,7 +66,7 @@
       </div>
 
       <div class="message">
-        <el-button type="primary" @click="dialogFormVisible = true"
+        <el-button type="primary" @click="dialogForm(null)"
           >点击留言</el-button
         >
       </div>
@@ -108,6 +112,7 @@ export default {
       text: "",
       pageNo: -1,
       pageSize: 10,
+      msgId: "",
     };
   },
   created() {
@@ -119,6 +124,11 @@ export default {
     },
   },
   methods: {
+    //显示输入框
+    dialogForm(id) {
+      this.msgId = id;
+      this.dialogFormVisible = true;
+    },
     //下滑加載數據
     load() {
       this.loading = true;
@@ -137,6 +147,7 @@ export default {
       if (this.text) {
         var formData = new FormData();
         formData.append("msg", this.text);
+        formData.append("msgId", this.msgId);
         this.$http.post("unAuth/addMsgBoard", formData).then((res) => {
           this.dialogFormVisible = false;
           this.text = "";
@@ -147,7 +158,7 @@ export default {
         });
       } else {
         this.$message({
-          message: "留言内容不能为空",
+          message: "内容不能为空",
           type: "warning",
         });
       }
@@ -176,14 +187,6 @@ export default {
           item.praiseCount++;
         });
       }
-    },
-    //回复
-    reply(id) {
-      this.$alert("回复功能开发中", {
-        confirmButtonText: "确定",
-        closeOnClickModal: true,
-        customClass: "width9",
-      });
     },
   },
 };
@@ -301,7 +304,6 @@ export default {
           .list {
             .list-item {
               width: 88%;
-
             }
           }
         }

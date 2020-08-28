@@ -197,6 +197,9 @@ export default {
       a {
         color: #747879;
         text-decoration: none;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
       }
     }
   }
