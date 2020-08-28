@@ -36,12 +36,10 @@
                   />
                 </div>
                 <div class="text">{{ item.content }}</div>
+
+                <!-- 操作 -->
                 <div class="operation">
-                  <div
-                    class="reply"
-                    id="reply"
-                    @click="dialogForm(item.id)"
-                  >
+                  <div class="reply" id="reply" @click="dialogForm(item.id)">
                     回复
                   </div>
                   <div
@@ -57,6 +55,44 @@
                     {{ item.createTime | formatDateIos("yyyy-MM-dd") }}
                   </div>
                 </div>
+                <!-- 回复 -->
+                <div class="reply-list" v-if="item.reply">
+                  <div
+                    class="reply-item"
+                    v-for="(replyIitem, replyIndex) in item.reply"
+                    v-bind:key="replyIitem.id"
+                    ref="{{replyIitem.id}}"
+                  >
+                    <div class="name">
+                      <img
+                        :src="
+                          require('../../assets/imgs/head/' +
+                            getHeadImgIndex(replyIndex) +
+                            '.png')
+                        "
+                      />
+                    </div>
+                    <div class="reply">
+                      {{ replyIitem.content }}
+                    </div>
+                    <div class="operation">
+                      <div
+                        class="praise"
+                        :class="{ red1: replyIitem.praise }"
+                        id="praise"
+                        @click="praise(replyIitem)"
+                      >
+                        <i class="iconfont">&#xe60c;</i>
+                        ({{ replyIitem.praiseCount }})
+                      </div>
+                      <div class="time">
+                        {{
+                          replyIitem.createTime | formatDateIos("yyyy-MM-dd")
+                        }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </li>
             </ul>
             <p v-if="loading" class="loading">加载中...</p>
@@ -66,9 +102,7 @@
       </div>
 
       <div class="message">
-        <el-button type="primary" @click="dialogForm(null)"
-          >点击留言</el-button
-        >
+        <el-button type="primary" @click="dialogForm(null)">点击留言</el-button>
       </div>
       <el-dialog title="请输入留言" :visible.sync="dialogFormVisible">
         <el-form>
@@ -170,6 +204,7 @@ export default {
         pageSize: this.pageSize,
       };
       this.$http.get("unAuth/findMsgBoard", param).then((res) => {
+        debugger;
         this.loading = false;
         if (res.length < this.pageSize) {
           this.noMore = true;
@@ -244,10 +279,11 @@ export default {
                 width: 0.4rem;
                 position: absolute;
                 left: -0.42rem;
+                top: -0.1rem;
               }
             }
             .text {
-              color: #565656;
+              color: #333333;
               line-height: 0.24rem;
               text-align: justify;
               word-break: break-all;
@@ -260,7 +296,7 @@ export default {
               font-size: 0.12rem;
               justify-content: flex-end;
               margin-top: 0.1rem;
-              color: #6b6b6b;
+              color: #000;
               cursor: pointer;
               .reply {
                 margin-right: 0.2rem;
@@ -268,6 +304,28 @@ export default {
               .praise {
                 width: 0.5rem;
                 text-align: left;
+              }
+            }
+            .reply-list {
+              padding: 0% 0.2rem 0% 1.3rem;
+              margin-top: 0.1rem;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12),
+                0 0 6px rgba(0, 0, 0, 0.04);
+              padding-top: 0.2rem;
+              .reply-item {
+                padding: 0.05rem 0;
+                position: relative;
+                .operation {
+                  color: #6b6b6b;
+                }
+                .name {
+                  position: absolute;
+                  left: -0.1rem;
+                }
+                .reply {
+                  font-size: 0.14rem;
+                  color: #808080;
+                }
               }
             }
           }

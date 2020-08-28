@@ -109,10 +109,10 @@ Vue.filter('formatDateIos', function(value1, value2) {
     return formatDate(date, value2);
 })
 Vue.filter('formatDate', function(value1, value2) {
-    let date = new Date(value1);
-    return formatDate(date, value2);
-})
-//百度统计
+        let date = new Date(value1);
+        return formatDate(date, value2);
+    })
+    //百度统计
 var _hmt = _hmt || [];
 (function() {
     var hm = document.createElement("script");
