@@ -14,6 +14,8 @@ Vue.component('happy-scroll', HappyScroll)
 //VCONSOLE
 import Vconsole from 'vconsole';
 
+//时间格式化
+import moment from 'moment'
 
 //无限滚动
 import infiniteScroll from "vue-infinite-scroll";
@@ -103,17 +105,16 @@ if (process.env.NODE_ENV == "development") {
 }
 
 //过滤器
-Vue.filter('formatDateIos', function(value1, value2) {
-    let date = new Date(yogaday.replace(/-/g, '/')).getTime()
-    return formatDate(date, value2);
+
+Vue.filter('formatDate', function (value1, value2) {
+    debugger
+    value1 = value1.replace(/-/g, '/');
+    return moment(value1).format(value2)
 })
-Vue.filter('formatDate', function(value1, value2) {
-        let date = new Date(value1);
-        return formatDate(date, value2);
-    })
-    //百度统计
+
+//百度统计
 var _hmt = _hmt || [];
-(function() {
+(function () {
     var hm = document.createElement("script");
     hm.src = "https://hm.baidu.com/hm.js?2032706202016ae71e8b76fb2b5f86b5";
     var s = document.getElementsByTagName("script")[0];

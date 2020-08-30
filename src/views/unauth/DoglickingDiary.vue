@@ -73,10 +73,7 @@ export default {
         .get("unAuth/getDoglickingDiary", { typeId: this.value })
         .then(res => {
           if (this.value == "0c97d296-e5b1-11ea-9d4b-00163e1e93a5") {
-            const date = this.$options.filters["formatDate"](
-              this.date,
-              "yyyy年MM月dd日"
-            );
+            const date = this.date.getFullYear() + "年" + (this.date.getMonth() + 1) + "月" + this.date.getDate() + "日";
             this.text = date + " " + res;
           } else {
             this.text = res;

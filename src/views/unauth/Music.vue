@@ -18,7 +18,7 @@
         <div class="operation-title">搜索</div>
         <div class="select">
           <el-select
-            v-model="value"
+            v-model="songId"
             filterable
             clearable
             remote
@@ -30,27 +30,16 @@
             id="musicSelect"
             ref="select"
           >
-            <el-option
-              v-for="item in songs"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            >
+            <el-option v-for="item in songs" :key="item.id" :label="item.name" :value="item.id">
               <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">
-                {{ item.artists[0].name }}
-              </span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.artists[0].name }}</span>
             </el-option>
           </el-select>
         </div>
         <div class="switch">
-          <div class="switch-title">开启随心听(暂未开放)</div>
+          <div class="switch-title">开启随心听</div>
           <div class="switch-btn">
-            <el-switch
-              v-model="switchValue"
-              disabled
-              id="musicSwitch"
-            ></el-switch>
+            <el-switch v-model="switchValue" id="musicSwitch" @change="switchChange"></el-switch>
             <!-- active-color="#13ce66"
             inactive-color="#ff4949"-->
           </div>
@@ -68,31 +57,32 @@ export default {
   name: "Music",
   components: {
     Header,
-    Footer,
+    Footer
   },
   data() {
     return {
       title: "听一听",
+      songId: "",
       name: "",
       author: "",
       keyword: "",
       songs: [],
-      value: "Lemon",
       loading: false,
       audio: {},
       bridge: {},
       switchValue: false,
       url: "",
+      songList: [],
+      songIndex: 0
     };
   },
 
   created() {},
   mounted() {
-    this.search("Lemon");
-    this.$refs.select.$el.click();
   },
   methods: {
     singSong() {
+
       init(this);
     },
     //查询歌曲
@@ -102,9 +92,9 @@ export default {
 
         this.$http
           .get("unAuth/crossDomain", {
-            url: "https://wyy.wangpinpin.com/search?keywords=" + query,
+            url: "https://wyy.wangpinpin.com/search?keywords=" + query
           })
-          .then((res) => {
+          .then(res => {
             if (res.code == 200) {
               this.songs = res.result.songs;
               this.loading = false;
@@ -112,18 +102,16 @@ export default {
           });
       }
     },
-    onchange(item) {
+    onchange(id) {
       this.$http
         .get("unAuth/crossDomain", {
-          url: "https://wyy.wangpinpin.com/song/url?id=" + this.value,
+          url: "https://wyy.wangpinpin.com/song/url?id=" + id
         })
-        .then((res) => {
+        .then(res => {
           if (res.code == 200) {
             let url = res.data[0].url;
             if (url) {
-              const obj = this.songs.find((d) => d.id === item);
-              this.name = obj.name;
-              this.author = obj.artists[0].name;
+              this.songDetail(id);
               if (url.indexOf("https") < 0) {
                 url = url.replace("http:", "https:");
               }
@@ -132,22 +120,63 @@ export default {
             } else {
               this.$message({
                 message: "木有资源",
-                type: "warning",
+                type: "warning"
               });
+              this.musicEnd();
             }
           } else {
             this.$message({
               message: res.message,
-              type: "warning",
+              type: "warning"
             });
+          }
+        });
+    },
+
+    //获取歌曲详情
+    songDetail(id) {
+      this.$http
+        .get("unAuth/crossDomain", {
+          url: "https://wyy.wangpinpin.com/song/detail?ids=" + id
+        })
+        .then(res => {
+          if (res.code == 200) {
+            this.name = res.songs[0].name;
+            this.author = res.songs[0].ar[0].name;
           }
         });
     },
     //音乐结束
     musicEnd() {
-      console.log("audio end")
+      if (this.switchValue) {
+        if (this.songIndex < this.songList.length) {
+          this.onchange(this.songList[this.songIndex].id);
+          this.songIndex++;
+        } else {
+          this.recommend();
+        }
+      }
     },
-
+    // 开启随心听
+    switchChange() {
+      if (this.switchValue) {
+        this.recommend();
+      }
+    },
+    //私人FM歌单
+    recommend() {
+      this.$http
+        .get("unAuth/crossDomain", {
+          url: "https://wyy.wangpinpin.com/personal_fm"
+        })
+        .then(res => {
+          if (res.code == 200) {
+            this.songIndex = 0;
+            this.songList = res.data;
+            this.musicEnd();
+          }
+        });
+    },
     showHide(show) {
       if (show) {
         document.querySelector(".loading").style.display = "block";
@@ -158,8 +187,8 @@ export default {
         document.querySelector(".tips").style.display = "none";
         document.querySelector(".song-info").style.display = "block";
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less">

@@ -52,7 +52,7 @@
                     ({{ item.praiseCount }})
                   </div>
                   <div class="time">
-                    {{ item.createTime | formatDateIos("yyyy-MM-dd") }}
+                    {{ item.createTime | formatDate("YYYY-MM-DD") }}
                   </div>
                 </div>
                 <!-- 回复 -->
@@ -87,7 +87,7 @@
                       </div>
                       <div class="time">
                         {{
-                          replyIitem.createTime | formatDateIos("yyyy-MM-dd")
+                          replyIitem.createTime | formatDate("YYYY-MM-DD")
                         }}
                       </div>
                     </div>
