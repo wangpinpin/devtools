@@ -768,10 +768,9 @@ function init(_this) {
 
     if (sound.isPlaying) {
         sound.stop();
-        sound.setBuffer(0);
     }
 
-
+    sound.setBuffer(0);
     loader.load(URL, function(buffer) {
         console.log('audio loaded.')
         sound.setBuffer(buffer);
