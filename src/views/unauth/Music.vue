@@ -161,7 +161,6 @@ export default {
     },
     //音乐结束
     musicEnd() {
-      debugger
       if (this.switchValue) {
         if (this.songIndex < this.songList.length) {
           this.onchange(this.songList[this.songIndex].id);
