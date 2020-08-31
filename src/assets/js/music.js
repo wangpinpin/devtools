@@ -779,7 +779,7 @@ function init(_this) {
 
         _this.showHide(false);
         sound.play();
-        sound.setVolume(1);
+        sound.setVolume(.4);
 
         sound.source.onended = function() {
             _this.musicEnd();
