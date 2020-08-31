@@ -68,7 +68,7 @@ export default {
         "background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);",
         "background-image: linear-gradient(to top, #d299c2 0%, #fef9d7 100%);",
         "background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);",
-        "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);"
+        // "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);"
       ],
       devText: [
         { path: "/DoglickingDiary", text: "舔狗日记" },
@@ -81,8 +81,8 @@ export default {
         { path: "/ImageToTxt", text: "图片文字提取" },
         { path: "/JsonFormat", text: "JSON格式化" },
         { path: "/ColorTransfer", text: "颜色代码转换" },
-        { path: "/", text: "正在开发" },
-        { path: "/", text: "正在开发" },
+        // { path: "/", text: "正在开发" },
+        // { path: "/", text: "正在开发" },
       ],
     };
   },
