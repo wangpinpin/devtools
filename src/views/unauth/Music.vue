@@ -30,19 +30,34 @@
             id="musicSelect"
             ref="select"
           >
-            <el-option v-for="item in songs" :key="item.id" :label="item.name" :value="item.id">
+            <el-option
+              v-for="item in songs"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            >
               <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.artists[0].name }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{
+                item.artists[0].name
+              }}</span>
             </el-option>
           </el-select>
         </div>
         <div class="switch">
           <div class="switch-title">开启随心听</div>
           <div class="switch-btn">
-            <el-switch v-model="switchValue" id="musicSwitch" @change="switchChange"></el-switch>
-            <!-- active-color="#13ce66"
-            inactive-color="#ff4949"-->
+            <el-switch
+              v-model="switchValue"
+              id="musicSwitch"
+              @change="switchChange"
+            ></el-switch>
           </div>
+        </div>
+        <div class="preAndNext">
+            <el-button type="primary" @click="playAndPause"
+              >暂停/播放</el-button
+            >
+            <el-button type="primary" @click="nextSong">下一首</el-button>
         </div>
       </div>
     </div>
@@ -52,12 +67,12 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import { init } from "@/assets/js/music";
+import { init, playAndPause } from "@/assets/js/music";
 export default {
   name: "Music",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
@@ -73,16 +88,14 @@ export default {
       switchValue: false,
       url: "",
       songList: [],
-      songIndex: 0
+      songIndex: 0,
     };
   },
 
   created() {},
-  mounted() {
-  },
+  mounted() {},
   methods: {
     singSong() {
-
       init(this);
     },
     //查询歌曲
@@ -92,9 +105,9 @@ export default {
 
         this.$http
           .get("unAuth/crossDomain", {
-            url: "https://wyy.wangpinpin.com/search?keywords=" + query
+            url: "https://wyy.wangpinpin.com/search?keywords=" + query,
           })
-          .then(res => {
+          .then((res) => {
             if (res.code == 200) {
               this.songs = res.result.songs;
               this.loading = false;
@@ -105,9 +118,9 @@ export default {
     onchange(id) {
       this.$http
         .get("unAuth/crossDomain", {
-          url: "https://wyy.wangpinpin.com/song/url?id=" + id
+          url: "https://wyy.wangpinpin.com/song/url?id=" + id,
         })
-        .then(res => {
+        .then((res) => {
           if (res.code == 200) {
             let url = res.data[0].url;
             if (url) {
@@ -120,14 +133,14 @@ export default {
             } else {
               this.$message({
                 message: "木有资源",
-                type: "warning"
+                type: "warning",
               });
               this.musicEnd();
             }
           } else {
             this.$message({
               message: res.message,
-              type: "warning"
+              type: "warning",
             });
           }
         });
@@ -137,9 +150,9 @@ export default {
     songDetail(id) {
       this.$http
         .get("unAuth/crossDomain", {
-          url: "https://wyy.wangpinpin.com/song/detail?ids=" + id
+          url: "https://wyy.wangpinpin.com/song/detail?ids=" + id,
         })
-        .then(res => {
+        .then((res) => {
           if (res.code == 200) {
             this.name = res.songs[0].name;
             this.author = res.songs[0].ar[0].name;
@@ -167,15 +180,30 @@ export default {
     recommend() {
       this.$http
         .get("unAuth/crossDomain", {
-          url: "https://wyy.wangpinpin.com/personal_fm"
+          url: "https://wyy.wangpinpin.com/personal_fm?" + Math.random(),
         })
-        .then(res => {
+        .then((res) => {
           if (res.code == 200) {
             this.songIndex = 0;
             this.songList = res.data;
             this.musicEnd();
           }
         });
+    },
+    //播放暂停
+    playAndPause() {
+      playAndPause();
+    },
+    //下一首
+    nextSong() {
+      if (this.switchValue) {
+        this.musicEnd();
+      } else {
+        this.$message({
+          message: "没有下一首了",
+          type: "warning",
+        });
+      }
     },
     showHide(show) {
       if (show) {
@@ -187,8 +215,8 @@ export default {
         document.querySelector(".tips").style.display = "none";
         document.querySelector(".song-info").style.display = "block";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less">
@@ -274,6 +302,13 @@ canvas {
         line-height: 0.3rem;
         .switch-title {
           margin-right: 0.2rem;
+        }
+      }
+      .preAndNext {
+        /deep/.el-button--primary {
+          color: #7c96b1;
+          background-color: #95d6fe;
+          border-color: #ffffff;
         }
       }
     }
