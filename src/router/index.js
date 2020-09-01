@@ -9,7 +9,7 @@ const routes = [{
         name: "Home",
         component: Home,
         meta: {
-            title: "小破站"
+            title: "小破站 - 舔狗日记|每日一文|www.wangpinpin.com"
         }
     },
     {
@@ -52,7 +52,7 @@ const routes = [{
         path: "/ImageToTxt",
         name: "ImageToTxt",
         meta: {
-            title: "图片文字提取"
+            title: "图片转文字, 图片文字提取 "
         },
         component: () =>
             import ("../views/unauth/ImageToTxt.vue")
@@ -119,6 +119,15 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/Wyy.vue")
+    },
+    {
+        path: "/wallpaper",
+        name: "wallpaper",
+        meta: {
+            title: "必应壁纸"
+        },
+        component: () =>
+            import ("../views/unauth/Wallpaper.vue")
     }
 ];
 

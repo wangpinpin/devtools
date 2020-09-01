@@ -11,9 +11,6 @@ import { HappyScroll } from 'vue-happy-scroll'
 import 'vue-happy-scroll/docs/happy-scroll.css'
 Vue.component('happy-scroll', HappyScroll)
 
-//VCONSOLE
-import Vconsole from 'vconsole';
-
 //时间格式化
 import moment from 'moment'
 
@@ -24,6 +21,11 @@ Vue.use(infiniteScroll);
 // import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
 // Vue.use(ElementUI);
+
+//element 内置过渡动画
+import 'element-ui/lib/theme-chalk/base.css';
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+Vue.component(CollapseTransition.name, CollapseTransition)
 
 //复制到粘贴板插件
 import VueClipboard from 'vue-clipboard2'
@@ -97,24 +99,18 @@ window.Vue = Vue;
 
 //打印当前所处环境
 console.log("当前所处环境: ", process.env.NODE_ENV);
-console.log("当前环境API: ", process.env.VUE_APP_BASE_URL);
-
-//测试环境
-if (process.env.NODE_ENV == "development") {
-    new Vconsole();
-}
+// console.log("当前环境API: ", process.env.VUE_APP_BASE_URL);
 
 //过滤器
 
-Vue.filter('formatDate', function (value1, value2) {
-    debugger
+Vue.filter('formatDate', function(value1, value2) {
     value1 = value1.replace(/-/g, '/');
     return moment(value1).format(value2)
 })
 
 //百度统计
 var _hmt = _hmt || [];
-(function () {
+(function() {
     var hm = document.createElement("script");
     hm.src = "https://hm.baidu.com/hm.js?2032706202016ae71e8b76fb2b5f86b5";
     var s = document.getElementsByTagName("script")[0];

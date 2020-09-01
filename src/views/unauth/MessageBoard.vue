@@ -204,7 +204,6 @@ export default {
         pageSize: this.pageSize,
       };
       this.$http.get("unAuth/findMsgBoard", param).then((res) => {
-        debugger;
         this.loading = false;
         if (res.length < this.pageSize) {
           this.noMore = true;

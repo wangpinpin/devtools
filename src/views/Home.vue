@@ -68,13 +68,15 @@ export default {
         "background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);",
         "background-image: linear-gradient(to top, #d299c2 0%, #fef9d7 100%);",
         "background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);",
-        // "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);"
+        "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);"
       ],
       devText: [
         { path: "/DoglickingDiary", text: "舔狗日记" },
         { path: "/MessageBoard", text: "留言板" },
         { path: "/Music", text: "听一听" },
         { path: "/EveryDayText", text: "每日一文" },
+        { path: "/wallpaper", text: "必应壁纸" },
+
         // { path: "/v", text: "看一看" },
         { path: "/Wyy", text: "网易云音乐API" },
         { path: "/QRcodeCreate", text: "二维码生成" },
