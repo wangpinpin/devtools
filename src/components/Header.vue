@@ -158,6 +158,7 @@ export default {
   font-size: 0.18rem;
   position: relative;
   z-index: 999;
+  box-sizing: border-box;
   .item:hover {
     color: #7c96b1;
   }
