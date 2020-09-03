@@ -11,9 +11,8 @@ import { HappyScroll } from 'vue-happy-scroll'
 import 'vue-happy-scroll/docs/happy-scroll.css'
 Vue.component('happy-scroll', HappyScroll)
 
-//VCONSOLE
-import Vconsole from 'vconsole';
-
+//时间格式化
+import moment from 'moment'
 
 //无限滚动
 import infiniteScroll from "vue-infinite-scroll";
@@ -22,6 +21,11 @@ Vue.use(infiniteScroll);
 // import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
 // Vue.use(ElementUI);
+
+//element 内置过渡动画
+import 'element-ui/lib/theme-chalk/base.css';
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+Vue.component(CollapseTransition.name, CollapseTransition)
 
 //复制到粘贴板插件
 import VueClipboard from 'vue-clipboard2'
@@ -95,23 +99,15 @@ window.Vue = Vue;
 
 //打印当前所处环境
 console.log("当前所处环境: ", process.env.NODE_ENV);
-console.log("当前环境API: ", process.env.VUE_APP_BASE_URL);
-
-//测试环境
-if (process.env.NODE_ENV == "development") {
-    new Vconsole();
-}
+// console.log("当前环境API: ", process.env.VUE_APP_BASE_URL);
 
 //过滤器
-Vue.filter('formatDateIos', function(value1, value2) {
-    // let date = new Date(value1);
-    let date = new Date(value1.substr(0, 10) + "T" + value1.substr(11, 8));
-    return formatDate(date, value2);
-})
+
 Vue.filter('formatDate', function(value1, value2) {
-    let date = new Date(value1);
-    return formatDate(date, value2);
+    value1 = value1.replace(/-/g, '/');
+    return moment(value1).format(value2)
 })
+
 //百度统计
 var _hmt = _hmt || [];
 (function() {

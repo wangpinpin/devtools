@@ -42,16 +42,16 @@ function AudioSystem() {
 }
 
 
-AudioSystem.prototype.start = function() {
+AudioSystem.prototype.start = function () {
     this.sound.play();
 }
 
-AudioSystem.prototype.update = function() {
+AudioSystem.prototype.update = function () {
     this.analyser.getByteTimeDomainData(this.waveform);
     this.analyser.getByteFrequencyData(this.frequency);
 }
 
-AudioSystem.prototype.play = function() {
+AudioSystem.prototype.play = function () {
     this.sound.play();
 }
 
@@ -120,11 +120,11 @@ function ParticleBufferGeometry(options) {
     if (typeof options.particleGeometry == 'function') {
         t = options.particleGeometry;
     } else if (Array.isArray(options.particleGeometry)) {
-        t = function() {
+        t = function () {
             return options.particleGeometry[THREE.Math.randInt(0, options.particleGeometry.length - 1)];
         }
     } else {
-        t = function() {
+        t = function () {
             return options.particleGeometry;
         }
     }
@@ -198,7 +198,7 @@ function SoundwaveTrampoline(options) {
         particleCount: 1e3,
         // particleCount: 100,
         particleGeometry: FannedCircleParticleGeometry(18)
-            // particleGeometry: TetrahedronParticleGeometry(18)
+        // particleGeometry: TetrahedronParticleGeometry(18)
     });
 
     var uniforms = Object.assign({
@@ -210,11 +210,11 @@ function SoundwaveTrampoline(options) {
         },
         radiusMultiplier: {
             value: 1
-                // value: .2
+            // value: .2
         },
         perturbMultiplier: {
             value: 1
-                // value: .2
+            // value: .2
         },
         audioFrequencyFactor: {
             value: options.audioFrequencyFactor
@@ -233,7 +233,7 @@ function SoundwaveTrampoline(options) {
         },
         particleScale: {
             value: .05
-                // value: 0
+            // value: 0
         }
     }, audioUniforms, appUniforms);
 
@@ -453,7 +453,7 @@ function Soundwave() {
             audioScaleFactor: .15,
             // audioScaleFactor: .1,
             audioScaleExponent: 5.5
-                // audioScaleExponent: 10
+            // audioScaleExponent: 10
         })
     ];
 
@@ -462,7 +462,7 @@ function Soundwave() {
     });
 }
 
-Soundwave.prototype.transitionShowSoundwave = function() {
+Soundwave.prototype.transitionShowSoundwave = function () {
     var timeline = new TimelineMax();
 
     var object3D = this.object3D;
@@ -515,7 +515,7 @@ Soundwave.prototype.transitionShowSoundwave = function() {
     // })
 }
 
-Soundwave.prototype.transitionExplodeSoundwave = function() {
+Soundwave.prototype.transitionExplodeSoundwave = function () {
     var timeline = new TimelineMax();
     var object3D = this.object3D;
 
@@ -560,12 +560,12 @@ function CameraDolly() {
     this.fixedTargetVector = new THREE.Vector3;
 }
 
-CameraDolly.prototype.start = function() {
+CameraDolly.prototype.start = function () {
     this.object3D.add(app.camera);
     app.camera.target = new THREE.Vector3
 }
 
-CameraDolly.prototype.update = function() {
+CameraDolly.prototype.update = function () {
     // var t = app.mouse,
     var t = new THREE.Vector3,
         i = new THREE.Vector3;
@@ -609,7 +609,7 @@ function Application() {
     this.animate = this.animate.bind(this);
 }
 
-Application.prototype.setup = function() {
+Application.prototype.setup = function () {
     var e = window.innerWidth,
         t = window.innerHeight,
         i = window.devicePixelRatio || 1;
@@ -623,14 +623,14 @@ Application.prototype.setup = function() {
     }
 }
 
-Application.prototype.animate = function() {
+Application.prototype.animate = function () {
     requestAnimationFrame(this.animate);
     // dispatch update
     onUpdate();
     this.render();
 }
 
-Application.prototype.start = function() {
+Application.prototype.start = function () {
     // dispatch start
     this.setup();
     this.clock.start();
@@ -638,15 +638,15 @@ Application.prototype.start = function() {
     this.animate();
 }
 
-Application.prototype.render = function() {
+Application.prototype.render = function () {
     this.renderer.render(this.scene, this.camera);
 }
 
-Application.prototype.getTime = function() {
+Application.prototype.getTime = function () {
     return this.clock.elapsedTime;
 }
 
-Application.prototype.getDelta = function() {
+Application.prototype.getDelta = function () {
     return this.clock.getDelta();
 }
 
@@ -682,7 +682,7 @@ function RewindApplication(options) {
 }
 
 // =====================================================
-var renderWebGL = (function() {
+var renderWebGL = (function () {
 
     function start() {
         app.start();
@@ -693,7 +693,7 @@ var renderWebGL = (function() {
 
     }
 
-    return function(container, options) {
+    return function (container, options) {
         // URL = options.audioSrc
         RewindApplication(options);
         container.appendChild(app.canvas);
@@ -740,11 +740,26 @@ function setUrl(url) {
     URL = url;
 }
 
+function playAndPause() {
+    if (sound) {
+        if (sound.isPlaying) {
+            sound.pause();
+        } else {
+            sound.play();
+            sound.source.onended = function () {
+                that.musicEnd();
+            };
+        }
+
+    }
+
+}
 var app, audio, dolly, soundwave, URL;
 
-var bridge, sound, loader, analyser;
+var bridge, sound, loader, analyser, that;
 
 function init(_this) {
+    that = _this
     setUrl(_this.url)
 
     _this.showHide(true);
@@ -755,23 +770,23 @@ function init(_this) {
     if (!audio) {
         audio = new AudioSystem();
     }
+
     if (sound.isPlaying) {
         sound.stop();
     }
 
     sound.setBuffer(0);
-
-    loader.load(URL, function(buffer) {
+    loader.load(URL, function (buffer) {
         console.log('audio loaded.')
         sound.setBuffer(buffer);
         sound.setLoop(false);
-        sound.setVolume(.5);
         sound.getOutput().connect(analyser);
 
         _this.showHide(false);
         sound.play();
+        sound.setVolume(.4);
 
-        sound.source.onended = function() {
+        sound.source.onended = function () {
             _this.musicEnd();
         };
         soundwave.transitionShowSoundwave();
@@ -783,4 +798,4 @@ function init(_this) {
 
 
 
-export { init }
+export { init, playAndPause }
