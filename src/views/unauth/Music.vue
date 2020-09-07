@@ -9,52 +9,15 @@
           <div class="author">{{ author }}</div>
         </div>
 
-        <div class="tips">音乐渲染中</div>
+        <div class="tips">音乐渲染中...</div>
       </div>
       <div class="loading">
         <img src="@/assets/imgs/loading.gif" />
       </div>
-      <i class="iconfont more" @click="popMore">&#xe648;</i>
+      <i class="iconfont btnMore" @click="popMore">&#xe648;</i>
       <div class="choice">
-        <!-- <div class="operation-title">搜索</div>
-        <div class="select">
-          <el-select
-            v-model="songId"
-            filterable
-            clearable
-            remote
-            reserve-keyword
-            :remote-method="search"
-            :loading="loading"
-            placeholder="请输入歌名或歌手名"
-            @change="onchange"
-            id="musicSelect"
-            ref="select"
-          >
-            <el-option
-              v-for="item in songs"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            >
-              <span style="float: left">{{ item.name }}</span>
-              <span style="float: right; color: #8492a6; font-size: 13px">{{
-                item.artists[0].name
-              }}</span>
-            </el-option>
-          </el-select>
-        </div> -->
-        <!-- <div class="switch">
-          <div class="switch-title">开启随心听</div>
-          <div class="switch-btn">
-            <el-switch
-              v-model="switchValue"
-              id="musicSwitch"
-              @change="switchChange"
-            ></el-switch>
-          </div>
-        </div> -->
         <div class="preAndNext">
+          <i @click="voice" class="iconfont">&#xe6e8;</i>
           <i @click="prevSong" class="iconfont">&#xe606;</i>
           <i @click="playAndPause" v-show="!isPlaying" class="iconfont"
             >&#xe612;</i
@@ -63,13 +26,18 @@
             >&#xe62d;</i
           >
           <i @click="nextSong" class="iconfont">&#xe601;</i>
-          <i @click="history" class="iconfont">&#xe625;</i>
+          <i @click="history" class="btnHistory iconfont">&#xe625;</i>
         </div>
       </div>
-      <div :class="showHistory ? 'popHistory show' : 'popHistory'">
-        <i class="popClose iconfont" @click="showHistory = false">&#xe607;</i>
+      <div
+        :class="showHistory ? 'popHistory show' : 'popHistory'"
+        ref="popHistory"
+      >
+        <i class="popClose iconfont" @click.stop="showHistory = false"
+          >&#xe607;</i
+        >
         <h3 class="popTitle">
-          播放列表<span>（共{{ hisSongsCnt }}首）</span>
+          播放列表<span>（共{{ songsHistory.length }}首）</span>
         </h3>
         <div class="listContainer">
           <happy-scroll
@@ -79,16 +47,25 @@
             resize
           >
             <ul class="hisList">
-              <li v-for="index in hisSongsCnt" @click="cutSong">
-                <span class="listNo">{{ index }}</span
-                >音乐
+              <li
+                v-for="(song, index) in songsHistory"
+                :key="song.id"
+                :value="song.id"
+                @click="onchange(song.id)"
+                @mouseenter="palyHistory($event, index)"
+                @mouseleave="pauseHistory($event, index)"
+                :class="hisListClass(index)"
+              >
+                <span class="listNo iconfont" v-html="listIcon(index)"></span>
+                <span class="listSongName">{{ song.name }}</span>
+                <span class="listSongAuthor">{{ song.artists[0].name }}</span>
               </li>
             </ul>
           </happy-scroll>
         </div>
       </div>
-      <div :class="showMore ? 'popMore show' : 'popMore'">
-        <i class="popClose iconfont" @click="showMore = false">&#xe607;</i>
+      <div :class="showMore ? 'popMore show' : 'popMore'" ref="popMore">
+        <i class="popClose iconfont" @click.stop="showMore = false">&#xe607;</i>
         <h3 class="popTitle">搜索歌曲</h3>
         <div class="select">
           <el-select
@@ -154,20 +131,63 @@ export default {
       loading: false,
       audio: {},
       bridge: {},
-      switchValue: false,
       url: "",
       songList: [],
       songIndex: 0,
       isPlaying: false,
       isFirstPlay: true,
       showHistory: false,
-      hisSongsCnt: 20,
       showMore: false,
+      songsHistory: [],
+      curSongIndex: 0,
     };
   },
 
   created() {},
-  mounted() {},
+  mounted() {
+    // 弹窗区域外点击关闭
+    document.addEventListener("click", (e) => {
+      let popHistory = this.$refs.popHistory;
+      let popMore = this.$refs.popMore;
+      if (popHistory) {
+        if (e.target.className.indexOf("btnHistory") !== -1) return;
+        if (!popHistory.contains(e.target)) {
+          this.showHistory = false;
+        } else {
+          this.showHistory = true;
+        }
+      }
+      if (popMore) {
+        if (e.target.className.indexOf("btnMore") !== -1) return;
+        if (!popMore.contains(e.target)) {
+          this.showMore = false;
+        } else {
+          this.showMore = true;
+        }
+      }
+    });
+  },
+  computed: {
+    // 历史记录当前播放歌曲换色
+    hisListClass() {
+      return (index) => {
+        if (this.curSongIndex == index) {
+          return "active";
+        } else {
+          return "";
+        }
+      };
+    },
+    listIcon() {
+      return (index) => {
+        if (this.curSongIndex == index) {
+          return "&#xe604;";
+        } else {
+          return index + 1;
+        }
+      };
+    },
+  },
   methods: {
     singSong() {
       init(this);
@@ -235,18 +255,11 @@ export default {
     },
     //音乐结束
     musicEnd() {
-      if (this.switchValue) {
-        if (this.songIndex < this.songList.length) {
-          this.onchange(this.songList[this.songIndex].id);
-          this.songIndex++;
-        } else {
-          this.recommend();
-        }
-      }
-    },
-    // 开启随心听
-    switchChange() {
-      if (this.switchValue) {
+      if (this.songIndex < this.songList.length) {
+        this.onchange(this.songList[this.songIndex].id);
+        this.songsHistory.push(this.songList[this.songIndex]);
+        this.songIndex++;
+      } else {
         this.recommend();
       }
     },
@@ -271,21 +284,33 @@ export default {
         playAndPause();
         return;
       }
-      this.switchValue = true;
       this.isFirstPlay = false;
       this.recommend();
     },
+    //音量调节
+    voice() {},
     //上一首
-    prevSong() {},
-    //下一首
-    nextSong() {
-      if (this.switchValue) {
-        this.musicEnd();
+    prevSong() {
+      let prevSong = this.songsHistory[this.curSongIndex - 1];
+      if (prevSong) {
+        this.curSongIndex--;
+        this.onchange(prevSong.id);
       } else {
         this.$message({
-          message: "没有下一首了",
+          message: "没有上一首了",
           type: "warning",
         });
+      }
+    },
+    //下一首
+    nextSong() {
+      let nextSong = this.songsHistory[this.curSongIndex + 1];
+      if (nextSong) {
+        this.curSongIndex++;
+        this.onchange(nextSong.id);
+      } else {
+        this.curSongIndex++;
+        this.musicEnd();
       }
     },
     showHide(show) {
@@ -303,10 +328,19 @@ export default {
     history() {
       this.showHistory = !this.showHistory;
     },
-    //切到指定歌曲
-    cutSong() {},
+    //左侧弹窗
     popMore() {
       this.showMore = !this.showMore;
+    },
+    //悬停历史记录前序号显示播放图标
+    palyHistory(e, index) {
+      let text = index == this.curSongIndex ? "&#xe62d;" : "&#xe612;";
+      e.target.children[0].innerHTML = text;
+    },
+    //悬停历史记录前序号显示暂停图标
+    pauseHistory(e, index) {
+      let text = index == this.curSongIndex ? "&#xe604;" : index + 1;
+      e.target.children[0].innerHTML = text;
     },
   },
 };
@@ -347,7 +381,8 @@ canvas {
       }
       .tips {
         display: none;
-        margin-top: 0.1rem;
+        margin-top: 1.4rem;
+        color: #7c96b1;
       }
     }
     .loading {
@@ -414,6 +449,10 @@ canvas {
       top: 0.2rem;
       right: 0.3rem;
       font-size: 0.2rem;
+      transition: all 0.3s ease;
+      &:hover {
+        transform: rotate(180deg);
+      }
     }
     .popTitle {
       margin: 0;
@@ -426,19 +465,19 @@ canvas {
     .popHistory {
       position: fixed;
       bottom: 15%;
-      left: 54%;
-      width: 30%;
+      left: 55.5%;
+      width: 32%;
       height: 0;
       background-color: #fff;
       padding: 0.1rem;
       color: #333;
-      z-index: 1000;
       opacity: 0;
       transition: all 0.6s ease;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
       &.show {
         opacity: 1;
         height: 60%;
+        z-index: 1000;
       }
       .listContainer {
         height: 88%;
@@ -446,25 +485,50 @@ canvas {
         /deep/.happy-scroll-container {
           width: 100% !important;
           height: 100% !important;
+          .happy-scroll-content {
+            width: 100%;
+            vertical-align: top;
+          }
         }
         .hisList {
           margin: 0;
-          font-size: 0.24rem;
+          font-size: 0.22rem;
           width: 100%;
           padding-left: 0;
           list-style: none;
           li {
             cursor: pointer;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            &.active,
+            &:hover {
+              color: #7c96b1;
+            }
           }
           .listNo {
             display: inline-block;
             width: 2em;
             text-align: center;
+            font-size: 0.22rem;
+          }
+          .listSongName {
+            display: inline-block;
+            width: 60%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-right: 0.5em;
+          }
+          .listSongAuthor {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
           }
         }
       }
     }
-    .more {
+    .btnMore {
       position: absolute;
       font-size: 0.6rem;
       left: -0.23rem;
