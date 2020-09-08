@@ -2,6 +2,7 @@
   <div class="container">
     <Header />
     <div class="title">{{ title }}</div>
+    <div class="sub-tilte">本站数据全网最全, 定时搜索全网数据</div>
     <div class="content">
       <div class="condition">
         <div class="select">
@@ -9,7 +10,7 @@
             <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </div>
-        <div class="search" @click="search" id="start">
+        <div class="search" @click="searchsub-tilte" id="start">
           <el-button type="success">开舔</el-button>
         </div>
       </div>
@@ -73,7 +74,13 @@ export default {
         .get("unAuth/getDoglickingDiary", { typeId: this.value })
         .then(res => {
           if (this.value == "0c97d296-e5b1-11ea-9d4b-00163e1e93a5") {
-            const date = this.date.getFullYear() + "年" + (this.date.getMonth() + 1) + "月" + this.date.getDate() + "日";
+            const date =
+              this.date.getFullYear() +
+              "年" +
+              (this.date.getMonth() + 1) +
+              "月" +
+              this.date.getDate() +
+              "日";
             this.text = date + " " + res;
           } else {
             this.text = res;
@@ -134,6 +141,11 @@ export default {
 
   .title {
     font-size: 0.4rem;
+    text-align: center;
+    color: #7c96b1;
+  }
+  .sub-title {
+    font-size: 0.3rem;
     text-align: center;
     color: #7c96b1;
   }
