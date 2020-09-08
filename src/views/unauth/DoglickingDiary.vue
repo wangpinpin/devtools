@@ -145,7 +145,7 @@ export default {
     color: #7c96b1;
   }
   .sub-title {
-    font-size: 0.3rem;
+    font-size: 0.3yrem;
     text-align: center;
     color: #7c96b1;
   }
