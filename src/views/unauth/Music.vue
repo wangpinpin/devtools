@@ -14,10 +14,12 @@
       <div class="loading">
         <img src="@/assets/imgs/loading.gif" />
       </div>
-      <i class="iconfont btnMore" @click="popMore">&#xe648;</i>
+      <i class="iconfont btnMore" @click="showMore = !showMore">&#xe62f;</i>
       <div class="choice">
         <div class="preAndNext">
-          <i @click="voice" class="iconfont">&#xe6e8;</i>
+          <i @click="showVolumn = !showVolumn" class="btnVolumn iconfont"
+            >&#xe6e8;</i
+          >
           <i @click="prevSong" class="iconfont">&#xe606;</i>
           <i @click="playAndPause" v-show="!isPlaying" class="iconfont"
             >&#xe612;</i
@@ -26,16 +28,29 @@
             >&#xe62d;</i
           >
           <i @click="nextSong" class="iconfont">&#xe601;</i>
-          <i @click="history" class="btnHistory iconfont">&#xe625;</i>
+          <i @click="showHistory = !showHistory" class="btnHistory iconfont"
+            >&#xe625;</i
+          >
         </div>
+      </div>
+      <div class="volumnSlider" v-show="showVolumn" ref="volumnSlider">
+        <el-slider
+          v-model="volume"
+          :min="0"
+          :max="1"
+          :step="0.1"
+          :show-tooltip="false"
+          vertical
+          height="1rem"
+          @change="changeVolume"
+        >
+        </el-slider>
       </div>
       <div
         :class="showHistory ? 'popHistory show' : 'popHistory'"
         ref="popHistory"
       >
-        <i class="popClose iconfont" @click.stop="showHistory = false"
-          >&#xe607;</i
-        >
+        <i class="clearHistory iconfont" @click.stop="clearHistory">&#xe797;</i>
         <h3 class="popTitle">
           播放列表<span>（共{{ songsHistory.length }}首）</span>
         </h3>
@@ -51,14 +66,15 @@
                 v-for="(song, index) in songsHistory"
                 :key="song.id"
                 :value="song.id"
-                @click="onchange(song.id)"
-                @mouseenter="palyHistory($event, index)"
-                @mouseleave="pauseHistory($event, index)"
+                :data-index="index"
+                @click="clickHistory(song.id, index)"
+                @mouseenter="enterHistory($event)"
+                @mouseleave="leaveHistory($event)"
                 :class="hisListClass(index)"
               >
                 <span class="listNo iconfont" v-html="listIcon(index)"></span>
                 <span class="listSongName">{{ song.name }}</span>
-                <span class="listSongAuthor">{{ song.artists[0].name }}</span>
+                <span class="listSongAuthor">{{ song.author }}</span>
               </li>
             </ul>
           </happy-scroll>
@@ -102,7 +118,19 @@
             :hide-horizontal="true"
             resize
           >
-            <ul class="menuList"></ul>
+            <ul class="menuList">
+              <li
+                v-for="item in songMenu"
+                :key="item.id"
+                @click="playMenu(item.id)"
+              >
+                <div class="menuPost">
+                  <img :src="item.picUrl" alt="" />
+                  <i class="iconPlay iconfont">&#xe60d;</i>
+                </div>
+                <p class="menuName">{{ item.name }}</p>
+              </li>
+            </ul>
           </happy-scroll>
         </div>
       </div>
@@ -113,7 +141,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-import { init, playAndPause } from "@/assets/js/music";
+import { init, playAndPause, setVolume } from "@/assets/js/music";
 export default {
   name: "Music",
   components: {
@@ -135,20 +163,26 @@ export default {
       songList: [],
       songIndex: 0,
       isPlaying: false,
-      isFirstPlay: true,
       showHistory: false,
       showMore: false,
+      showVolumn: false,
       songsHistory: [],
-      curSongIndex: 0,
+      curSongIndex: -1,
+      volume: 0.4,
+      songMenu: [],
     };
   },
 
-  created() {},
+  created() {
+    // 歌单
+    this.getSongMenu();
+  },
   mounted() {
     // 弹窗区域外点击关闭
     document.addEventListener("click", (e) => {
       let popHistory = this.$refs.popHistory;
       let popMore = this.$refs.popMore;
+      let volumnSlider = this.$refs.volumnSlider;
       if (popHistory) {
         if (e.target.className.indexOf("btnHistory") !== -1) return;
         if (!popHistory.contains(e.target)) {
@@ -165,11 +199,19 @@ export default {
           this.showMore = true;
         }
       }
+      if (volumnSlider) {
+        if (e.target.className.indexOf("btnVolumn") !== -1) return;
+        if (!volumnSlider.contains(e.target)) {
+          this.showVolumn = false;
+        } else {
+          this.showVolumn = true;
+        }
+      }
     });
   },
   computed: {
     // 历史记录当前播放歌曲换色
-    hisListClass() {
+    hisListClass(index) {
       return (index) => {
         if (this.curSongIndex == index) {
           return "active";
@@ -181,7 +223,7 @@ export default {
     listIcon() {
       return (index) => {
         if (this.curSongIndex == index) {
-          return "&#xe604;";
+          return this.isPlaying ? "&#xe604;" : "&#xe612;";
         } else {
           return index + 1;
         }
@@ -218,12 +260,14 @@ export default {
           if (res.code == 200) {
             let url = res.data[0].url;
             if (url) {
-              this.songDetail(id);
+              // this.songDetail(id);
               if (url.indexOf("https") < 0) {
                 url = url.replace("http:", "https:");
               }
               this.url = url;
               this.singSong();
+              this.isPlaying = true;
+              this.matchMusic(id);
             } else {
               this.$message({
                 message: "木有资源",
@@ -239,7 +283,37 @@ export default {
           }
         });
     },
-
+    //获取歌单
+    getSongMenu() {
+      this.$http
+        .get("unAuth/crossDomain", {
+          url: "https://wyy.wangpinpin.com/personalized",
+        })
+        .then((res) => {
+          if (res.code == 200) {
+            this.songMenu = res.result;
+          }
+        });
+    },
+    //点击歌单播放
+    playMenu(id) {
+      this.$http
+        .get("unAuth/crossDomain", {
+          url: "https://wyy.wangpinpin.com/playlist/detail?id=" + id,
+        })
+        .then((res) => {
+          if (res.code == 200) {
+            this.songIndex = 0;
+            this.songList = res.playlist.tracks;
+            this.musicEnd();
+          } else {
+            this.$message({
+              message: res.message,
+              type: "warning",
+            });
+          }
+        });
+    },
     //获取歌曲详情
     songDetail(id) {
       this.$http
@@ -250,14 +324,35 @@ export default {
           if (res.code == 200) {
             this.name = res.songs[0].name;
             this.author = res.songs[0].ar[0].name;
+            this.songsHistory.push({
+              id: id,
+              name: this.name,
+              author: this.author,
+            });
           }
         });
+    },
+    //判断歌曲是否在历史记录中
+    matchMusic(id) {
+      let flag = false;
+      this.songsHistory.forEach((item, index) => {
+        if (item.id == id) {
+          this.curSongIndex = index;
+          this.name = item.name;
+          this.author = item.author;
+          flag = true;
+          return;
+        }
+      });
+      if (!flag) {
+        this.curSongIndex = this.songsHistory.length;
+        this.songDetail(id);
+      }
     },
     //音乐结束
     musicEnd() {
       if (this.songIndex < this.songList.length) {
         this.onchange(this.songList[this.songIndex].id);
-        this.songsHistory.push(this.songList[this.songIndex]);
         this.songIndex++;
       } else {
         this.recommend();
@@ -280,15 +375,16 @@ export default {
     //播放暂停
     playAndPause() {
       this.isPlaying = !this.isPlaying;
-      if (!this.isFirstPlay) {
+      if (this.songsHistory.length > 0) {
         playAndPause();
         return;
       }
-      this.isFirstPlay = false;
       this.recommend();
     },
     //音量调节
-    voice() {},
+    changeVolume() {
+      setVolume(this.volume);
+    },
     //上一首
     prevSong() {
       let prevSong = this.songsHistory[this.curSongIndex - 1];
@@ -306,10 +402,8 @@ export default {
     nextSong() {
       let nextSong = this.songsHistory[this.curSongIndex + 1];
       if (nextSong) {
-        this.curSongIndex++;
         this.onchange(nextSong.id);
       } else {
-        this.curSongIndex++;
         this.musicEnd();
       }
     },
@@ -324,23 +418,35 @@ export default {
         document.querySelector(".song-info").style.display = "block";
       }
     },
-    //历史记录
-    history() {
-      this.showHistory = !this.showHistory;
+    //点击历史记录
+    clickHistory(id, index) {
+      if (this.curSongIndex == index) {
+        this.playAndPause();
+      } else {
+        this.onchange(id);
+      }
     },
-    //左侧弹窗
-    popMore() {
-      this.showMore = !this.showMore;
-    },
-    //悬停历史记录前序号显示播放图标
-    palyHistory(e, index) {
+    //鼠标悬停历史记录时序号显示
+    enterHistory(e) {
+      let index = e.target.dataset.index * 1;
       let text = index == this.curSongIndex ? "&#xe62d;" : "&#xe612;";
       e.target.children[0].innerHTML = text;
     },
-    //悬停历史记录前序号显示暂停图标
-    pauseHistory(e, index) {
-      let text = index == this.curSongIndex ? "&#xe604;" : index + 1;
+    //鼠标离开历史记录后序号显示
+    leaveHistory(e) {
+      let index = e.target.dataset.index * 1;
+      let text =
+        index == this.curSongIndex
+          ? this.isPlaying
+            ? "&#xe604;"
+            : "&#xe612;"
+          : index + 1;
       e.target.children[0].innerHTML = text;
+    },
+    //清空历史记录
+    clearHistory() {
+      this.songsHistory.length = 0;
+      this.curSongIndex = -1;
     },
   },
 };
@@ -362,6 +468,14 @@ canvas {
     text-align: center;
   }
   .content {
+    /deep/.happy-scroll-container {
+      width: 100% !important;
+      height: 100% !important;
+      .happy-scroll-content {
+        width: 100%;
+        vertical-align: top;
+      }
+    }
     .operation {
       position: absolute;
       left: 0;
@@ -443,6 +557,29 @@ canvas {
         }
       }
     }
+    .clearHistory {
+      cursor: pointer;
+      position: absolute;
+      top: 0.2rem;
+      right: 0.3rem;
+      font-size: 0.26rem;
+      &:hover {
+        animation: shake 0.3s ease;
+      }
+    }
+    @keyframes shake {
+      0%,
+      50%,
+      100% {
+        transform: rotate(0);
+      }
+      25% {
+        transform: rotate(-45deg);
+      }
+      75% {
+        transform: rotate(45deg);
+      }
+    }
     .popClose {
       cursor: pointer;
       position: absolute;
@@ -482,14 +619,6 @@ canvas {
       .listContainer {
         height: 88%;
         margin-top: 1%;
-        /deep/.happy-scroll-container {
-          width: 100% !important;
-          height: 100% !important;
-          .happy-scroll-content {
-            width: 100%;
-            vertical-align: top;
-          }
-        }
         .hisList {
           margin: 0;
           font-size: 0.22rem;
@@ -531,11 +660,29 @@ canvas {
     .btnMore {
       position: absolute;
       font-size: 0.6rem;
-      left: -0.23rem;
+      left: 0.2rem;
       top: 18%;
       color: #74c0ef;
       cursor: pointer;
       z-index: 100;
+      animation: shine 1s ease-in-out infinite;
+      &:hover {
+        animation: none;
+      }
+    }
+    @keyframes shine {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
     .popMore {
       position: fixed;
@@ -560,6 +707,100 @@ canvas {
         line-height: 0;
         /deep/.el-select {
           width: 100%;
+        }
+      }
+    }
+    .volumnSlider {
+      position: absolute;
+      left: 42.3%;
+      top: 74%;
+      /deep/.el-slider {
+        .el-slider__runway {
+          background-color: #fff;
+        }
+        .el-slider__bar {
+          background-color: #7c96b1;
+        }
+        .el-slider__button-wrapper {
+          height: 0.2rem;
+        }
+        .el-slider__button {
+          width: 0.2rem;
+          height: 0.2rem;
+          border: 0;
+          background-color: #7c96b1;
+          vertical-align: top;
+        }
+      }
+    }
+    .songMenu {
+      height: 80%;
+      margin-top: 2%;
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      img {
+        width: 100%;
+        vertical-align: top;
+      }
+      .menuList {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        li {
+          display: inline-block;
+          list-style: none;
+          width: 46%;
+          margin-bottom: 2%;
+          margin-right: 4%;
+          border: 1px solid #7c96b1;
+          border-radius: 0.1rem;
+          box-sizing: border-box;
+          overflow: hidden;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+          cursor: pointer;
+          .menuPost {
+            height: 2.44rem;
+            overflow: hidden;
+            position: relative;
+            img {
+              transition: all 1s ease;
+            }
+            .iconPlay {
+              position: absolute;
+              font-size: 0;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              transition: all 0.6s ease;
+              color: #fff;
+            }
+          }
+          &:hover {
+            .menuPost {
+              img {
+                transform: scale(1.2);
+              }
+              .iconPlay {
+                font-size: 0.6rem;
+              }
+            }
+          }
+          .menuName {
+            font-size: 0.2rem;
+            padding: 0.2em 0.5em;
+            line-height: 1.5;
+            height: 0.68rem;
+            box-sizing: border-box;
+            text-overflow: -o-ellipsis-lastline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+          }
         }
       }
     }

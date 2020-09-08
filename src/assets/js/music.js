@@ -784,7 +784,7 @@ function init(_this) {
 
         _this.showHide(false);
         sound.play();
-        sound.setVolume(.4);
+        sound.setVolume(_this.volume);
 
         sound.source.onended = function () {
             _this.musicEnd();
@@ -796,6 +796,10 @@ function init(_this) {
     bridge.start();
 }
 
+function setVolume(vlaue) {
+    sound.setVolume(vlaue);
+}
 
 
-export { init, playAndPause }
+
+export { init, playAndPause, setVolume }
