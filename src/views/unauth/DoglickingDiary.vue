@@ -144,7 +144,7 @@ export default {
     text-align: center;
     color: #7c96b1;
   }
-  .sub-title {
+  .sub-tilte {
     font-size: 0.3rem;
     text-align: center;
     color: #7c96b1;
