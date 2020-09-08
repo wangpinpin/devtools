@@ -219,6 +219,7 @@ export default {
       height: 5rem;
       background: #fff;
       position: relative;
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
       .copy {
         position: absolute;
         top: 0.1rem;

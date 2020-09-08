@@ -128,6 +128,15 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/Wallpaper.vue")
+    },
+    {
+        path: "/Base64",
+        name: "Base64",
+        meta: {
+            title: "图片转Base64"
+        },
+        component: () =>
+            import ("../views/unauth/Base64.vue")
     }
 ];
 

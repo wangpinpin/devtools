@@ -68,7 +68,13 @@ export default {
         "background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);",
         "background-image: linear-gradient(to top, #d299c2 0%, #fef9d7 100%);",
         "background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);",
-        "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);"
+        "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
+        "background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);",
+        // "background-image: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);",
+        // "background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);",
+        // "background-image: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);",
+        // "background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);",
+        // "background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);",
       ],
       devText: [
         { path: "/DoglickingDiary", text: "舔狗日记" },
@@ -82,6 +88,8 @@ export default {
         { path: "/QRcodeCreate", text: "二维码生成" },
         { path: "/ImageToTxt", text: "图片文字提取" },
         { path: "/JsonFormat", text: "JSON格式化" },
+        { path: "/Base64", text: "图片转Base64" },
+
         { path: "/ColorTransfer", text: "颜色代码转换" },
         // { path: "/", text: "正在开发" },
         // { path: "/", text: "正在开发" },
@@ -190,7 +198,7 @@ export default {
         line-height: 1.2rem;
         border-radius: 0.3rem;
         margin: 0.2rem 0.3rem;
-        font-size: 0.24rem;
+        font-size: 0.21rem;
         cursor: pointer;
         text-align: center;
         a {

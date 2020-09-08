@@ -79,7 +79,7 @@
             resize
           >
             <ul class="hisList">
-              <li v-for="index in hisSongsCnt" @click="cutSong">
+              <li v-for="index in hisSongsCnt" @click="cutSong" :key="index">
                 <span class="listNo">{{ index }}</span
                 >音乐
               </li>
@@ -434,7 +434,7 @@ canvas {
       color: #333;
       z-index: 1000;
       opacity: 0;
-      transition: all 0.6s ease;
+      transition: all 0.2s ease;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
       &.show {
         opacity: 1;
@@ -484,7 +484,7 @@ canvas {
       color: #333;
       z-index: 1000;
       opacity: 0;
-      transition: all 0.6s ease;
+      transition: all 0.2s ease;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
       box-sizing: border-box;
       &.show {
