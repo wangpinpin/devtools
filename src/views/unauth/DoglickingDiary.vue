@@ -10,7 +10,7 @@
             <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </div>
-        <div class="search" @click="searchsub-tilte" id="start">
+        <div class="search" @click="search" id="start">
           <el-button type="success">开舔</el-button>
         </div>
       </div>
