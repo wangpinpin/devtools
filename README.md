@@ -9,6 +9,6 @@
 
 后端项目地址: https://github.com/wangpinpin/devtools-server
 
-目前功能： JSON格式化、二维码生成、颜色转换、舔狗日记、图片文字提取
+目前功能： 舔狗日记、听歌音乐抖动粒子、每日一文、壁纸、网易云API、JSON格式化、二维码生成、颜色转换、图片文字提取
 
 域名： https://wangpinpin.com/
