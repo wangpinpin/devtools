@@ -17,9 +17,22 @@
       <i class="iconfont btnMore" @click="showMore = !showMore">&#xe62f;</i>
       <div class="choice">
         <div class="preAndNext">
-          <i @click="showVolumn = !showVolumn" class="btnVolumn iconfont"
-            >&#xe6e8;</i
-          >
+          <div class="volumeWrap">
+            <div class="volumeSlider" ref="volumeSlider">
+              <el-slider
+                v-model="volume"
+                :min="0"
+                :max="1"
+                :step="0.1"
+                :show-tooltip="false"
+                vertical
+                height="1rem"
+                @change="changeVolume"
+              >
+              </el-slider>
+            </div>
+            <i class="btnVolume iconfont">&#xe6e8;</i>
+          </div>
           <i @click="prevSong" class="iconfont">&#xe606;</i>
           <i @click="playAndPause" v-show="!isPlaying" class="iconfont"
             >&#xe612;</i
@@ -33,19 +46,6 @@
           >
         </div>
       </div>
-      <div class="volumnSlider" v-show="showVolumn" ref="volumnSlider">
-        <el-slider
-          v-model="volume"
-          :min="0"
-          :max="1"
-          :step="0.1"
-          :show-tooltip="false"
-          vertical
-          height="1rem"
-          @change="changeVolume"
-        >
-        </el-slider>
-      </div>
       <div
         :class="showHistory ? 'popHistory show' : 'popHistory'"
         ref="popHistory"
@@ -54,6 +54,7 @@
         <h3 class="popTitle">
           播放列表<span>（共{{ songsHistory.length }}首）</span>
         </h3>
+        <p class="popMenuName">{{ curMenu || "随心听" }}</p>
         <div class="listContainer">
           <happy-scroll
             color="rgba(0,0,0,0.2)"
@@ -75,6 +76,9 @@
                 <span class="listNo iconfont" v-html="listIcon(index)"></span>
                 <span class="listSongName">{{ song.name }}</span>
                 <span class="listSongAuthor">{{ song.author }}</span>
+                <i class="delHistory iconfont" @click.stop="delHistory(index)"
+                  >&#xe66a;</i
+                >
               </li>
             </ul>
           </happy-scroll>
@@ -93,7 +97,7 @@
             :remote-method="search"
             :loading="loading"
             placeholder="请输入歌名或歌手名"
-            @change="onchange"
+            @change="searchSelect"
             id="musicSelect"
             ref="select"
           >
@@ -122,19 +126,23 @@
               <li
                 v-for="item in songMenu"
                 :key="item.id"
-                @click="playMenu(item.id)"
+                :value="item.id"
+                @click="playMenu($event)"
               >
                 <div class="menuPost">
                   <img :src="item.picUrl" alt="" />
                   <i class="iconPlay iconfont">&#xe60d;</i>
                 </div>
-                <p class="menuName">{{ item.name }}</p>
+                <p class="menuName">
+                  <span>{{ item.name }}</span>
+                </p>
               </li>
             </ul>
           </happy-scroll>
         </div>
       </div>
     </div>
+    <i class="iconFly iconfont" ref="fly">&#xe61b;</i>
     <Footer class="footer" />
   </div>
 </template>
@@ -165,11 +173,12 @@ export default {
       isPlaying: false,
       showHistory: false,
       showMore: false,
-      showVolumn: false,
       songsHistory: [],
       curSongIndex: -1,
       volume: 0.4,
       songMenu: [],
+      delIndex: -1, // 删除歌曲暂存索引
+      curMenu: "",
     };
   },
 
@@ -182,29 +191,16 @@ export default {
     document.addEventListener("click", (e) => {
       let popHistory = this.$refs.popHistory;
       let popMore = this.$refs.popMore;
-      let volumnSlider = this.$refs.volumnSlider;
       if (popHistory) {
         if (e.target.className.indexOf("btnHistory") !== -1) return;
         if (!popHistory.contains(e.target)) {
           this.showHistory = false;
-        } else {
-          this.showHistory = true;
         }
       }
       if (popMore) {
         if (e.target.className.indexOf("btnMore") !== -1) return;
         if (!popMore.contains(e.target)) {
           this.showMore = false;
-        } else {
-          this.showMore = true;
-        }
-      }
-      if (volumnSlider) {
-        if (e.target.className.indexOf("btnVolumn") !== -1) return;
-        if (!volumnSlider.contains(e.target)) {
-          this.showVolumn = false;
-        } else {
-          this.showVolumn = true;
         }
       }
     });
@@ -283,6 +279,10 @@ export default {
           }
         });
     },
+    searchSelect(id) {
+      this.onchange(id);
+      this.curMenu = "";
+    },
     //获取歌单
     getSongMenu() {
       this.$http
@@ -296,16 +296,32 @@ export default {
         });
     },
     //点击歌单播放
-    playMenu(id) {
+    playMenu(e) {
+      let id = e.currentTarget.getAttribute("value");
       this.$http
         .get("unAuth/crossDomain", {
           url: "https://wyy.wangpinpin.com/playlist/detail?id=" + id,
         })
         .then((res) => {
           if (res.code == 200) {
-            this.songIndex = 0;
-            this.songList = res.playlist.tracks;
+            this.curMenu = res.playlist.name;
+            this.clearHistory();
+            res.playlist.tracks.forEach((item, index) => {
+              this.songsHistory.push({
+                id: item.id,
+                name: item.name,
+                author: item.ar[0].name,
+              });
+            });
             this.musicEnd();
+            this.$refs.fly.style.bottom =
+              window.screen.height - e.screenY + "px";
+            this.$refs.fly.style.left = e.screenX + "px";
+            this.$refs.fly.classList.add("active");
+            setTimeout(() => {
+              this.showMore = false;
+              this.$refs.fly.classList.remove("active");
+            }, 1000);
           } else {
             this.$message({
               message: res.message,
@@ -351,11 +367,19 @@ export default {
     },
     //音乐结束
     musicEnd() {
-      if (this.songIndex < this.songList.length) {
-        this.onchange(this.songList[this.songIndex].id);
-        this.songIndex++;
+      if (
+        this.songsHistory.length > 0 &&
+        this.curSongIndex < this.songsHistory.length - 1
+      ) {
+        this.onchange(this.songsHistory[this.curSongIndex + 1].id);
+        this.curSongIndex++;
       } else {
-        this.recommend();
+        if (this.songIndex < this.songList.length) {
+          this.onchange(this.songList[this.songIndex].id);
+          this.songIndex++;
+        } else {
+          this.recommend();
+        }
       }
     },
     //私人FM歌单
@@ -368,6 +392,7 @@ export default {
           if (res.code == 200) {
             this.songIndex = 0;
             this.songList = res.data;
+            this.curMenu = "";
             this.musicEnd();
           }
         });
@@ -387,6 +412,10 @@ export default {
     },
     //上一首
     prevSong() {
+      if (this.delIndex >= 0) {
+        this.curSongIndex = this.delIndex - 1;
+        this.delIndex = -1;
+      }
       let prevSong = this.songsHistory[this.curSongIndex - 1];
       if (prevSong) {
         this.curSongIndex--;
@@ -400,6 +429,10 @@ export default {
     },
     //下一首
     nextSong() {
+      if (this.delIndex >= 0) {
+        this.curSongIndex = this.delIndex - 1;
+        this.delIndex = -1;
+      }
       let nextSong = this.songsHistory[this.curSongIndex + 1];
       if (nextSong) {
         this.onchange(nextSong.id);
@@ -448,6 +481,18 @@ export default {
       this.songsHistory.length = 0;
       this.curSongIndex = -1;
     },
+    //删除单条播放记录
+    delHistory(index) {
+      this.songIndex = 0;
+      this.songList.splice(index, 1);
+      this.songsHistory.splice(index, 1);
+      if (index == this.curSongIndex) {
+        this.delIndex = index;
+        this.curSongIndex = -1;
+      } else if (index < this.curSongIndex) {
+        this.curSongIndex--;
+      }
+    },
   },
 };
 </script>
@@ -466,6 +511,15 @@ canvas {
     font-size: 0.4rem;
     color: #7c96b1;
     text-align: center;
+  }
+  .iconFly {
+    color: #7c96b1;
+    position: absolute;
+    font-size: 0;
+    z-index: 1001;
+    &.active {
+      animation: fly 1s ease;
+    }
   }
   .content {
     /deep/.happy-scroll-container {
@@ -567,19 +621,6 @@ canvas {
         animation: shake 0.3s ease;
       }
     }
-    @keyframes shake {
-      0%,
-      50%,
-      100% {
-        transform: rotate(0);
-      }
-      25% {
-        transform: rotate(-45deg);
-      }
-      75% {
-        transform: rotate(45deg);
-      }
-    }
     .popClose {
       cursor: pointer;
       position: absolute;
@@ -594,10 +635,20 @@ canvas {
     .popTitle {
       margin: 0;
       font-size: 0.28rem;
+      padding-left: 0.3em;
       span {
         font-weight: normal;
         font-size: 0.24rem;
       }
+    }
+    .popMenuName {
+      font-size: 0.2rem;
+      margin: 0;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      padding: 0 2em 0 0.4em;
+      color: #d6d0d0;
     }
     .popHistory {
       position: fixed;
@@ -605,9 +656,11 @@ canvas {
       left: 55.5%;
       width: 32%;
       height: 0;
-      background-color: #fff;
+      box-sizing: border-box;
+      border-radius: 0.2rem;
+      background-color: rgba(11, 11, 11, 0.5);
+      color: #fff;
       padding: 0.1rem;
-      color: #333;
       opacity: 0;
       transition: all 0.2s ease;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
@@ -630,9 +683,15 @@ canvas {
             display: flex;
             justify-content: flex-start;
             align-items: center;
+            position: relative;
             &.active,
             &:hover {
-              color: #7c96b1;
+              color: #ffbdb9;
+            }
+            &:hover {
+              .delHistory {
+                display: block;
+              }
             }
           }
           .listNo {
@@ -643,16 +702,24 @@ canvas {
           }
           .listSongName {
             display: inline-block;
-            width: 60%;
+            width: 58%;
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
-            margin-right: 0.5em;
+            margin-right: 2%;
           }
           .listSongAuthor {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            width: 22%;
+          }
+          .delHistory {
+            position: absolute;
+            right: 4%;
+            top: 0.06rem;
+            font-size: 0.2rem;
+            display: none;
           }
         }
       }
@@ -668,20 +735,6 @@ canvas {
       animation: shine 1s ease-in-out infinite;
       &:hover {
         animation: none;
-      }
-    }
-    @keyframes shine {
-      0% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      50% {
-        opacity: 0;
-        transform: scale(0.8);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
       }
     }
     .popMore {
@@ -710,19 +763,33 @@ canvas {
         }
       }
     }
-    .volumnSlider {
-      position: absolute;
-      left: 42.3%;
-      top: 74%;
-      /deep/.el-slider {
+    .volumeWrap {
+      display: inline-block;
+      position: relative;
+      &:hover {
+        .volumeSlider {
+          display: block;
+        }
+      }
+    }
+    .volumeSlider {
+      display: none;
+      /deep/.el-slider.is-vertical {
         .el-slider__runway {
           background-color: #fff;
+          margin: 0 auto;
         }
         .el-slider__bar {
           background-color: #7c96b1;
         }
+        .el-slider__runway,
+        .el-slider__bar {
+          width: 0.08rem;
+        }
         .el-slider__button-wrapper {
+          left: -0.06rem;
           height: 0.2rem;
+          width: 0.2rem;
         }
         .el-slider__button {
           width: 0.2rem;
@@ -759,6 +826,7 @@ canvas {
           box-sizing: border-box;
           overflow: hidden;
           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+          position: relative;
           cursor: pointer;
           .menuPost {
             height: 2.44rem;
@@ -793,13 +861,25 @@ canvas {
             line-height: 1.5;
             height: 0.68rem;
             box-sizing: border-box;
-            text-overflow: -o-ellipsis-lastline;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            background-color: rgba(11, 11, 11, 0.5);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            span {
+              text-overflow: -o-ellipsis-lastline;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              line-clamp: 2;
+              -webkit-box-orient: vertical;
+            }
           }
         }
       }
@@ -812,10 +892,73 @@ canvas {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+@keyframes fly {
+  0% {
+    opacity: 0;
+    font-size: 0;
+  }
+  30% {
+    opacity: 1;
+    transform: rotate(70deg);
+  }
+  50% {
+    opacity: 1;
+    font-size: 0.3rem;
+    transform: rotate(70deg);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    font-size: 0;
+    bottom: 10%;
+    left: 56%;
+    transform: rotate(70deg);
+  }
+}
+@keyframes shake {
+  0%,
+  50%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-45deg);
+  }
+  75% {
+    transform: rotate(45deg);
+  }
+}
+@keyframes shine {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 @media screen and (max-width: 900px) {
   .container {
     .content {
       width: 90%;
+      .operation {
+        width: 50%;
+      }
+      .popHistory {
+        width: 90%;
+        left: 5%;
+      }
+      .popMore {
+        width: 100%;
+        left: -100%;
+      }
     }
   }
   /deep/.el-popper {
