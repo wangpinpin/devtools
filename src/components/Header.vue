@@ -13,6 +13,12 @@
         <div class="item" :style="{ backgroundImage: `url(${img})` }">
           <a href="Music">听一听</a>
         </div>
+        <div class="item" :style="{ backgroundImage: `url(${img})` }">
+          <a href="adarkroom" target="_blank">小黑屋</a>
+        </div>
+        <div class="item" :style="{ backgroundImage: `url(${img})` }">
+          <a href="sponsor">赞助</a>
+        </div>
         <!-- <div class="item" :style="{ backgroundImage: `url(${img})`}">
           <a href="v">看一看</a>
         </div> -->

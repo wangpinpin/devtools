@@ -137,6 +137,24 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/Base64.vue")
+    },
+    {
+        path: "/adarkroom",
+        name: "adarkroom",
+        meta: {
+            title: "小黑屋"
+        },
+        component: () =>
+            import ("../views/unauth/Adarkroom.vue")
+    },
+    {
+        path: "/sponsor",
+        name: "sponsor",
+        meta: {
+            title: "赞助"
+        },
+        component: () =>
+            import ("../views/unauth/Sponsor.vue")
     }
 ];
 
