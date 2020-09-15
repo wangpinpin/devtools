@@ -33,6 +33,13 @@ VueClipboard.config.autoSetContainer = true
 Vue.use(VueClipboard)
 Vue.use(VueWechatTitle)
 
+//谷歌联盟
+import Ads from 'vue-google-adsense'
+Vue.use(require('vue-script2'))
+Vue.use(Ads.Adsense)
+Vue.use(Ads.InArticleAdsense)
+Vue.use(Ads.InFeedAdsense)
+
 
 //按需引入element组件库
 import {

@@ -7,7 +7,12 @@
       <div class="condition">
         <div class="select">
           <el-select v-model="value">
-            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            <el-option
+              v-for="item in options"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
+            ></el-option>
           </el-select>
         </div>
         <div class="search" @click="search" id="start">
@@ -21,8 +26,19 @@
           </audio>
         </div>
         <div class="readDogText">
-          <i v-if="!readLoading" @click="readDogText" id="readDogText" class="iconfont">&#xe6fd;</i>
-          <i v-if="readLoading" @click="noReadDogText" id="noReadDogText" class="el-icon-loading"></i>
+          <i
+            v-if="!readLoading"
+            @click="readDogText"
+            id="readDogText"
+            class="iconfont"
+            >&#xe6fd;</i
+          >
+          <i
+            v-if="readLoading"
+            @click="noReadDogText"
+            id="noReadDogText"
+            class="el-icon-loading"
+          ></i>
         </div>
 
         <div class="copy" @click="copy" id="copy">
@@ -30,6 +46,28 @@
         </div>
         <div class="text-content">{{ text }}</div>
       </div>
+    </div>
+    <div class="advertisement">
+      <!-- 300*250 -->
+      <!-- <ins
+        class="adsbygoogle"
+        style="display:inline-block;width:300px;height:250px"
+        data-ad-client="ca-pub-8697460075278474"
+        data-ad-slot="6734414294"
+      ></ins> -->
+      <!-- <adsense
+        ad-client="ca-pub-8697460075278474"
+        ad-slot="6734414294"
+        style="display:inline-block;width:300px;height:250px"
+        ad-format="auto"
+      >
+      </adsense> -->
+      <Adsense
+        data-ad-client="ca-pub-8697460075278474"
+        ins-style="display:inline-block;width:300px;height:250px"
+        data-ad-slot="6734414294"
+      >
+      </Adsense>
     </div>
     <Footer />
   </div>
@@ -42,7 +80,7 @@ export default {
   name: "ColorTransfer",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
@@ -52,16 +90,17 @@ export default {
       readLoading: false,
       musicUrl: "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&&text=",
       options: [],
-      value: ""
+      value: "",
     };
   },
   created() {
     this.getTypeList();
   },
+  mounted() {},
   methods: {
     //获取类型列表
     getTypeList() {
-      this.$http.get("unAuth/findTypeList", { t: "DOG" }).then(res => {
+      this.$http.get("unAuth/findTypeList", { t: "DOG" }).then((res) => {
         this.options = res;
         this.value = res[0].id;
       });
@@ -72,7 +111,7 @@ export default {
 
       this.$http
         .get("unAuth/getDoglickingDiary", { typeId: this.value })
-        .then(res => {
+        .then((res) => {
           if (this.value == "0c97d296-e5b1-11ea-9d4b-00163e1e93a5") {
             const date =
               this.date.getFullYear() +
@@ -91,7 +130,7 @@ export default {
       this.$copyText(this.text).then(() => {
         this.$message({
           message: "复制成功",
-          type: "success"
+          type: "success",
         });
       });
     },
@@ -129,10 +168,11 @@ export default {
       let ttsAudio = document.getElementById("ttsAudio");
       ttsAudio.pause();
       this.readLoading = false;
-    }
-  }
+    },
+  },
 };
 </script>
+
 <style lang="less" scoped>
 .container {
   width: 100%;
@@ -148,6 +188,13 @@ export default {
     font-size: 0.3rem;
     text-align: center;
     color: #7c96b1;
+  }
+  .advertisement {
+    position: absolute;
+    width: 330px;
+    height: 260px;
+    top: 60%;
+    left: 4%;
   }
   .content {
     margin: 10% auto 0;
