@@ -215,6 +215,7 @@ export default {
 }
 @media screen and (max-width: 900px) {
   .home-container {
+    margin-top: 0.2rem;
     .content {
       .slogan {
         display: none;
@@ -222,7 +223,8 @@ export default {
       .card {
         width: 100%;
         justify-content: center;
-        height: 80vh;
+        align-items: center;
+        height: calc(100vh - 2.4rem);
         margin: 0;
         .card-tool {
           width: 32%;
