@@ -48,20 +48,6 @@
       </div>
     </div>
     <div class="advertisement">
-      <!-- 300*250 -->
-      <!-- <ins
-        class="adsbygoogle"
-        style="display:inline-block;width:300px;height:250px"
-        data-ad-client="ca-pub-8697460075278474"
-        data-ad-slot="6734414294"
-      ></ins> -->
-      <!-- <adsense
-        ad-client="ca-pub-8697460075278474"
-        ad-slot="6734414294"
-        style="display:inline-block;width:300px;height:250px"
-        ad-format="auto"
-      >
-      </adsense> -->
       <Adsense
         data-ad-client="ca-pub-8697460075278474"
         ins-style="display:inline-block;width:300px;height:250px"
@@ -69,7 +55,15 @@
       >
       </Adsense>
     </div>
-    <Footer />
+    <div class="advertisement advertisement2">
+      <Adsense
+        data-ad-client="ca-pub-8697460075278474"
+        ins-style="display:inline-block;width:300px;height:250px"
+        data-ad-slot="6844249022"
+      >
+      </Adsense>
+    </div>
+    <Footer class="footer" />
   </div>
 </template>
 <script>
@@ -191,10 +185,14 @@ export default {
   }
   .advertisement {
     position: absolute;
-    width: 330px;
-    height: 260px;
+    // width: 300px;
+    // height: 250px;
     top: 60%;
     left: 4%;
+  }
+  .advertisement2 {
+    left: unset;
+    right: 4%;
   }
   .content {
     margin: 10% auto 0;
@@ -240,14 +238,21 @@ export default {
 @media screen and (max-width: 900px) {
   .container {
     position: relative;
+    width: 100%;
+    min-height: 100%;
+    height: unset;
+    text-align: center;
+    background-image: linear-gradient(
+      to top,
+      #f3e7e9 0%,
+      #e3eeff 99%,
+      #e3eeff 100%
+    );
+    padding-bottom: 1%;
     .advertisement {
-      width: 330px;
-      height: 260px;
+      position: unset;
       top: 60%;
-      left: 0;
-      border: 1px solid;
-      right: 0;
-      margin: 0 auto;
+      text-align: center;
     }
     .qrcode {
       position: absolute;
@@ -265,6 +270,11 @@ export default {
     .content {
       margin: 13% auto;
       width: 90%;
+    }
+    .footer {
+      /deep/.container {
+        position: unset;
+      }
     }
   }
 }
