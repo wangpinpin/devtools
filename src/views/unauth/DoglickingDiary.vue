@@ -240,7 +240,15 @@ export default {
 @media screen and (max-width: 900px) {
   .container {
     position: relative;
-
+    .advertisement {
+      width: 330px;
+      height: 260px;
+      top: 60%;
+      left: 0;
+      border: 1px solid;
+      right: 0;
+      margin: 0 auto;
+    }
     .qrcode {
       position: absolute;
       right: 0;
