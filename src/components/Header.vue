@@ -83,6 +83,11 @@ export default {
   position: relative;
   z-index: 999;
   box-sizing: border-box;
+  .weather {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
   .item:hover {
     color: #7c96b1;
   }

@@ -1,7 +1,8 @@
 <template>
   <div class="home">
-    <Header />
+    <div id="he-plugin-simple"></div>
 
+    <Header />
     <div class="home-container">
       <div class="content">
         <div class="slogan">
@@ -40,6 +41,9 @@
       </div>
     </div>
     <Footer />
+    <remote-js
+      src="https://widget.heweather.net/simple/static/js/he-simple-common.js?v=1.1"
+    ></remote-js>
   </div>
 </template>
 
@@ -53,6 +57,16 @@ export default {
   components: {
     Header,
     Footer,
+    "remote-js": {
+      render(createElement) {
+        return createElement("script", {
+          attrs: { type: "text/javascript", src: this.src },
+        });
+      },
+      props: {
+        src: { type: String, required: true },
+      },
+    },
   },
   data() {
     return {
@@ -130,12 +144,14 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="less">
 .home-container {
   margin: 0.4rem auto 0;
   text-align: center;
   color: #7c96b1;
   display: flex;
+
   .content {
     width: 100%;
     .slogan {
