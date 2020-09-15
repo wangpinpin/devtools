@@ -18,34 +18,55 @@
         <el-button type="success" @click="getVideo">换一个</el-button>
       </div>
     </div>
+    <div class="advertisement">
+      <Adsense
+        data-ad-client="ca-pub-8697460075278474"
+        ins-style="display:inline-block;width:300px;height:250px"
+        data-ad-slot="6734414294"
+      >
+      </Adsense>
+    </div>
+    <div class="advertisement advertisement2">
+      <Adsense
+        data-ad-client="ca-pub-8697460075278474"
+        ins-style="display:inline-block;width:300px;height:250px"
+        data-ad-slot="6844249022"
+      >
+      </Adsense>
+    </div>
     <Footer class="footer" />
   </div>
 </template>
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-
+var _this;
+Vue.config.errorHandler = (err, vm, info) => {
+  console.log("error");
+  _this.getVideo();
+};
 export default {
-  name: "EveryDayText",
+  name: "V",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
       title: "看一看",
-      src: "https://www.nihaowua.com/v/video.php"
+      src: "https://www.nihaowua.com/v/video.php",
     };
   },
   created() {
-    this.getVideo();
+    _this = this;
   },
-
+  mounted() {},
   methods: {
     getVideo() {
       this.src = "https://www.nihaowua.com/v/video.php?_t=" + Math.random();
-    }
-  }
+      document.getElementById("player").play();
+    },
+  },
 };
 </script>
 <style lang="less">
@@ -67,7 +88,15 @@ export default {
     font-size: 0.4rem;
     color: #7c96b1;
   }
-
+  .advertisement {
+    position: absolute;
+    top: 60%;
+    left: 4%;
+  }
+  .advertisement2 {
+    left: unset;
+    right: 4%;
+  }
   .content {
     margin: 3%;
     .next {
@@ -81,9 +110,26 @@ export default {
 }
 @media screen and (max-width: 900px) {
   .container {
-    .content {
-      video {
-        // width: 80%;
+    position: relative;
+    width: 100%;
+    min-height: 100%;
+    height: unset;
+    text-align: center;
+    background-image: linear-gradient(
+      to top,
+      #f3e7e9 0%,
+      #e3eeff 99%,
+      #e3eeff 100%
+    );
+    padding-bottom: 1%;
+    .advertisement {
+      position: unset;
+      top: 60%;
+      text-align: center;
+    }
+    .footer {
+      /deep/.container {
+        position: unset;
       }
     }
   }

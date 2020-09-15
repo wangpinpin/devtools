@@ -185,8 +185,6 @@ export default {
   }
   .advertisement {
     position: absolute;
-    // width: 300px;
-    // height: 250px;
     top: 60%;
     left: 4%;
   }
