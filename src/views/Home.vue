@@ -222,8 +222,11 @@ export default {
       .card {
         width: 100%;
         justify-content: center;
+        height: 80vh;
+        margin: 0;
         .card-tool {
           width: 32%;
+          margin: 0 0.3rem;
         }
       }
     }

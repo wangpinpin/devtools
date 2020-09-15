@@ -207,7 +207,7 @@ export default {
   },
   computed: {
     // 历史记录当前播放歌曲换色
-    hisListClass(index) {
+    hisListClass() {
       return (index) => {
         if (this.curSongIndex == index) {
           return "active";
