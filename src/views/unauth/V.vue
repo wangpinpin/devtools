@@ -23,16 +23,14 @@
         data-ad-client="ca-pub-8697460075278474"
         ins-style="display:inline-block;width:300px;height:250px"
         data-ad-slot="6734414294"
-      >
-      </Adsense>
+      ></Adsense>
     </div>
     <div class="advertisement advertisement2">
       <Adsense
         data-ad-client="ca-pub-8697460075278474"
         ins-style="display:inline-block;width:300px;height:250px"
         data-ad-slot="6844249022"
-      >
-      </Adsense>
+      ></Adsense>
     </div>
     <Footer class="footer" />
   </div>
@@ -49,12 +47,12 @@ export default {
   name: "V",
   components: {
     Header,
-    Footer,
+    Footer
   },
   data() {
     return {
       title: "看一看",
-      src: "https://www.nihaowua.com/v/video.php",
+      src: "https://www.nihaowua.com/v/video.php"
     };
   },
   created() {
@@ -65,8 +63,11 @@ export default {
     getVideo() {
       this.src = "https://www.nihaowua.com/v/video.php?_t=" + Math.random();
       document.getElementById("player").play();
-    },
-  },
+      document.getElementById("player").addEventListener("error", function() {
+        _this.getVideo();
+      });
+    }
+  }
 };
 </script>
 <style lang="less">
