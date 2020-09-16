@@ -11,6 +11,8 @@
       <div class="gang">|</div>
       <div><a id="Statement" href="Statement">免责声明</a></div>
       <div class="gang">|</div>
+      <div><a id="sponsor" href="sponsor">赞助</a></div>
+      <div class="gang">|</div>
       <div id="beian">
         © 2020
         <a href="https://beian.miit.gov.cn">皖ICP备19011468号</a>

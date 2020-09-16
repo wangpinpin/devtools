@@ -155,6 +155,15 @@ const routes = [{
         },
         component: () =>
             import ("../views/unauth/Sponsor.vue")
+    },
+    {
+        path: "/login",
+        name: "login",
+        meta: {
+            title: "登录页"
+        },
+        component: () =>
+            import ("../views/unauth/Login.vue")
     }
 ];
 

@@ -19,9 +19,6 @@
         <div class="item" :style="{ backgroundImage: `url(${img})` }">
           <a href="adarkroom" target="_blank">小黑屋</a>
         </div>
-        <div class="item" :style="{ backgroundImage: `url(${img})` }">
-          <a href="sponsor">赞助</a>
-        </div>
         <!-- <div class="item" :style="{ backgroundImage: `url(${img})` }">
           <a href="GoddessLetter">女神日记</a>
         </div> -->
@@ -33,9 +30,21 @@
           菜单6
         </div>
       </div>
-      <!-- <div class="right-mobile">
-        <i class="iconfont menu">&#xe605;</i>
-      </div> -->
+      <div class="login" v-if="login">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <i class="iconfont">&#xe666;</i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item disabled>个人信息</el-dropdown-item>
+            <el-dropdown-item>我的订阅</el-dropdown-item>
+            <el-dropdown-item divided>退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+      <div class="login un-login" v-if="!login">
+        <a href="/login"><i class="iconfont">&#xe666;</i></a>
+      </div>
     </div>
   </div>
 </template>
@@ -49,25 +58,11 @@ export default {
   data() {
     return {
       img: require("@/assets/imgs/cloud.png"),
+      login: false,
     };
   },
-  created() {
-    this.open();
-  },
-  methods: {
-    open() {
-      if (window.location.host == "139.196.199.233") {
-        this.$alert(
-          "<strong>139.196.199.233 即将暂停使用, 请更换域名</strong><div>本站地址永久更新到<a href='https://wangpinpin.com'>https://wangpinpin.com</a></div>",
-          "",
-          {
-            dangerouslyUseHTMLString: true,
-            customClass: "width9",
-          }
-        );
-      }
-    },
-  },
+  created() {},
+  methods: {},
 };
 </script>
 
@@ -131,6 +126,23 @@ export default {
         width: 100%;
         height: 100%;
       }
+    }
+  }
+  .login {
+    height: 30px;
+    position: absolute;
+    right: 1rem;
+    top: 0.5rem;
+    cursor: pointer;
+    i {
+      font-size: 0.3rem;
+      color: #74c0ef;
+    }
+  }
+  .un-login {
+    i {
+      font-size: 0.3rem;
+      color: #757575;
     }
   }
 }

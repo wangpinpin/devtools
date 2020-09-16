@@ -230,6 +230,9 @@ export default {
   }
 }
 @media screen and (max-width: 900px) {
+  /deep/#he-plugin-simple {
+    display: none;
+  }
   .home-container {
     margin-top: 0.2rem;
     .content {

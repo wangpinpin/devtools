@@ -67,7 +67,10 @@ import {
     Collapse,
     CollapseItem,
     MessageBox,
-    Switch
+    Switch,
+    Dropdown,
+    DropdownMenu,
+    DropdownItem,
 } from "element-ui";
 
 Vue.use(Button);
@@ -91,6 +94,9 @@ Vue.use(Dialog);
 Vue.use(Form);
 Vue.use(FormItem);
 Vue.use(Switch);
+Vue.use(Dropdown);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
 
 Vue.prototype.$loading = Loading;
 Vue.prototype.$message = Message;
