@@ -30,7 +30,7 @@
           菜单6
         </div>
       </div>
-      <div class="login" v-if="login">
+      <div class="login" v-if="this.$store.state.user">
         <el-dropdown>
           <span class="el-dropdown-link">
             <i class="iconfont">&#xe666;</i>
@@ -38,11 +38,13 @@
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item disabled>个人信息</el-dropdown-item>
             <el-dropdown-item>我的订阅</el-dropdown-item>
-            <el-dropdown-item divided>退出</el-dropdown-item>
+            <a @click="signOut"
+              ><el-dropdown-item divided>退出</el-dropdown-item></a
+            >
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <div class="login un-login" v-if="!login">
+      <div class="login un-login" v-if="!this.$store.state.user">
         <a href="/login"><i class="iconfont">&#xe666;</i></a>
       </div>
     </div>
@@ -58,14 +60,18 @@ export default {
   data() {
     return {
       img: require("@/assets/imgs/cloud.png"),
-      login: false,
+      login: this.$store.state.user,
     };
   },
   created() {},
-  methods: {},
+  methods: {
+    //退出
+    signOut() {
+      this.$store.commit("setUser", "");
+    },
+  },
 };
 </script>
-
 <style scoped lang="less">
 .container {
   width: 100%;

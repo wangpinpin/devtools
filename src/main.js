@@ -133,15 +133,26 @@ var _hmt = _hmt || [];
 // 路由之前动态修改title
 // 单独打开的页面此方法不可用
 router.beforeEach((to, from, next) => {
-    if (to.meta.title) {
-        document.title = to.meta.title;
-    }
     if (_hmt) {
         if (to.path) {
             _hmt.push(['_trackPageview', to.fullPath]);
         }
     }
-    next();
+    if (to.meta.requireAuth) {
+        if (store.state.user) {
+            next() // 已登录
+        } else {
+            next({
+                path: '/login'
+            })
+        }
+    } else {
+        if (to.meta.title) {
+            document.title = to.meta.title;
+        }
+        next();
+    }
+
 });
 
 new Vue({

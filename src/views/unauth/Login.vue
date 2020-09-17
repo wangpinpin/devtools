@@ -2,7 +2,10 @@
   <div class="container">
     <Header />
     <div class="content">
-      <p class="title">{{ loginShow ? "登录" : "注册" }}</p>
+      <p class="title" v-if="loginShow">登录</p>
+      <p class="title" v-if="!loginShow">
+        {{ forgetPassword ? "重置密码" : "注册" }}
+      </p>
       <!-- 登录 -->
       <transition name="el-zoom-in-center">
         <div v-show="loginShow" class="transition-box">
@@ -31,6 +34,7 @@
               >
                 <el-input
                   v-model="loginForm.email"
+                  @keyup.enter.native="submitLoginForm('loginForm')"
                   style="width: 3rem;"
                 ></el-input>
               </el-form-item>
@@ -42,6 +46,7 @@
                 <el-input
                   style="width: 3rem;"
                   v-model="loginForm.password"
+                  @keyup.enter.native="submitLoginForm('loginForm')"
                   type="password"
                   autocomplete="off"
                 ></el-input>
@@ -50,6 +55,14 @@
                 <el-button type="success" @click="submitLoginForm('loginForm')">
                   登 录
                 </el-button>
+                <a
+                  class="forget-password"
+                  @click="
+                    forgetPassword = true;
+                    loginShow = false;
+                  "
+                  >忘记密码</a
+                >
               </el-form-item>
             </el-form>
           </div>
@@ -82,9 +95,9 @@
                 <el-button
                   plain
                   style="margin-left: .2rem"
-                  :loading="loading"
                   @click="sendCode()"
-                  >发送验证码</el-button
+                  :disabled="sendCodeIsDisabled"
+                  >{{ sendCodeText }}</el-button
                 >
               </el-form-item>
               <el-form-item label="密码" prop="password">
@@ -95,10 +108,7 @@
                   style="width: 3rem;"
                 ></el-input>
               </el-form-item>
-              <el-form-item
-                label="确认密码"
-                prop="checkPassword"
-              >
+              <el-form-item label="确认密码" prop="checkPassword">
                 <el-input
                   type="password"
                   v-model="registerForm.checkPassword"
@@ -111,7 +121,7 @@
                   type="success"
                   @click="submitRegisterForm('registerForm')"
                 >
-                  注 册
+                  {{ forgetPassword ? "重置密码" : "注册" }}
                 </el-button>
               </el-form-item>
             </el-form>
@@ -119,9 +129,13 @@
         </div>
       </transition>
       <div class="click-login-register">
-        <a @click="loginShow = !loginShow">{{
-          loginShow ? "点击注册" : "点击登录"
-        }}</a>
+        <a
+          @click="
+            loginShow = !loginShow;
+            forgetPassword = false;
+          "
+          >{{ loginShow ? "点击注册" : "点击登录" }}</a
+        >
       </div>
     </div>
     <Footer class="footer" />
@@ -138,18 +152,8 @@ export default {
     Footer,
   },
   data() {
-    // var validatePass = (rule, value, callback) => {
-    //   if (value === "") {
-    //     callback(new Error("请输入密码"));
-    //   } else {
-    //     if (this.registerRules.checkPassword !== "") {
-    //       this.$refs.ruleForm.validateField("checkPassword");
-    //     }
-    //     callback();
-    //   }
-    // };
     var validatePass2 = (rule, value, callback) => {
-      console.log("value",value)
+      console.log("value", value);
       if (value === "") {
         callback(new Error("请再次输入密码"));
       } else if (value !== this.registerForm.password) {
@@ -160,7 +164,9 @@ export default {
     };
     return {
       loginShow: true,
-      loading: false,
+      forgetPassword: false,
+      sendCodeText: "发送验证码",
+      sendCodeIsDisabled: false,
       registerForm: {
         email: "",
         code: "",
@@ -193,11 +199,18 @@ export default {
             trigger: "blur",
           },
         ],
-        password: [{
+        password: [
+          {
             required: true,
             message: "密码不能为空",
             trigger: "blur",
-          }],
+          },
+          {
+            pattern: "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$",
+            message: "密码必须同时包含字母数字的6-18位组合",
+            trigger: "blur",
+          },
+        ],
         checkPassword: [{ validator: validatePass2, trigger: "blur" }],
         code: [
           { required: true, message: "验证码不能为空" },
@@ -215,7 +228,20 @@ export default {
 
   methods: {
     //发送验证码
-    sendCode() {},
+    sendCode() {
+      let that = this;
+      that.sendCodeIsDisabled = true;
+      let waitSecond = 60;
+      let interval = window.setInterval(function() {
+        that.sendCodeText = waitSecond + "秒后重发";
+        --waitSecond;
+        if (waitSecond < 0) {
+          that.sendCodeText = "重新发送";
+          that.sendCodeIsDisabled = false;
+          window.clearInterval(interval);
+        }
+      }, 1000);
+    },
     //提交注册表单
     submitRegisterForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -228,10 +254,22 @@ export default {
     },
 
     //提交登录表单
-    submitLoginForm() {
+    submitLoginForm(formName) {
+      let that = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          var formData = new FormData();
+          formData.append("email", that[`${formName}`].email);
+          formData.append("password", that[`${formName}`].password);
+          let param = {
+            email: that[`${formName}`].email,
+            password: that[`${formName}`].password
+          }
+          that.$http.post("unAuth/login", param).then((res) => {
+            this.$store.commit("setUser", res);
+            //跳转上个来的页面
+            this.$router.go(-1);
+          });
         } else {
           return false;
         }
@@ -251,7 +289,7 @@ export default {
   }
   .content {
     width: 6rem;
-    height: 3.5rem;
+    height: 40%;
     margin: 4% auto;
     padding: 3% 0 4%;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -278,6 +316,14 @@ export default {
     .register {
       width: 100%;
       margin-left: 0.5rem;
+    }
+    .login {
+      .forget-password {
+        position: absolute;
+        color: #ababab;
+        cursor: pointer;
+        right: 0.5rem;
+      }
     }
   }
 }

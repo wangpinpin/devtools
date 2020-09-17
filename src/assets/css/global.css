@@ -81,6 +81,10 @@ a:active {
     text-decoration: none;
 }
 
+.el-dropdown-menu {
+    text-align: center;
+}
+
 @media screen and (max-width: 900px) {
     .width9 {
         width: 90% !important;

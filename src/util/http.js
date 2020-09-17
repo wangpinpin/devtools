@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from "@/store";
 
 axios.defaults.timeout = 5000;
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
@@ -6,9 +7,10 @@ axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 axios.interceptors.request.use(
     config => {
         // config.data = JSON.stringify(config.data);
-        // config.headers = {
-        //     'Content-Type': 'application/x-www-form-urlencoded'
-        // }
+        config.headers = {
+            // 'Content-Type': 'application/x-www-form-urlencoded'
+            'Authorization': store.state.user.token
+        }
         return config;
     },
     error => {
@@ -101,7 +103,9 @@ export function get(url, params = {}) {
                 params: params
             })
             .then(response => {
-                resolve(response.data);
+                if (response) {
+                    resolve(response.data);
+                }
             })
             .catch(err => {
                 reject(err)
@@ -121,7 +125,9 @@ export function post(url, data = {}) {
     return new Promise((resolve, reject) => {
         axios.post(url, data)
             .then(response => {
-                resolve(response.data);
+                if (response) {
+                    resolve(response.data);
+                }
             }, err => {
                 reject(err)
             })
@@ -139,7 +145,9 @@ export function patch(url, data = {}) {
     return new Promise((resolve, reject) => {
         axios.patch(url, data)
             .then(response => {
-                resolve(response.data);
+                if (response) {
+                    resolve(response.data);
+                }
             }, err => {
                 reject(err)
             })
@@ -157,7 +165,9 @@ export function put(url, data = {}) {
     return new Promise((resolve, reject) => {
         axios.put(url, data)
             .then(response => {
-                resolve(response.data);
+                if (response) {
+                    resolve(response.data);
+                }
             }, err => {
                 reject(err)
             })
