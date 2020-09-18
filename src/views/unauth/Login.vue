@@ -145,6 +145,7 @@
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
 
+let that;
 export default {
   name: "Login",
   components: {
@@ -152,16 +153,27 @@ export default {
     Footer,
   },
   data() {
-    var validatePass2 = (rule, value, callback) => {
-      console.log("value", value);
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.registerForm.password) {
-        callback(new Error("两次输入密码不一致!"));
+    var validatePass = (rule, value, callback) => {
+      if (value !== this.registerForm.password) {
+        callback(new Error("两次输入密码不一致"));
       } else {
         callback();
       }
     };
+    var validateEmail = (rule, value, callback) => {
+      that.emailIsExist(value, function(exist) {
+        //忘记密码
+        if (that.forgetPassword && !exist) {
+          callback(new Error("邮箱不存在"));
+          //注册
+        } else if (!that.forgetPassword && exist) {
+          callback(new Error("邮箱已被注册"));
+        } else {
+          callback();
+        }
+      });
+    };
+
     return {
       loginShow: true,
       forgetPassword: false,
@@ -189,6 +201,7 @@ export default {
             message: "请输入正确的邮箱地址",
             trigger: ["blur", "change"],
           },
+          { validator: validateEmail, trigger: "blur" },
         ],
         code: [
           { required: true, message: "验证码不能为空" },
@@ -211,7 +224,7 @@ export default {
             trigger: "blur",
           },
         ],
-        checkPassword: [{ validator: validatePass2, trigger: "blur" }],
+        checkPassword: [{ validator: validatePass, trigger: "blur" }],
         code: [
           { required: true, message: "验证码不能为空" },
           {
@@ -224,29 +237,56 @@ export default {
       },
     };
   },
-  created() {},
+  created() {
+    that = this;
+  },
 
   methods: {
     //发送验证码
     sendCode() {
-      let that = this;
-      that.sendCodeIsDisabled = true;
-      let waitSecond = 60;
-      let interval = window.setInterval(function() {
-        that.sendCodeText = waitSecond + "秒后重发";
-        --waitSecond;
-        if (waitSecond < 0) {
-          that.sendCodeText = "重新发送";
-          that.sendCodeIsDisabled = false;
-          window.clearInterval(interval);
-        }
-      }, 1000);
+      var formData = new FormData();
+      formData.append("email", this.registerForm.email);
+      this.$http.post("unAuth/sendCode", formData).then((res) => {
+        that.sendCodeIsDisabled = true;
+        let waitSecond = 60;
+        let interval = window.setInterval(function() {
+          that.sendCodeText = waitSecond + "秒后重发";
+          --waitSecond;
+          if (waitSecond < 0) {
+            that.sendCodeText = "重新发送";
+            that.sendCodeIsDisabled = false;
+            window.clearInterval(interval);
+          }
+        }, 1000);
+      });
     },
     //提交注册表单
     submitRegisterForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          let param = {
+            email: that[`${formName}`].email,
+            password: that[`${formName}`].password,
+            code: that[`${formName}`].code,
+          };
+
+          let url;
+          let message;
+          if (that.forgetPassword) {
+            url = "unAuth/forgetPassword";
+            message = "密码修改成功";
+          } else {
+            url = "unAuth/register";
+            message = "注册成功";
+          }
+          that.$http.post(url, param).then((res) => {
+            this.$message({
+              message: message,
+              type: "success",
+            });
+            this.loginShow = true;
+            this.loginForm.email = that[`${formName}`].email;
+          });
         } else {
           return false;
         }
@@ -258,13 +298,10 @@ export default {
       let that = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          var formData = new FormData();
-          formData.append("email", that[`${formName}`].email);
-          formData.append("password", that[`${formName}`].password);
           let param = {
             email: that[`${formName}`].email,
-            password: that[`${formName}`].password
-          }
+            password: that[`${formName}`].password,
+          };
           that.$http.post("unAuth/login", param).then((res) => {
             this.$store.commit("setUser", res);
             //跳转上个来的页面
@@ -273,6 +310,13 @@ export default {
         } else {
           return false;
         }
+      });
+    },
+    //邮箱是否存在
+    emailIsExist(email, callback) {
+      this.$http.get("unAuth/emailIsExist", {email: email}).then((res) => {
+        console.log("是否存在", res);
+        callback(res);
       });
     },
   },
