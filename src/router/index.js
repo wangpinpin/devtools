@@ -165,16 +165,25 @@ const routes = [{
         component: () =>
             import ("../views/unauth/Login.vue")
     },
-    // {
-    //     path: "/subscribe",
-    //     name: "subscribe",
-    //     meta: {
-    //         title: "订阅",
-    //         requireAuth: true
-    //     },
-    //     component: () =>
-    //         import ("../views/auth/Subscribe.vue")
-    // }
+    {
+        path: "/cancel",
+        name: "cancel",
+        meta: {
+            title: "取消订阅"
+        },
+        component: () =>
+            import ("../views/unauth/Cancel.vue")
+    },
+    {
+        path: "/subscribe",
+        name: "subscribe",
+        meta: {
+            title: "订阅日记",
+            requireAuth: true
+        },
+        component: () =>
+            import ("../views/auth/Subscribe.vue")
+    }
 ];
 
 const router = new VueRouter({
