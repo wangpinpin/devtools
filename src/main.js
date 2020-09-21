@@ -71,6 +71,9 @@ import {
     Dropdown,
     DropdownMenu,
     DropdownItem,
+    Checkbox,
+    CheckboxGroup,
+    TimeSelect
 } from "element-ui";
 
 Vue.use(Button);
@@ -97,6 +100,9 @@ Vue.use(Switch);
 Vue.use(Dropdown);
 Vue.use(DropdownMenu);
 Vue.use(DropdownItem);
+Vue.use(Checkbox);
+Vue.use(CheckboxGroup);
+Vue.use(TimeSelect);
 
 Vue.prototype.$loading = Loading;
 Vue.prototype.$message = Message;
@@ -116,14 +122,14 @@ console.log("当前所处环境: ", process.env.NODE_ENV);
 
 //过滤器
 
-Vue.filter('formatDate', function(value1, value2) {
+Vue.filter('formatDate', function (value1, value2) {
     value1 = value1.replace(/-/g, '/');
     return moment(value1).format(value2)
 })
 
 //百度统计
 var _hmt = _hmt || [];
-(function() {
+(function () {
     var hm = document.createElement("script");
     hm.src = "https://hm.baidu.com/hm.js?2032706202016ae71e8b76fb2b5f86b5";
     var s = document.getElementsByTagName("script")[0];

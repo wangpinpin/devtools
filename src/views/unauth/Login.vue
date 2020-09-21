@@ -10,14 +10,8 @@
       <transition name="el-zoom-in-center">
         <div v-show="loginShow" class="transition-box">
           <div class="login">
-            <el-form
-              :model="loginForm"
-              ref="loginForm"
-              label-width="100px"
-              class="demo-ruleForm"
-            >
+            <el-form :model="loginForm" ref="loginForm" class="demo-ruleForm">
               <el-form-item
-                label="邮箱"
                 prop="email"
                 :rules="[
                   {
@@ -35,24 +29,33 @@
                 <el-input
                   v-model="loginForm.email"
                   @keyup.enter.native="submitLoginForm('loginForm')"
-                  style="width: 3rem;"
-                ></el-input>
+                  style="width: 4rem;"
+                  placeholder="邮箱"
+                  prefix-icon="el-icon-email"
+                >
+                </el-input>
               </el-form-item>
               <el-form-item
-                label="密码"
                 prop="password"
                 :rules="[{ required: true, message: '密码不能为空' }]"
               >
                 <el-input
-                  style="width: 3rem;"
+                  style="width: 4rem;"
                   v-model="loginForm.password"
                   @keyup.enter.native="submitLoginForm('loginForm')"
                   type="password"
                   autocomplete="off"
-                ></el-input>
+                  placeholder="密码"
+                  prefix-icon="el-icon-password"
+                >
+                </el-input>
               </el-form-item>
               <el-form-item>
-                <el-button type="success" @click="submitLoginForm('loginForm')">
+                <el-button
+                  class="submitBtn"
+                  type="success"
+                  @click="submitLoginForm('loginForm')"
+                >
                   登 录
                 </el-button>
                 <a
@@ -76,8 +79,8 @@
             <el-form
               :rules="registerRules"
               :model="registerForm"
+              label-width="1.2rem"
               ref="registerForm"
-              label-width="100px"
               class="demo-ruleForm"
             >
               <el-form-item label="邮箱" prop="email">
@@ -88,7 +91,7 @@
               </el-form-item>
               <el-form-item label="验证码" prop="code">
                 <el-input
-                  style="width: 1rem;"
+                  style="width: 1.55rem;"
                   v-model="registerForm.code"
                   autocomplete="off"
                 ></el-input>
@@ -116,8 +119,9 @@
                   style="width: 3rem;"
                 ></el-input>
               </el-form-item>
-              <el-form-item>
+              <el-form-item class="el-form-item-btn">
                 <el-button
+                  class="submitBtn"
                   type="success"
                   @click="submitRegisterForm('registerForm')"
                 >
@@ -224,7 +228,9 @@ export default {
             trigger: "blur",
           },
         ],
-        checkPassword: [{ validator: validatePass, trigger: "blur" }],
+        checkPassword: [
+          { required: true, validator: validatePass, trigger: "blur" },
+        ],
         code: [
           { required: true, message: "验证码不能为空" },
           {
@@ -314,7 +320,7 @@ export default {
     },
     //邮箱是否存在
     emailIsExist(email, callback) {
-      this.$http.get("unAuth/emailIsExist", {email: email}).then((res) => {
+      this.$http.get("unAuth/emailIsExist", { email: email }).then((res) => {
         console.log("是否存在", res);
         callback(res);
       });
@@ -331,20 +337,42 @@ export default {
   /deep/.el-input__inner {
     background: unset;
   }
+  /deep/.el-icon-email::before {
+    font-family: "iconfont";
+    content: "\e662";
+  }
+  /deep/.el-icon-password::before {
+    font-family: "iconfont";
+    content: "\e8db";
+  }
+  /deep/.el-input__prefix {
+    left: 0;
+    .el-input__icon {
+      font-size: 0.24rem;
+      width: 2.2em;
+      line-height: 0.5rem;
+      &::before {
+        vertical-align: top;
+      }
+    }
+  }
   .content {
     width: 6rem;
-    height: 40%;
+    height: 58%;
     margin: 4% auto;
-    padding: 3% 0 4%;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     position: relative;
     .transition-box {
       position: absolute;
+      height: calc(100% - 1.3rem);
+      width: 100%;
     }
     .title {
       font-size: 0.3rem;
       text-align: center;
       color: #7c96b1;
+      margin: 0;
+      padding: 1em 0;
     }
     .click-login-register {
       font-size: 0.2rem;
@@ -359,7 +387,36 @@ export default {
     .login,
     .register {
       width: 100%;
-      margin-left: 0.5rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      .submitBtn {
+        width: 100%;
+      }
+      /deep/.el-form-item-btn {
+        .el-form-item__content {
+          margin-left: 0;
+        }
+      }
+      /deep/.el-form-item {
+        margin-bottom: 0.26rem;
+        .el-button,
+        .el-form-item__label,
+        .el-form-item__content {
+          line-height: 0.5rem;
+          font-size: 0.18rem;
+        }
+        .el-button {
+          width: 7em;
+          padding: 0;
+        }
+        .el-input__inner {
+          height: 0.5rem;
+          padding: 0 0.5em 0 2.5em;
+        }
+      }
     }
     .login {
       .forget-password {
