@@ -37,7 +37,7 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item disabled>个人信息</el-dropdown-item>
-            <el-dropdown-item>我的订阅</el-dropdown-item>
+            <el-dropdown-item><a href="/subscribe">我的订阅</a></el-dropdown-item>
             <a @click="signOut"
               ><el-dropdown-item divided>退出</el-dropdown-item></a
             >

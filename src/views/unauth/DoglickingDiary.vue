@@ -47,22 +47,22 @@
         <div class="text-content">{{ text }}</div>
       </div>
     </div>
-    <div class="advertisement">
+    <!-- <div class="advertisement">
       <Adsense
         data-ad-client="ca-pub-8697460075278474"
         ins-style="display:inline-block;width:300px;height:250px"
         data-ad-slot="6734414294"
       >
       </Adsense>
-    </div>
-    <div class="advertisement advertisement2">
+    </div> -->
+    <!-- <div class="advertisement advertisement2">
       <Adsense
         data-ad-client="ca-pub-8697460075278474"
         ins-style="display:inline-block;width:300px;height:250px"
         data-ad-slot="6844249022"
       >
       </Adsense>
-    </div>
+    </div> -->
     <Footer class="footer" />
   </div>
 </template>
