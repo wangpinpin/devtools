@@ -10,7 +10,7 @@
           :data-index="index"
         >
           <div class="goddessImg">
-            <img class="" src="@/assets/imgs/goddess.jpg" alt="" />
+            <img class src="@/assets/imgs/goddess.jpg" alt />
           </div>
           <div class="cardInfo">
             <p class="godNickName">{{ item.godNickName }}</p>
@@ -28,9 +28,7 @@
               tagEnabled: !item.cancel && item.enabled ? true : false,
             }"
             @click.stop="changeStatus"
-          >
-            {{ getStatus(index) }}
-          </p>
+          >{{ getStatus(index) }}</p>
         </li>
         <li @click="handleAdd" class="add">
           <i class="iconfont iconAdd">&#xe62e;</i>
@@ -42,13 +40,18 @@
     </div>
     <div v-show="showPopAdd" class="pop">
       <i class="iconfont iconClose" @click="showPopAdd = false">&#xe607;</i>
-      <el-form
-        :model="popForm"
-        label-width="1.2rem"
-        ref="popForm"
-        class="demo-ruleForm"
-      >
-        <el-form-item label="女神昵称" prop="godNickName">
+      <el-form :model="popForm" label-width="1.2rem" ref="popForm" class="demo-ruleForm">
+        <el-form-item
+          label="女神昵称"
+          prop="godNickName"
+          :rules="[
+            {
+              required: true,
+              message: '请输入女神昵称',
+              trigger: 'blur',
+            }
+          ]"
+        >
           <el-input
             style="width: 4rem;"
             v-model="popForm.godNickName"
@@ -64,11 +67,13 @@
             prefix-icon="el-icon-dog"
             :disabled="popForm.isAnonymous"
           ></el-input>
-          <el-checkbox v-model="popForm.isAnonymous" class="checkAnonymous"
-            >匿名</el-checkbox
-          >
+          <el-checkbox v-model="popForm.isAnonymous" class="checkAnonymous">匿名</el-checkbox>
         </el-form-item>
-        <el-form-item label="订阅内容" prop="activityName">
+        <el-form-item
+          label="订阅内容"
+          prop="activityName"
+          :rules="[{type: 'array', required: true, message: '请至少选择一个订阅内容', trigger: 'change'}]"
+        >
           <el-checkbox-group v-model="popForm.activityName">
             <el-checkbox
               v-for="item in activityList"
@@ -78,7 +83,11 @@
             ></el-checkbox>
           </el-checkbox-group>
         </el-form-item>
-        <el-form-item label="发送时间" prop="sendTime">
+        <el-form-item
+          label="发送时间"
+          prop="sendTime"
+          :rules="[{required: true, message: '请选择日期', trigger: 'blur' }]"
+        >
           <el-time-select
             v-model="popForm.sendTime"
             style="width: 4rem;"
@@ -88,14 +97,14 @@
               end: '23:00',
             }"
             placeholder="选择时间"
-          >
-          </el-time-select>
+          ></el-time-select>
         </el-form-item>
         <el-form-item
           label="女神邮箱"
           prop="email"
           :rules="[
             {
+              required: true,
               message: '请输入邮箱地址',
               trigger: 'blur',
             },
@@ -118,9 +127,7 @@
             class="submitBtn"
             type="success"
             @click="submitpopForm('popForm')"
-          >
-            {{ popForm.submitBtnText }}
-          </el-button>
+          >{{ popForm.submitBtnText }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -136,7 +143,7 @@ export default {
   name: "Subscribe",
   components: {
     Header,
-    Footer,
+    Footer
   },
   data() {
     return {
@@ -152,8 +159,8 @@ export default {
         isAnonymous: true,
         activityName: [],
         sendTime: "",
-        submitBtnText: "新 增",
-      },
+        submitBtnText: "新 增"
+      }
     };
   },
   created() {
@@ -162,12 +169,12 @@ export default {
   },
   computed: {
     getStatus() {
-      return (index) => {
+      return index => {
         let cancel = this.subscribeList[index].cancel;
         let enabled = this.subscribeList[index].enabled;
         return cancel ? "取消订阅" : enabled ? "已启用" : "已禁用";
       };
-    },
+    }
   },
   filters: {
     transferName(value) {
@@ -178,7 +185,7 @@ export default {
           index == value.length - 1 ? text + element : text + element + "、";
       });
       return text;
-    },
+    }
   },
   methods: {
     // 清空订阅信息表单
@@ -191,12 +198,12 @@ export default {
         isAnonymous: true,
         activityName: [],
         sendTime: "",
-        submitBtnText: "新 增",
+        submitBtnText: "新 增"
       };
     },
     // 获取订阅列表
     getSubscribe() {
-      this.$http.get("user/findSubscribe").then((res) => {
+      this.$http.get("user/findSubscribe").then(res => {
         this.subscribeList = res;
         this.loading = false;
       });
@@ -212,7 +219,7 @@ export default {
         isAnonymous: !Boolean(curObj.nickName),
         activityName: curObj.activityName,
         sendTime: this.hourToTime(curObj.hour),
-        submitBtnText: "保 存",
+        submitBtnText: "保 存"
       };
       this.showPopAdd = true;
     },
@@ -224,9 +231,9 @@ export default {
     changeStatus() {},
     // 获取订阅内容：日记、天气、星座运势
     getActivityName() {
-      this.$http.get("user/findActivityList").then((res) => {
+      this.$http.get("user/findActivityList").then(res => {
         this.activityList = res;
-        res.forEach((element) => {
+        res.forEach(element => {
           if (element.enabled) this.popForm.activityName.push(element.name);
         });
       });
@@ -251,7 +258,7 @@ export default {
     //提交新增订阅表单
     submitpopForm(formName) {
       let that = this;
-      this.$refs[formName].validate((valid) => {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           let params = {
             activityName: this.popForm.activityName,
@@ -260,7 +267,7 @@ export default {
             godNickName: this.popForm.godNickName,
             hour: this.timeToHour(this.popForm.sendTime),
             nickName: this.popForm.isAnonymous ? "" : this.popForm.nickName,
-            id: this.popForm.id,
+            id: this.popForm.id
           };
           that.$http.post("user/addSubscribe", params).then((res) => {
             this.$message({
@@ -273,8 +280,8 @@ export default {
           return false;
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

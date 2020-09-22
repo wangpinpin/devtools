@@ -5,15 +5,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        user: JSON.parse(sessionStorage.getItem("user")) || ""
+        user: JSON.parse(localStorage.getItem("user")) || ""
     },
     mutations: {
         setUser(state, x) {
             if (x) {
-                sessionStorage.setItem('user', JSON.stringify(x))
+                localStorage.setItem('user', JSON.stringify(x))
                 state.user = x
             } else {
-                sessionStorage.removeItem('user')
+                localStorage.removeItem('user')
                 state.user = ""
             }
 
