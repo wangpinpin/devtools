@@ -21,14 +21,25 @@
             <p>发送时间：每天{{ item.hour }}点</p>
           </div>
           <p class="edit" v-text="item.cancel ? '查 看' : '编 辑'"></p>
-          <p
-            :class="{
-              tag: true,
-              tagCancel: item.cancel,
-              tagEnabled: !item.cancel && item.enabled ? true : false,
-            }"
-            @click.stop="changeStatus"
-          >{{ getStatus(index) }}</p>
+          <div class="tagContainer">
+            <p
+              :class="{
+                tag: true,
+                tagCancel: item.cancel,
+                tagEnabled: !item.cancel && item.enabled ? true : false,
+              }"
+            >
+              {{ getStatus(index) }}
+            </p>
+            <ul class="statusTag" v-if="!item.cancel">
+              <li class="enabledTag" @click.stop="changeStatus(index, true)">
+                <span class="iconfont">&#xe6b0;</span>
+              </li>
+              <li class="disaabledTag" @click.stop="changeStatus(index, false)">
+                <span class="iconfont">&#xe640;</span>
+              </li>
+            </ul>
+          </div>
         </li>
         <li @click="handleAdd" class="add">
           <i class="iconfont iconAdd">&#xe62e;</i>
@@ -40,7 +51,12 @@
     </div>
     <div v-show="showPopAdd" class="pop">
       <i class="iconfont iconClose" @click="showPopAdd = false">&#xe607;</i>
-      <el-form :model="popForm" label-width="1.2rem" ref="popForm" class="demo-ruleForm">
+      <el-form
+        :model="popForm"
+        label-width="1.2rem"
+        ref="popForm"
+        class="demo-ruleForm"
+      >
         <el-form-item
           label="女神昵称"
           prop="godNickName"
@@ -49,7 +65,7 @@
               required: true,
               message: '请输入女神昵称',
               trigger: 'blur',
-            }
+            },
           ]"
         >
           <el-input
@@ -67,12 +83,21 @@
             prefix-icon="el-icon-dog"
             :disabled="popForm.isAnonymous"
           ></el-input>
-          <el-checkbox v-model="popForm.isAnonymous" class="checkAnonymous">匿名</el-checkbox>
+          <el-checkbox v-model="popForm.isAnonymous" class="checkAnonymous"
+            >匿名</el-checkbox
+          >
         </el-form-item>
         <el-form-item
           label="订阅内容"
           prop="activityName"
-          :rules="[{type: 'array', required: true, message: '请至少选择一个订阅内容', trigger: 'change'}]"
+          :rules="[
+            {
+              type: 'array',
+              required: true,
+              message: '请至少选择一个订阅内容',
+              trigger: 'change',
+            },
+          ]"
         >
           <el-checkbox-group v-model="popForm.activityName">
             <el-checkbox
@@ -86,7 +111,7 @@
         <el-form-item
           label="发送时间"
           prop="sendTime"
-          :rules="[{required: true, message: '请选择日期', trigger: 'blur' }]"
+          :rules="[{ required: true, message: '请选择日期', trigger: 'blur' }]"
         >
           <el-time-select
             v-model="popForm.sendTime"
@@ -122,15 +147,36 @@
             prefix-icon="el-icon-email"
           ></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item class="formItemBtn">
           <el-button
+            v-if="!popForm.cancel"
             class="submitBtn"
             type="success"
             @click="submitpopForm('popForm')"
-          >{{ popForm.submitBtnText }}</el-button>
+            >{{ popForm.submitBtnText }}</el-button
+          >
+          <el-button
+            v-if="!popForm.nowAdd"
+            class="submitBtn"
+            type="danger"
+            @click="dialogVisible = true"
+            >删 除</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="30%"
+      class="popDialog"
+    >
+      <span>删除后无法恢复，是否确认删除？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="delSubscribe">确 定</el-button>
+      </span>
+    </el-dialog>
     <Footer class="footer" />
   </div>
 </template>
@@ -143,7 +189,7 @@ export default {
   name: "Subscribe",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
@@ -151,6 +197,8 @@ export default {
       showPopAdd: false,
       subscribeList: {},
       activityList: {},
+      dialogVisible: false,
+      showStatus: false,
       popForm: {
         id: "",
         email: "",
@@ -159,8 +207,10 @@ export default {
         isAnonymous: true,
         activityName: [],
         sendTime: "",
-        submitBtnText: "新 增"
-      }
+        enabled: true,
+        cancel: false,
+        nowAdd: true,
+      },
     };
   },
   created() {
@@ -169,12 +219,12 @@ export default {
   },
   computed: {
     getStatus() {
-      return index => {
+      return (index) => {
         let cancel = this.subscribeList[index].cancel;
         let enabled = this.subscribeList[index].enabled;
         return cancel ? "取消订阅" : enabled ? "已启用" : "已禁用";
       };
-    }
+    },
   },
   filters: {
     transferName(value) {
@@ -185,7 +235,7 @@ export default {
           index == value.length - 1 ? text + element : text + element + "、";
       });
       return text;
-    }
+    },
   },
   methods: {
     // 清空订阅信息表单
@@ -198,14 +248,17 @@ export default {
         isAnonymous: true,
         activityName: [],
         sendTime: "",
-        submitBtnText: "新 增"
+        submitBtnText: "新 增",
+        enabled: true,
+        cancel: false,
+        nowAdd: true,
       };
     },
     // 获取订阅列表
     getSubscribe() {
-      this.$http.get("user/findSubscribe").then(res => {
+      this.$http.get("user/findSubscribe").then((res) => {
         this.subscribeList = res;
-        this.loading = false;
+        if (!this.showPopAdd) this.loading = false;
       });
     },
     handleEdit(e) {
@@ -219,7 +272,10 @@ export default {
         isAnonymous: !Boolean(curObj.nickName),
         activityName: curObj.activityName,
         sendTime: this.hourToTime(curObj.hour),
-        submitBtnText: "保 存"
+        submitBtnText: "保 存",
+        enabled: curObj.enabled,
+        cancel: curObj.cancel,
+        nowAdd: false,
       };
       this.showPopAdd = true;
     },
@@ -228,12 +284,32 @@ export default {
       this.showPopAdd = true;
     },
     // 切换启用/禁用状态
-    changeStatus() {},
+    changeStatus(index, status) {
+      let curObj = this.subscribeList[index];
+      let statusText = status ? "启用" : "禁用";
+      if (curObj.enabled == status) {
+        this.$message({
+          message: "当前已是" + statusText + "状态",
+          type: "warning",
+        });
+      } else {
+        let params = new FormData();
+        params.append("id", curObj.id);
+        params.append("enabled", status);
+        this.$http.post("user/enabledSubscribe", params).then((res) => {
+          this.$message({
+            message: statusText + "成功",
+            type: "success",
+          });
+          this.subscribeList[index].enabled = status;
+        });
+      }
+    },
     // 获取订阅内容：日记、天气、星座运势
     getActivityName() {
-      this.$http.get("user/findActivityList").then(res => {
+      this.$http.get("user/findActivityList").then((res) => {
         this.activityList = res;
-        res.forEach(element => {
+        res.forEach((element) => {
           if (element.enabled) this.popForm.activityName.push(element.name);
         });
       });
@@ -258,30 +334,53 @@ export default {
     //提交新增订阅表单
     submitpopForm(formName) {
       let that = this;
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           let params = {
             activityName: this.popForm.activityName,
             email: this.popForm.email,
-            enabled: this.popForm.isAnonymous,
+            enabled: true,
             godNickName: this.popForm.godNickName,
             hour: this.timeToHour(this.popForm.sendTime),
             nickName: this.popForm.isAnonymous ? "" : this.popForm.nickName,
-            id: this.popForm.id
+            id: this.popForm.id,
           };
           that.$http.post("user/addSubscribe", params).then((res) => {
-            this.$message({
-              message: "订阅成功",
-              type: "success",
-            });
-            this.clearForm();
+            if (this.popForm.submitBtnText == "保 存") {
+              this.$message({
+                message: "保存成功",
+                type: "success",
+              });
+              this.getSubscribe();
+            } else {
+              this.$message({
+                message: "订阅成功",
+                type: "success",
+              });
+              this.clearForm();
+            }
           });
         } else {
           return false;
         }
       });
-    }
-  }
+    },
+    // 删除订阅
+    delSubscribe() {
+      this.dialogVisible = true;
+      var formData = new FormData();
+      formData.append("id", this.popForm.id);
+      this.$http.post("user/delSubscribe", formData).then((res) => {
+        this.$message({
+          message: "删除成功",
+          type: "success",
+        });
+        this.dialogVisible = false;
+        this.showPopAdd = false;
+        this.getSubscribe();
+      });
+    },
+  },
 };
 </script>
 
@@ -378,12 +477,63 @@ export default {
           font-size: 0.18rem;
           line-height: 2em;
           transform: rotate(45deg);
-          background-color: yellow;
+          background-color: red;
           &.tagCancel {
             background-color: #9a9696;
           }
           &.tagEnabled {
             background-color: green;
+          }
+        }
+        .statusTag {
+          padding: 0;
+          transform: rotate(-90deg);
+          position: absolute;
+          top: 0;
+          right: 0;
+          transition: 0.3s;
+          li {
+            margin: 0;
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: inline-block;
+            background-color: #7c96b1;
+            border-radius: 0 0 0 1rem;
+            width: 1rem;
+            height: 1rem;
+            box-sizing: border-box;
+            transform-origin: 1rem 0;
+            text-align: center;
+            padding-right: 0.2rem;
+            span {
+              font-size: 0.26rem;
+              color: #fff;
+              display: inline-block;
+            }
+          }
+          .enabledTag {
+            span {
+              margin-top: 0.1rem;
+            }
+            &:hover span {
+              color: green;
+            }
+          }
+          .disaabledTag {
+            transform: rotate(-45deg);
+            span {
+              margin-top: 0.1rem;
+              transform: rotate(45deg);
+            }
+            &:hover span {
+              color: red;
+            }
+          }
+        }
+        .tagContainer:hover {
+          .statusTag {
+            transform: rotate(0deg);
           }
         }
         .hovershow {
@@ -475,6 +625,9 @@ export default {
     .checkAnonymous {
       margin-left: 0.2rem;
     }
+  }
+  .popDialog {
+    font-size: 0;
   }
 }
 </style>
