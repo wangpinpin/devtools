@@ -37,7 +37,9 @@
           </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item disabled>个人信息</el-dropdown-item>
-            <el-dropdown-item><a href="/subscribe">我的订阅</a></el-dropdown-item>
+            <el-dropdown-item
+              ><a href="/subscribe">我的订阅</a></el-dropdown-item
+            >
             <a @click="signOut"
               ><el-dropdown-item divided>退出</el-dropdown-item></a
             >
@@ -181,6 +183,14 @@ export default {
         height: 0.9rem;
         line-height: 1rem;
       }
+    }
+    .login {
+      margin-right: 0.2rem;
+      margin-top: 0.2rem;
+      position: relative;
+      top: 0;
+      right: 0;
+      height: auto;
     }
   }
 }

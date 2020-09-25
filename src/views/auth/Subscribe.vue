@@ -1,53 +1,75 @@
 <template>
   <div class="container">
     <Header />
+    <!-- <h3 class="title">{{ title }}</h3> -->
     <div class="content">
-      <ul class="list" v-show="!loading">
-        <li
-          @click="handleEdit($event)"
-          v-for="(item, index) in subscribeList"
-          :key="item.id"
-          :data-index="index"
+      <div class="subscribeWrap">
+        <happy-scroll
+          color="rgba(0,0,0,0.2)"
+          size="3"
+          :hide-horizontal="true"
+          resize
         >
-          <div class="delete" @click.stop="dialogVisible = true; deleteId = item.id">
-            <i class="iconfont">&#xe60a;</i>
-          </div>
-          <div class="goddessImg">
-            <img class src="@/assets/imgs/goddess.jpg" alt />
-          </div>
-          <div class="cardInfo">
-            <p class="godNickName">{{ item.godNickName }}</p>
-            <p class="count">已送达{{ item.count }}封</p>
-          </div>
-          <div class="hovershow">
-            <p>订阅内容：{{ popForm.activityName | transferName }}</p>
-            <p>发送时间：每天{{ item.hour }}点</p>
-          </div>
-          <p class="edit" v-text="item.cancel ? '查 看' : '编 辑'"></p>
-          <div class="tagContainer">
-            <p
-              :class="{
-                tag: true,
-                tagCancel: item.cancel,
-                tagEnabled: !item.cancel && item.enabled ? true : false,
-              }"
-            >
-              {{ getStatus(index) }}
-            </p>
-            <ul class="statusTag" v-if="!item.cancel">
-              <li class="enabledTag" @click.stop="changeStatus(index, true)">
-                <span class="iconfont">&#xe6b0;</span>
-              </li>
-              <li class="disaabledTag" @click.stop="changeStatus(index, false)">
-                <span class="iconfont">&#xe640;</span>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li @click="handleAdd" class="add">
-          <i class="iconfont iconAdd">&#xe62e;</i>
-        </li>
-      </ul>
+          <ul class="list" v-show="!loading">
+            <li v-for="(item, index) in subscribeList" :key="item.id">
+              <div
+                class="delete"
+                @click.stop="
+                  dialogVisible = true;
+                  deleteId = item.id;
+                "
+              >
+                <i class="iconfont">&#xe60a;</i>
+              </div>
+              <div class="goddessImg">
+                <img class src="@/assets/imgs/goddess.jpg" alt />
+              </div>
+              <div class="cardInfo">
+                <p class="godNickName">{{ item.godNickName }}</p>
+                <p class="count">已送达{{ item.count }}封</p>
+              </div>
+              <div class="hovershow">
+                <p>订阅内容：{{ popForm.activityName | transferName }}</p>
+                <p>发送时间：每天{{ item.hour }}点</p>
+              </div>
+              <p
+                class="edit"
+                v-text="item.cancel ? '查 看' : '编 辑'"
+                @click.stop="handleEdit($event)"
+                :data-index="index"
+              ></p>
+              <div class="tagContainer">
+                <p
+                  :class="{
+                    tag: true,
+                    tagCancel: item.cancel,
+                    tagEnabled: !item.cancel && item.enabled ? true : false,
+                  }"
+                >
+                  {{ getStatus(index) }}
+                </p>
+                <ul class="statusTag" v-if="!item.cancel">
+                  <li
+                    class="enabledTag"
+                    @click.stop="changeStatus(index, true)"
+                  >
+                    <span class="iconfont">&#xe6b0;</span>
+                  </li>
+                  <li
+                    class="disaabledTag"
+                    @click.stop="changeStatus(index, false)"
+                  >
+                    <span class="iconfont">&#xe640;</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li @click="handleAdd" class="add">
+              <i class="iconfont iconAdd">&#xe62e;</i>
+            </li>
+          </ul>
+        </happy-scroll>
+      </div>
       <div class="loading" v-show="loading">
         <img src="@/assets/imgs/loading.gif" />
       </div>
@@ -56,7 +78,7 @@
       <i class="iconfont iconClose" @click="showPopAdd = false">&#xe607;</i>
       <el-form
         :model="popForm"
-        label-width="1.2rem"
+        label-width="1.4rem"
         ref="popForm"
         class="demo-ruleForm"
       >
@@ -196,12 +218,12 @@ export default {
   },
   data() {
     return {
+      title: "做舔狗嘛 最重要的是陪伴",
       loading: true,
       showPopAdd: false,
       subscribeList: {},
       activityList: {},
       dialogVisible: false,
-      showStatus: false,
       deleteId: "",
       popForm: {
         id: "",
@@ -397,6 +419,14 @@ export default {
   margin: 0 auto;
   /deep/.el-input__inner {
     background: unset;
+    font-size: 0.2rem;
+  }
+  .title {
+    font-size: 0.3rem;
+    line-height: 2;
+    text-align: center;
+    margin: 0.5em 0;
+    color: #7c96b1;
   }
   p {
     margin: 0;
@@ -407,6 +437,20 @@ export default {
     align-items: center;
     height: 80%;
     width: 100%;
+    .subscribeWrap {
+      width: 100%;
+      height: 100%;
+      /deep/.happy-scroll-container {
+        width: 100% !important;
+        height: 100% !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .happy-scroll-content {
+          width: 80%;
+        }
+      }
+    }
     .list {
       list-style: none;
       display: flex;
@@ -414,8 +458,9 @@ export default {
       align-items: center;
       margin: 0;
       padding: 0;
-      width: 80%;
+      width: 100%;
       flex-wrap: wrap;
+      margin: 0 auto;
       li {
         background-color: #fff;
         width: 3rem;
@@ -546,11 +591,6 @@ export default {
             }
           }
         }
-        .tagContainer:hover {
-          .statusTag {
-            transform: rotate(0deg);
-          }
-        }
         .hovershow {
           opacity: 0;
           transition: all 0.3s ease;
@@ -583,6 +623,9 @@ export default {
           .hovershow {
             opacity: 1;
             bottom: 0.5rem;
+          }
+          .statusTag {
+            transform: rotate(0deg);
           }
         }
         .iconAdd {
@@ -624,9 +667,10 @@ export default {
     transform: translate(-50%, -50%);
     background-color: #fff;
     border-radius: 0.2rem;
-    padding: 0.5rem 0.4rem 0.2rem 0.3rem;
+    padding: 0.6rem 0.4rem 0.2rem 0.3rem;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+    z-index: 10;
     .iconClose {
       position: absolute;
       right: 2em;
@@ -640,9 +684,56 @@ export default {
     .checkAnonymous {
       margin-left: 0.2rem;
     }
+    /deep/.el-form-item__label {
+      font-size: 0.2rem;
+      white-space: nowrap;
+    }
+    /deep/.el-checkbox__label,
+    /deep/.el-button {
+      font-size: 0.2rem;
+    }
+    /deep/.el-checkbox__input {
+      &.is-checked .el-checkbox__inner,
+      &.is-indeterminate .el-checkbox__inner {
+        background-color: #7c96b1;
+        border-color: #7c96b1;
+      }
+      &.is-checked + .el-checkbox__label {
+        color: #7c96b1;
+      }
+    }
   }
   .popDialog {
     font-size: 0;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  /deep/.el-dialog {
+    width: 80% !important;
+  }
+  .container {
+    .content {
+      .subscribeWrap {
+        /deep/.happy-scroll-container {
+          .happy-scroll-content {
+            width: 100%;
+          }
+        }
+      }
+      .list {
+        li {
+          width: 2.8rem;
+          margin: 0.2rem;
+        }
+      }
+    }
+    .pop {
+      form {
+        overflow-y: scroll;
+        max-height: 66vh;
+      }
+    }
   }
 }
 </style>
