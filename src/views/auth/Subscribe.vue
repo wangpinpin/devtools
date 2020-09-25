@@ -102,7 +102,7 @@
         </el-form-item>
         <el-form-item label="你的昵称" prop="nickName">
           <el-input
-            style="width: 3rem;"
+            style="width: 2.9rem;"
             v-model="popForm.nickName"
             autocomplete="off"
             prefix-icon="el-icon-dog"
