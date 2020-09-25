@@ -1,11 +1,8 @@
 @font-face {
-    font-family: "iconfont"; /* project id 1916117 */
-    src: url("//at.alicdn.com/t/font_1916117_k1w3x3cvuo.eot");
-    src: url("//at.alicdn.com/t/font_1916117_k1w3x3cvuo.eot?#iefix") format("embedded-opentype"),
-        url("//at.alicdn.com/t/font_1916117_k1w3x3cvuo.woff2") format("woff2"),
-        url("//at.alicdn.com/t/font_1916117_k1w3x3cvuo.woff") format("woff"),
-        url("//at.alicdn.com/t/font_1916117_k1w3x3cvuo.ttf") format("truetype"),
-        url("//at.alicdn.com/t/font_1916117_k1w3x3cvuo.svg#iconfont") format("svg");
+    font-family: 'iconfont';
+    /* project id 1916117 */
+    src: url('//at.alicdn.com/t/font_1916117_9ru6lm3brn6.eot');
+    src: url('//at.alicdn.com/t/font_1916117_9ru6lm3brn6.eot?#iefix') format('embedded-opentype'), url('//at.alicdn.com/t/font_1916117_9ru6lm3brn6.woff2') format('woff2'), url('//at.alicdn.com/t/font_1916117_9ru6lm3brn6.woff') format('woff'), url('//at.alicdn.com/t/font_1916117_9ru6lm3brn6.ttf') format('truetype'), url('//at.alicdn.com/t/font_1916117_9ru6lm3brn6.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -49,11 +46,13 @@
     color: #999;
 }
 
+
 /* 去除a 标签样式 */
 
 a {
     text-decoration: none;
 }
+
 
 /*正常的未被访问过的链接*/
 
@@ -61,17 +60,20 @@ a:link {
     text-decoration: none;
 }
 
+
 /*已经访问过的链接*/
 
 a:visited {
     text-decoration: none;
 }
 
+
 /*鼠标划过(停留)的链接*/
 
 a:hover {
     text-decoration: none;
 }
+
 
 /* 正在点击的链接*/
 

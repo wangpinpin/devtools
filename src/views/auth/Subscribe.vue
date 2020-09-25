@@ -9,6 +9,9 @@
           :key="item.id"
           :data-index="index"
         >
+          <div class="delete" @click.stop="dialogVisible = true; deleteId = item.id">
+            <i class="iconfont">&#xe60a;</i>
+          </div>
           <div class="goddessImg">
             <img class src="@/assets/imgs/goddess.jpg" alt />
           </div>
@@ -155,13 +158,13 @@
             @click="submitpopForm('popForm')"
             >{{ popForm.submitBtnText }}</el-button
           >
-          <el-button
+          <!-- <el-button
             v-if="!popForm.nowAdd"
             class="submitBtn"
             type="danger"
             @click="dialogVisible = true"
             >删 除</el-button
-          >
+          > -->
         </el-form-item>
       </el-form>
     </div>
@@ -199,6 +202,7 @@ export default {
       activityList: {},
       dialogVisible: false,
       showStatus: false,
+      deleteId: "",
       popForm: {
         id: "",
         email: "",
@@ -358,7 +362,9 @@ export default {
                 type: "success",
               });
               this.clearForm();
+              this.getSubscribe();
             }
+            this.showPopAdd = false;
           });
         } else {
           return false;
@@ -369,7 +375,7 @@ export default {
     delSubscribe() {
       this.dialogVisible = true;
       var formData = new FormData();
-      formData.append("id", this.popForm.id);
+      formData.append("id", this.deleteId);
       this.$http.post("user/delSubscribe", formData).then((res) => {
         this.$message({
           message: "删除成功",
@@ -426,6 +432,15 @@ export default {
         font-size: 0.24rem;
         position: relative;
         overflow: hidden;
+        .delete {
+          position: absolute;
+          z-index: 9;
+          left: 4%;
+          top: 3%;
+          i {
+            font-size: 0.3rem;
+          }
+        }
         .goddessImg {
           width: 100%;
           height: 2rem;

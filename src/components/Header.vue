@@ -10,9 +10,9 @@
         <div class="item" :style="{ backgroundImage: `url(${img})` }">
           <a href="MessageBoard">留言板</a>
         </div>
-        <!-- <div class="item" :style="{ backgroundImage: `url(${img})` }">
-          <a href="Music">听一听</a>
-        </div> -->
+        <div class="item" :style="{ backgroundImage: `url(${img})` }">
+          <a href="subscribe">女神日记</a>
+        </div>
         <div class="item" :style="{ backgroundImage: `url(${img})` }">
           <a href="v">看一看</a>
         </div>
@@ -150,6 +150,11 @@ export default {
       font-size: 0.3rem;
       color: #757575;
     }
+  }
+}
+/deep/.el-dropdown-menu__item {
+  a {
+    color: #606266;
   }
 }
 @media screen and (max-width: 900px) {

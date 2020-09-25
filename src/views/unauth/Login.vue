@@ -3,7 +3,9 @@
     <Header />
     <div class="content">
       <p class="title" v-if="loginShow">登录</p>
-      <p class="title" v-if="!loginShow">{{ forgetPassword ? "重置密码" : "注册" }}</p>
+      <p class="title" v-if="!loginShow">
+        {{ forgetPassword ? "重置密码" : "注册" }}
+      </p>
       <!-- 登录 -->
       <transition name="el-zoom-in-center">
         <div v-show="loginShow" class="transition-box">
@@ -32,7 +34,10 @@
                   prefix-icon="el-icon-email"
                 ></el-input>
               </el-form-item>
-              <el-form-item prop="password" :rules="[{ required: true, message: '密码不能为空' }]">
+              <el-form-item
+                prop="password"
+                :rules="[{ required: true, message: '密码不能为空' }]"
+              >
                 <el-input
                   style="width: 4rem;"
                   v-model="loginForm.password"
@@ -48,14 +53,16 @@
                   class="submitBtn"
                   type="success"
                   @click="submitLoginForm('loginForm')"
-                >登 录</el-button>
+                  >登 录</el-button
+                >
                 <a
                   class="forget-password"
                   @click="
                     forgetPassword = true;
                     loginShow = false;
                   "
-                >忘记密码</a>
+                  >忘记密码</a
+                >
               </el-form-item>
             </el-form>
           </div>
@@ -74,16 +81,24 @@
               class="demo-ruleForm"
             >
               <el-form-item label="邮箱" prop="email">
-                <el-input v-model="registerForm.email" style="width: 3rem;"></el-input>
+                <el-input
+                  v-model="registerForm.email"
+                  style="width: 3rem;"
+                ></el-input>
               </el-form-item>
               <el-form-item label="验证码" prop="code">
-                <el-input style="width: 1.55rem;" v-model="registerForm.code" autocomplete="off"></el-input>
+                <el-input
+                  style="width: 1.55rem;"
+                  v-model="registerForm.code"
+                  autocomplete="off"
+                ></el-input>
                 <el-button
                   plain
                   style="margin-left: .2rem"
                   @click="sendCode()"
                   :disabled="sendCodeIsDisabled"
-                >{{ sendCodeText }}</el-button>
+                  >{{ sendCodeText }}</el-button
+                >
               </el-form-item>
               <el-form-item label="密码" prop="password">
                 <el-input
@@ -106,7 +121,8 @@
                   class="submitBtn"
                   type="success"
                   @click="submitRegisterForm('registerForm')"
-                >{{ forgetPassword ? "重置密码" : "注册" }}</el-button>
+                  >{{ forgetPassword ? "重置密码" : "注册" }}</el-button
+                >
               </el-form-item>
             </el-form>
           </div>
@@ -118,7 +134,8 @@
             loginShow = !loginShow;
             forgetPassword = false;
           "
-        >{{ loginShow ? "点击注册" : "点击登录" }}</a>
+          >{{ loginShow ? "点击注册" : "点击登录" }}</a
+        >
       </div>
     </div>
     <Footer class="footer" />
@@ -133,7 +150,7 @@ export default {
   name: "Login",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     var validatePass = (rule, value, callback) => {
@@ -167,25 +184,25 @@ export default {
         email: "",
         code: "",
         password: "",
-        checkPassword: ""
+        checkPassword: "",
       },
       loginForm: {
         email: "",
-        password: ""
+        password: "",
       },
       registerRules: {
         email: [
           {
             required: true,
             message: "邮箱不能为空",
-            trigger: "blur"
+            trigger: "blur",
           },
           {
             type: "email",
             message: "请输入正确的邮箱地址",
-            trigger: ["blur", "change"]
+            trigger: ["blur", "change"],
           },
-          { validator: validateEmail, trigger: "blur" }
+          { validator: validateEmail, trigger: "blur" },
         ],
         code: [
           { required: true, message: "验证码不能为空" },
@@ -193,23 +210,23 @@ export default {
             min: 4,
             max: 4,
             message: "长度4个字符",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         password: [
           {
             required: true,
             message: "密码不能为空",
-            trigger: "blur"
+            trigger: "blur",
           },
           {
             pattern: "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,18}$",
             message: "密码必须同时包含字母数字的6-18位组合",
-            trigger: "blur"
-          }
+            trigger: "blur",
+          },
         ],
         checkPassword: [
-          { required: true, validator: validatePass, trigger: "blur" }
+          { required: true, validator: validatePass, trigger: "blur" },
         ],
         code: [
           { required: true, message: "验证码不能为空" },
@@ -217,16 +234,15 @@ export default {
             min: 4,
             max: 4,
             message: "长度4个字符",
-            trigger: "blur"
-          }
-        ]
-      }
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   created() {
-    debugger
-    if(this.login) {
-      this.$router.push("/")
+    if (this.login) {
+      this.$router.push("/");
     }
     that = this;
   },
@@ -236,7 +252,7 @@ export default {
     sendCode() {
       var formData = new FormData();
       formData.append("email", this.registerForm.email);
-      this.$http.post("unAuth/sendCode", formData).then(res => {
+      this.$http.post("unAuth/sendCode", formData).then((res) => {
         that.sendCodeIsDisabled = true;
         let waitSecond = 60;
         let interval = window.setInterval(function() {
@@ -252,12 +268,12 @@ export default {
     },
     //提交注册表单
     submitRegisterForm(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           let param = {
             email: that[`${formName}`].email,
             password: that[`${formName}`].password,
-            code: that[`${formName}`].code
+            code: that[`${formName}`].code,
           };
 
           let url;
@@ -269,10 +285,10 @@ export default {
             url = "unAuth/register";
             message = "注册成功";
           }
-          that.$http.post(url, param).then(res => {
+          that.$http.post(url, param).then((res) => {
             this.$message({
               message: message,
-              type: "success"
+              type: "success",
             });
             this.loginShow = true;
             this.loginForm.email = that[`${formName}`].email;
@@ -286,13 +302,13 @@ export default {
     //提交登录表单
     submitLoginForm(formName) {
       let that = this;
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           let param = {
             email: that[`${formName}`].email,
-            password: that[`${formName}`].password
+            password: that[`${formName}`].password,
           };
-          that.$http.post("unAuth/login", param).then(res => {
+          that.$http.post("unAuth/login", param).then((res) => {
             this.$store.commit("setUser", res);
             //跳转上个来的页面
             this.$router.go(-1);
@@ -304,12 +320,12 @@ export default {
     },
     //邮箱是否存在
     emailIsExist(email, callback) {
-      this.$http.get("unAuth/emailIsExist", { email: email }).then(res => {
+      this.$http.get("unAuth/emailIsExist", { email: email }).then((res) => {
         console.log("是否存在", res);
         callback(res);
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -416,6 +432,8 @@ export default {
 @media screen and (max-width: 900px) {
   .container {
     .content {
+      margin: 27% auto;
+      width: 87%;
     }
   }
 }
