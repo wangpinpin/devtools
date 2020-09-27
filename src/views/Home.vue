@@ -140,6 +140,7 @@ export default {
 </script>
 
 <style scoped lang="less">
+
 .home-container {
   margin: 0.4rem auto 0;
   text-align: center;
@@ -224,11 +225,15 @@ export default {
   }
 }
 @media screen and (max-width: 900px) {
+  .home{
+  height: 90%;
+}
   /deep/#he-plugin-simple {
     display: none;
   }
   .home-container {
     margin-top: 0.2rem;
+    height: 88%;
     .content {
       .slogan {
         display: none;
@@ -237,7 +242,7 @@ export default {
         width: 100%;
         justify-content: center;
         align-items: center;
-        height: 78vh;
+        height: 100%;
         margin: 0;
         overflow-y: scroll;
         .card-tool {

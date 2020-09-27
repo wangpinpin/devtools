@@ -4,12 +4,8 @@
     <div class="title">{{ title }}</div>
     <div class="author">作者: {{ author }}</div>
 
-    <div class="scroll-content">
-      <happy-scroll color="rgba(0,0,0,0.2)" size="3" :hide-horizontal="true" resize>
-        <div class="content" v-html="content">
-          <p></p>
-        </div>
-      </happy-scroll>
+    <div class="content" v-html="content">
+      <p></p>
     </div>
     <Footer class="footer" />
   </div>
@@ -84,8 +80,7 @@ export default {
     height: 70vh;
     padding-bottom: 0.2rem;
     box-sizing: border-box;
-    overflow: hidden;
-    /deep/.happy-scroll-container{
+    over /deep/.happy-scroll-container {
       width: 100% !important;
       height: 100% !important;
     }
@@ -101,11 +96,11 @@ export default {
       text-indent: 2em !important;
     }
   }
-  // .footer {
-  //   /deep/.container {
-  //     position: unset;
-  //   }
-  // }
+  .footer {
+    /deep/.container {
+      position: unset;
+    }
+  }
 }
 @media screen and (max-width: 900px) {
   .container {
