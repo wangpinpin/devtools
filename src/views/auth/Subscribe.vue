@@ -3,6 +3,27 @@
     <Header />
     <!-- <h3 class="title">{{ title }}</h3> -->
     <div class="content">
+      <el-popover placement="right" width="400" trigger="click">
+        <div class="QAwrap">
+          <h3 class="QAtitle">{{ title }}</h3>
+          <h4>卡片状态解释说明</h4>
+          <ul>
+            <li>
+              已启用：每天为女神投送日记，点击女神卡片右上角<span
+                class="iconfont"
+                >&#xe640;</span
+              >可切换禁用状态；
+            </li>
+            <li>
+              已禁用：女神日记暂停投送，点击女神卡片右上角<span class="iconfont"
+                >&#xe6b0;</span
+              >可切换启用状态；
+            </li>
+            <li>取消订阅：女神主动关闭了您的订阅，无法继续为女神投送日记。</li>
+          </ul>
+        </div>
+        <i slot="reference" class="iconfont iconQA">&#xe630;</i>
+      </el-popover>
       <div class="subscribeWrap">
         <happy-scroll
           color="rgba(0,0,0,0.2)"
@@ -29,7 +50,7 @@
                 <p class="count">已送达{{ item.count }}封</p>
               </div>
               <div class="hovershow">
-                <p>订阅内容：{{ popForm.activityName | transferName }}</p>
+                <p>订阅内容：{{ item.activityName | transferName }}</p>
                 <p>发送时间：每天{{ item.hour }}点</p>
               </div>
               <p
@@ -52,12 +73,14 @@
                   <li
                     class="enabledTag"
                     @click.stop="changeStatus(index, true)"
+                    title="启用"
                   >
                     <span class="iconfont">&#xe6b0;</span>
                   </li>
                   <li
                     class="disaabledTag"
                     @click.stop="changeStatus(index, false)"
+                    title="禁用"
                   >
                     <span class="iconfont">&#xe640;</span>
                   </li>
@@ -65,7 +88,7 @@
               </div>
             </li>
             <li @click="handleAdd" class="add">
-              <i class="iconfont iconAdd">&#xe62e;</i>
+              <i class="iconfont iconAdd" title="添加订阅">&#xe62e;</i>
             </li>
           </ul>
         </happy-scroll>
@@ -646,6 +669,26 @@ export default {
   /deep/.el-icon-email::before {
     font-family: "iconfont";
     content: "\e662";
+  }
+  .iconQA {
+    font-size: 0.4rem;
+    color: #7c96b1;
+    cursor: pointer;
+    position: fixed;
+    left: 0.2rem;
+    top: 20%;
+    z-index: 2;
+    transform-origin: bottom;
+    animation: scaleQA 1s infinite;
+  }
+  @keyframes scaleQA {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
   }
   .loading {
     position: absolute;
