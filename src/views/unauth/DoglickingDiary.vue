@@ -177,6 +177,7 @@ export default {
     font-size: 0.4rem;
     text-align: center;
     color: #7c96b1;
+    margin-top: .2rem;
   }
   .sub-tilte {
     font-size: 0.3rem;
@@ -213,6 +214,7 @@ export default {
       position: relative;
       .text-content {
         text-indent: 2em;
+        text-align: left;
       }
       .copy,
       .readDogText {
@@ -247,6 +249,7 @@ export default {
       #e3eeff 100%
     );
     padding-bottom: 1%;
+    box-sizing: border-box;
     .advertisement {
       position: unset;
       top: 60%;

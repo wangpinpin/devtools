@@ -88,6 +88,7 @@ export default {
   .title {
     font-size: 0.4rem;
     color: #7c96b1;
+    margin-top: .2rem;
   }
   .advertisement {
     position: absolute;

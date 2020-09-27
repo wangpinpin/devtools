@@ -18,10 +18,11 @@
           :http-request="coustomUpload"
         >
           <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">
-            只能上传jpg/png文件, 且不超过{{ formMaxSize }}M
+          <div class="el-upload__text">
+            将文件拖到此处，或
+            <em>点击上传</em>
           </div>
+          <div class="el-upload__tip" slot="tip">只能上传jpg/png文件, 且不超过{{ formMaxSize }}M</div>
         </el-upload>
         <div class="language">
           <el-select v-model="value">
@@ -30,8 +31,7 @@
               :key="item.value"
               :label="item.label"
               :value="item.value"
-            >
-            </el-option>
+            ></el-option>
           </el-select>
           <el-button type="success" @click="upload" id="img-to-text">提取文字</el-button>
         </div>
@@ -57,7 +57,7 @@ export default {
   name: "ColorTransfer",
   components: {
     Header,
-    Footer,
+    Footer
   },
   data() {
     return {
@@ -66,49 +66,49 @@ export default {
       languages: [
         {
           value: "CHN_ENG",
-          label: "中英文混合",
+          label: "中英文混合"
         },
         {
           value: "ENG",
-          label: "英文",
+          label: "英文"
         },
         {
           value: "JAP",
-          label: "日语",
+          label: "日语"
         },
         {
           value: "KOR",
-          label: "韩语",
+          label: "韩语"
         },
         {
           value: "FRE",
-          label: "法语",
+          label: "法语"
         },
         {
           value: "SPA",
-          label: "西班牙语",
+          label: "西班牙语"
         },
         {
           value: "POR",
-          label: "葡萄牙语",
+          label: "葡萄牙语"
         },
         {
           value: "GER",
-          label: "德语",
+          label: "德语"
         },
         {
           value: "ITA",
-          label: "意大利语",
+          label: "意大利语"
         },
         {
           value: "RUS",
-          label: "俄语",
-        },
+          label: "俄语"
+        }
       ],
       value: "",
       formMaxSize: 1,
       text: "",
-      loading: "",
+      loading: ""
     };
   },
   created() {
@@ -121,7 +121,7 @@ export default {
       if (file.size / 1024 / 1024 > this.formMaxSize) {
         this.$message({
           message: `上传文件大小不能超过${this.formMaxSize}M!`,
-          type: "warning",
+          type: "warning"
         });
         return false;
       }
@@ -133,13 +133,13 @@ export default {
       if (fileType != "jpg" && fileType != "png") {
         this.$message({
           message: "上传文件只能是jpg/png格式!",
-          type: "warning",
+          type: "warning"
         });
         return false;
       }
 
       this.loading = this.$loading.service({
-        target: this.$refs.textscroll,
+        target: this.$refs.textscroll
       });
       return true;
     },
@@ -155,12 +155,12 @@ export default {
       formData.append("file", data.file);
       formData.append("languageType", this.value);
 
-      this.$http.post("unAuth/imgToText", formData).then((res) => {
+      this.$http.post("unAuth/imgToText", formData).then(res => {
         debugger;
         this.loading.close();
         if (res && res.words_result) {
           let words = "";
-          res.words_result.forEach((e) => {
+          res.words_result.forEach(e => {
             words += e.words + "<br />";
           });
           this.text = words;
@@ -178,7 +178,7 @@ export default {
     exceedFile() {
       this.$message({
         message: "单次仅支持识别一张图片！",
-        type: "warning",
+        type: "warning"
       });
     },
 
@@ -186,11 +186,11 @@ export default {
       this.$copyText(this.$refs.text.innerText).then(() => {
         this.$message({
           message: "复制成功",
-          type: "success",
+          type: "success"
         });
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -252,6 +252,9 @@ export default {
       flex-direction: column;
       width: unset;
       margin: 0;
+      height: 75%;
+      margin-top: 2%;
+      overflow-y: scroll;
       .left {
         text-align: center;
         .language {
@@ -264,6 +267,9 @@ export default {
         .textScroll {
           height: unset;
         }
+      }
+      /deep/.el-upload-dragger {
+        width: 6rem;
       }
     }
   }

@@ -108,4 +108,16 @@ export default {
     }
   }
 }
+@media screen and (max-width: 900px) {
+  .container{
+    .content{
+      display: block;
+      overflow-y: scroll;
+      .left,.right{
+        width: 90%;
+        margin: 0 auto;
+      }
+    }
+  }
+}
 </style>

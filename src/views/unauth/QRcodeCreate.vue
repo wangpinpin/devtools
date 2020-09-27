@@ -191,6 +191,7 @@ export default {
     font-size: .4rem;
     text-align: center;
     color: #7c96b1;
+    margin-top: .2rem;
   }
   .content {
     width: 88%;
@@ -314,5 +315,18 @@ export default {
 /deep/.el-slider__button-wrapper {
   top: -14px !important;
   line-height: 0;
+}
+@media screen and (max-width: 900px) {
+  .container .content{
+    display: block;
+    .left{
+      width: 100%;
+      margin: 0;
+      margin-bottom: 0.4rem;
+    }
+    .right{
+      margin: 0 auto;
+    }
+  }
 }
 </style>

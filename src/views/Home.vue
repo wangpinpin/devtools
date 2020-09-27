@@ -12,11 +12,7 @@
           <div class="sub-title">网站每周更新功能, 欢迎收藏关注转发</div>
           <div class="sub-title">
             代码已在github开源
-            <a
-              href="https://github.com/wangpinpin/devtools-server"
-              target="_blank"
-              >点击这里</a
-            >
+            <a href="https://github.com/wangpinpin/devtools-server" target="_blank">点击这里</a>
           </div>
 
           <!-- 搜索框 -->
@@ -41,9 +37,7 @@
       </div>
     </div>
     <Footer />
-    <remote-js
-      src="https://widget.heweather.net/simple/static/js/he-simple-common.js?v=1.1"
-    ></remote-js>
+    <remote-js src="https://widget.heweather.net/simple/static/js/he-simple-common.js?v=1.1"></remote-js>
   </div>
 </template>
 
@@ -60,13 +54,13 @@ export default {
     "remote-js": {
       render(createElement) {
         return createElement("script", {
-          attrs: { type: "text/javascript", src: this.src },
+          attrs: { type: "text/javascript", src: this.src }
         });
       },
       props: {
-        src: { type: String, required: true },
-      },
-    },
+        src: { type: String, required: true }
+      }
+    }
   },
   data() {
     return {
@@ -85,7 +79,7 @@ export default {
         "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
         "background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);",
         "background-image: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);",
-        "background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);",
+        "background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);"
         // "background-image: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);",
         // "background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);",
         // "background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);",
@@ -104,10 +98,10 @@ export default {
         { path: "/JsonFormat", text: "JSON格式化" },
         { path: "/Base64", text: "图片转Base64" },
 
-        { path: "/ColorTransfer", text: "颜色代码转换" },
+        { path: "/ColorTransfer", text: "颜色代码转换" }
         // { path: "/", text: "正在开发" },
         // { path: "/", text: "正在开发" },
-      ],
+      ]
     };
   },
   beforeCreate() {},
@@ -140,8 +134,8 @@ export default {
           _this.inputText += inputText;
         }
       }, 800);
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -245,9 +239,12 @@ export default {
         align-items: center;
         height: calc(100vh - 2.4rem);
         margin: 0;
+        overflow-y: scroll;
         .card-tool {
           width: 32%;
-          margin: 0 0.3rem;
+          margin: 0.5vh 0.3rem;
+          height: auto;
+          line-height: 9.5vh;
         }
       }
     }

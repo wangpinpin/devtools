@@ -4,7 +4,13 @@
     <div class="title">{{ title }}</div>
     <div class="author">作者: {{ author }}</div>
 
-    <div class="content" v-html="content"><p></p></div>
+    <div class="scroll-content">
+      <happy-scroll color="rgba(0,0,0,0.2)" size="3" :hide-horizontal="true" resize>
+        <div class="content" v-html="content">
+          <p></p>
+        </div>
+      </happy-scroll>
+    </div>
     <Footer class="footer" />
   </div>
 </template>
@@ -16,13 +22,13 @@ export default {
   name: "EveryDayText",
   components: {
     Header,
-    Footer,
+    Footer
   },
   data() {
     return {
       title: "每日一文",
       author: "",
-      content: "",
+      content: ""
     };
   },
   created() {
@@ -32,13 +38,13 @@ export default {
   methods: {
     //获取文章
     getEveryDayText() {
-      this.$http.get("unAuth/getEveryDayText").then((res) => {
+      this.$http.get("unAuth/getEveryDayText").then(res => {
         this.title = res.title;
         this.author = res.author;
         this.content = res.content;
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less">
@@ -62,14 +68,26 @@ export default {
     #e3eeff 100%
   );
   padding-bottom: 1%;
+  box-sizing: border-box;
   .title {
     font-size: 0.4rem;
     color: #7c96b1;
+    margin-top: 0.2rem;
   }
   .author {
     margin: 0.1rem 0;
     font-size: 0.2rem;
     color: black;
+  }
+  .scroll-content {
+    width: 100%;
+    height: calc(100vh - 3.2rem);
+    padding-bottom: 0.2rem;
+    box-sizing: border-box;
+    /deep/.happy-scroll-container{
+      width: 100% !important;
+      height: 100% !important;
+    }
   }
   .content {
     font-size: 0.2rem;
@@ -78,16 +96,15 @@ export default {
     margin: 0 auto;
     line-height: 0.4rem;
     text-align: left;
-    padding-bottom: 1%;
     p {
       text-indent: 2em !important;
     }
   }
-  .footer {
-    /deep/.container {
-      position: unset;
-    }
-  }
+  // .footer {
+  //   /deep/.container {
+  //     position: unset;
+  //   }
+  // }
 }
 @media screen and (max-width: 900px) {
   .container {
