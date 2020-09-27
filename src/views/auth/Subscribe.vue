@@ -3,7 +3,7 @@
     <Header />
     <!-- <h3 class="title">{{ title }}</h3> -->
     <div class="content">
-      <el-popover placement="right" width="400" trigger="click">
+      <el-popover placement="right" trigger="click">
         <div class="QAwrap">
           <h3 class="QAtitle">{{ title }}</h3>
           <h4>卡片状态解释说明</h4>
@@ -750,7 +750,20 @@ export default {
     font-size: 0;
   }
 }
-
+.QAwrap {
+  font-size: 0.18rem;
+  padding: 1em 0.2em;
+  box-sizing: border-box;
+  h3 {
+    text-align: center;
+    font-size: 0.22rem;
+    margin: 0;
+  }
+  ul {
+    margin: 0;
+    padding-left: 2em;
+  }
+}
 @media screen and (max-width: 900px) {
   /deep/.el-dialog {
     width: 80% !important;
