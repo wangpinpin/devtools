@@ -81,9 +81,10 @@ export default {
   }
   .scroll-content {
     width: 100%;
-    height: calc(100vh - 3.2rem);
+    height: 70vh;
     padding-bottom: 0.2rem;
     box-sizing: border-box;
+    overflow: hidden;
     /deep/.happy-scroll-container{
       width: 100% !important;
       height: 100% !important;

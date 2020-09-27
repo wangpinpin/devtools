@@ -237,7 +237,7 @@ export default {
         width: 100%;
         justify-content: center;
         align-items: center;
-        height: calc(100vh - 2.4rem);
+        height: 78vh;
         margin: 0;
         overflow-y: scroll;
         .card-tool {
