@@ -27,11 +27,11 @@
             只能上传jpg/png文件, 且不超过{{ formMaxSize }}M
           </div>
         </el-upload>
-        <div class="language">
+        <!-- <div class="language">
           <el-button type="success" @click="upload" id="img-to-text"
             >提取文字</el-button
           >
-        </div>
+        </div> -->
       </div>
       <div class="right">
         <div class="copy" @click="copy">复制</div>
