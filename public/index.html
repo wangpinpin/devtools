@@ -7,7 +7,8 @@
     <meta name="author" content="舔狗小胖">
     <meta name="keywords" content="舔狗日记, 舔狗日记一键生成, 开发工具, 每日一文, 二维码生成, JSON格式化, 搞笑">
     <meta name="description" content="一个好玩搞笑的在线工具网站, 舔狗日记, 舔狗日记一键生成, 开发工具, 每日一文, 二维码生成, JSON格式化, 搞笑">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
 
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
@@ -20,7 +21,8 @@
 
 <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+            Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
@@ -50,6 +52,13 @@
             "key": "014137cac5894679bd2e97c6315b36b9"
         }
     };
+    window.onload = function () {
+        var now = new Date();
+        if (now >= new Date('2020/12/13') && now < new Date('2020/12/14')) {
+            document.getElementsByTagName('html')[0].style.filter = 'grayscale(100%)'
+        }
+    }
+
 </script>
 
 </html>
