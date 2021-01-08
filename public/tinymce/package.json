@@ -1,0 +1,54 @@
+{
+  "_from": "tinymce@^5.6.2",
+  "_id": "tinymce@5.6.2",
+  "_inBundle": false,
+  "_integrity": "sha512-z7zvM5seOPiW86/vqf08kStwW5Zs5U9oQfuqh2rTj4jEcT2QzxT0v72i2zw3W6rbTLldkAej6edFZphj5ee5zg==",
+  "_location": "/tinymce",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "tinymce@^5.6.2",
+    "name": "tinymce",
+    "escapedName": "tinymce",
+    "rawSpec": "^5.6.2",
+    "saveSpec": null,
+    "fetchSpec": "^5.6.2"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/",
+    "/@packy-tang/vue-tinymce"
+  ],
+  "_resolved": "https://registry.npmjs.org/tinymce/-/tinymce-5.6.2.tgz",
+  "_shasum": "4c20c22e328c5d0baab204928dbc2b0ecbed18b4",
+  "_spec": "tinymce@^5.6.2",
+  "_where": "D:\\my\\devtools",
+  "author": {
+    "name": "Tiny Technologies, Inc"
+  },
+  "bugs": {
+    "url": "https://github.com/tinymce/tinymce/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Web based JavaScript HTML WYSIWYG editor control.",
+  "homepage": "https://github.com/tinymce/tinymce-dist#readme",
+  "keywords": [
+    "editor",
+    "wysiwyg",
+    "tinymce",
+    "richtext",
+    "javascript",
+    "html"
+  ],
+  "license": "LGPL-2.1",
+  "main": "tinymce.js",
+  "name": "tinymce",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tinymce/tinymce-dist.git"
+  },
+  "types": "tinymce.d.ts",
+  "version": "5.6.2"
+}

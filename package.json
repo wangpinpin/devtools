@@ -9,6 +9,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@packy-tang/vue-tinymce": "^1.1.0",
+    "@tinymce/tinymce-vue": "^2.1.0",
     "axios": "^0.19.2",
     "baidu-aip-sdk": "^2.4.6",
     "core-js": "^3.6.5",
@@ -19,6 +21,7 @@
     "postcss-px2rem": "^0.3.0",
     "qrcodejs2": "0.0.2",
     "three": "^0.119.1",
+    "tinymce": "^5.6.2",
     "vue": "^2.6.11",
     "vue-google-adsense": "^1.8.3",
     "vue-infinite-scroll": "^2.0.2",

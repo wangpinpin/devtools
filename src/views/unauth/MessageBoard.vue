@@ -1,13 +1,29 @@
 <template>
   <div class="container">
+                    <vue-tinymce
+              v-model="text"
+              :setting="setting"
+            />
     <Header />
     <div class="title">{{ title }}</div>
 
     <div class="content">
       <div class="cr">
-        <div class="infinite-list-wrapper record" style="overflow-y:auto;overflow-x: hidden;">
-          <happy-scroll color="rgba(0,0,0,0.2)" size="3" :hide-horizontal="true" resize>
-            <ul class="list" v-infinite-scroll="load" infinite-scroll-disabled="disabled">
+        <div
+          class="infinite-list-wrapper record"
+          style="overflow-y:auto;overflow-x: hidden;"
+        >
+          <happy-scroll
+            color="rgba(0,0,0,0.2)"
+            size="3"
+            :hide-horizontal="true"
+            resize
+          >
+            <ul
+              class="list"
+              v-infinite-scroll="load"
+              infinite-scroll-disabled="disabled"
+            >
               <li
                 v-for="(item, index) in list"
                 class="list-item"
@@ -15,19 +31,26 @@
                 ref="{{item.id}}"
               >
                 <div class="name">
-                  <img
-                    :src="
+                  <img :src="
                       require('../../assets/imgs/head/' +
                         getHeadImgIndex(index) +
                         '.png')
-                    "
-                  />
+                    " />
                 </div>
-                <div class="text">{{ item.content }}</div>
+                <div
+                  class="text"
+                  v-html="item.content"
+                ></div>
 
                 <!-- 操作 -->
                 <div class="operation">
-                  <div class="reply" id="reply" @click="dialogForm(item.id)">回复</div>
+                  <div
+                    class="reply"
+                    id="reply"
+                    @click="dialogForm(item.id)"
+                  >
+                    回复
+                  </div>
                   <div
                     class="praise"
                     :class="{ red1: item.praise }"
@@ -37,10 +60,15 @@
                     <i class="iconfont">&#xe60c;</i>
                     ({{ item.praiseCount }})
                   </div>
-                  <div class="time">{{ item.createTime | formatDate("YYYY-MM-DD") }}</div>
+                  <div class="time">
+                    {{ item.createTime | formatDate("YYYY-MM-DD") }}
+                  </div>
                 </div>
                 <!-- 回复 -->
-                <div class="reply-list" v-if="item.reply">
+                <div
+                  class="reply-list"
+                  v-if="item.reply"
+                >
                   <div
                     class="reply-item"
                     v-for="(replyIitem, replyIndex) in item.reply"
@@ -48,13 +76,11 @@
                     ref="{{replyIitem.id}}"
                   >
                     <div class="name">
-                      <img
-                        :src="
+                      <img :src="
                           require('../../assets/imgs/head/' +
                             getHeadImgIndex(replyIndex) +
                             '.png')
-                        "
-                      />
+                        " />
                     </div>
                     <div class="reply">{{ replyIitem.content }}</div>
                     <div class="operation">
@@ -68,38 +94,67 @@
                         ({{ replyIitem.praiseCount }})
                       </div>
                       <div class="time">
-                        {{
-                        replyIitem.createTime | formatDate("YYYY-MM-DD")
-                        }}
+                        {{ replyIitem.createTime | formatDate("YYYY-MM-DD") }}
                       </div>
                     </div>
                   </div>
                 </div>
               </li>
             </ul>
-            <p v-if="loading" class="loading">加载中...</p>
-            <p v-if="noMore" class="no-more">没有更多了</p>
+            <p
+              v-if="loading"
+              class="loading"
+            >加载中...</p>
+            <p
+              v-if="noMore"
+              class="no-more"
+            >没有更多了</p>
           </happy-scroll>
         </div>
       </div>
-
       <div class="message">
-        <el-button type="primary" @click="dialogForm(null)">点击留言</el-button>
+        <el-button
+          type="primary"
+          @click="dialogForm(null)"
+        >点击留言</el-button>
       </div>
-      <el-dialog title="请输入留言" :visible.sync="dialogFormVisible">
+      <el-dialog
+        title="请输入留言"
+        :visible.sync="dialogFormVisible"
+      >
         <el-form>
           <el-form-item label>
-            <el-input type="textarea" v-model="text" autocomplete="off"></el-input>
+            <!-- 回复框 -->
+            <el-input
+              v-if="this.msgId"
+              type="textarea"
+              v-model="text"
+              autocomplete="off"
+            ></el-input>
+            <!-- 留言框 -->
+            <vue-tinymce
+              v-else
+              v-model="text"
+              :setting="setting"
+            />
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
+        <div
+          slot="footer"
+          class="dialog-footer"
+        >
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="addMsg" id="add-message">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="addMsg"
+            id="add-message"
+          >确 定</el-button>
         </div>
       </el-dialog>
     </div>
     <Footer />
   </div>
+
 </template>
 <script>
 import Header from "@/components/Header.vue";
@@ -109,7 +164,7 @@ export default {
   name: "MessageBoard",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
@@ -122,17 +177,29 @@ export default {
       text: "",
       pageNo: -1,
       pageSize: 10,
-      msgId: ""
+      msgId: "",
+      setting: {
+        menubar: false,
+        toolbar:
+          "undo redo | fullscreen | formatselect alignleft aligncenter alignright alignjustify | link unlink | numlist bullist | image media table | fontselect fontsizeselect forecolor backcolor | bold italic underline strikethrough | indent outdent | removeformat |",
+        toolbar_drawer: "sliding",
+        quickbars_selection_toolbar:
+          "removeformat | bold italic underline strikethrough | fontsizeselect forecolor backcolor",
+        plugins: "link image media table lists fullscreen quickbars",
+        language: "zh_CN", //本地化设置
+        height: 350,
+      },
     };
   },
   created() {
-    // this.initTextList();
+
   },
   computed: {
     disabled() {
       return this.loading || this.noMore;
-    }
+    },
   },
+
   methods: {
     //显示输入框
     dialogForm(id) {
@@ -158,7 +225,7 @@ export default {
         var formData = new FormData();
         formData.append("msg", this.text);
         formData.append("msgId", this.msgId);
-        this.$http.post("unAuth/addMsgBoard", formData).then(res => {
+        this.$http.post("unAuth/addMsgBoard", formData).then((res) => {
           this.dialogFormVisible = false;
           this.text = "";
           //刷新列表
@@ -169,7 +236,7 @@ export default {
       } else {
         this.$message({
           message: "内容不能为空",
-          type: "warning"
+          type: "warning",
         });
       }
     },
@@ -177,9 +244,9 @@ export default {
     initTextList() {
       let param = {
         pageNo: this.pageNo,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
       };
-      this.$http.get("unAuth/findMsgBoard", param).then(res => {
+      this.$http.get("unAuth/findMsgBoard", param).then((res) => {
         this.loading = false;
         if (res.length < this.pageSize) {
           this.noMore = true;
@@ -192,13 +259,13 @@ export default {
       if (item.praise == 0) {
         var formData = new FormData();
         formData.append("msgId", item.id);
-        this.$http.post("unAuth/msgBoardPraise", formData).then(res => {
+        this.$http.post("unAuth/msgBoardPraise", formData).then((res) => {
           item.praise = 1;
           item.praiseCount++;
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
