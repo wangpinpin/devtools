@@ -1,9 +1,5 @@
 <template>
   <div class="container">
-                    <vue-tinymce
-              v-model="text"
-              :setting="setting"
-            />
     <Header />
     <div class="title">{{ title }}</div>
 
