@@ -2,26 +2,41 @@
   <div>
     <div class="container">
       <div class="left">
-        <div class="item home" id="home">
+        <div
+          class="item home"
+          id="home"
+        >
           <a href="/"><i class="iconfont">&#xe632;</i></a>
         </div>
       </div>
       <div class="right">
-        <div class="item" :style="{ backgroundImage: `url(${img})` }">
+        <div
+          class="item"
+          :style="{ backgroundImage: `url(${img})` }"
+        >
           <a href="MessageBoard">留言板</a>
         </div>
-        <div class="item" :style="{ backgroundImage: `url(${img})` }">
+        <div
+          class="item"
+          :style="{ backgroundImage: `url(${img})` }"
+        >
           <a href="subscribe">女神日记</a>
         </div>
-        <div class="item" :style="{ backgroundImage: `url(${img})` }">
+        <div
+          class="item"
+          :style="{ backgroundImage: `url(${img})` }"
+        >
           <a href="v">看一看</a>
         </div>
-        <div class="item" :style="{ backgroundImage: `url(${img})` }">
-          <a href="adarkroom" target="_blank">小黑屋</a>
+        <div
+          class="item"
+          :style="{ backgroundImage: `url(${img})` }"
+        >
+          <a
+            href="adarkroom"
+            target="_blank"
+          >小黑屋</a>
         </div>
-        <!-- <div class="item" :style="{ backgroundImage: `url(${img})` }">
-          <a href="GoddessLetter">女神日记</a>
-        </div> -->
         <div
           class="item"
           :style="{ backgroundImage: `url(${img})` }"
@@ -30,23 +45,28 @@
           菜单6
         </div>
       </div>
-      <div class="login" v-if="this.$store.state.user">
+      <div
+        class="login"
+        v-if="this.$store.state.user"
+      >
         <el-dropdown>
           <span class="el-dropdown-link">
             <i class="iconfont">&#xe666;</i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item disabled>个人信息</el-dropdown-item>
-            <el-dropdown-item
-              ><a href="/subscribe">我的订阅</a></el-dropdown-item
-            >
-            <a @click="signOut"
-              ><el-dropdown-item divided>退出</el-dropdown-item></a
-            >
+            <el-dropdown-item><a href="/info">个人信息</a></el-dropdown-item>
+            <el-dropdown-item disabled>记事本</el-dropdown-item>
+            <el-dropdown-item><a href="/subscribe">我的订阅</a></el-dropdown-item>
+            <a @click="signOut">
+              <el-dropdown-item divided>退出</el-dropdown-item>
+            </a>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
-      <div class="login un-login" v-if="!this.$store.state.user">
+      <div
+        class="login un-login"
+        v-if="!this.$store.state.user"
+      >
         <a href="/login"><i class="iconfont">&#xe666;</i></a>
       </div>
     </div>

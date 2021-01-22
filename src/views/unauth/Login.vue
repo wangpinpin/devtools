@@ -321,7 +321,6 @@ export default {
     //邮箱是否存在
     emailIsExist(email, callback) {
       this.$http.get("unAuth/emailIsExist", { email: email }).then((res) => {
-        console.log("是否存在", res);
         callback(res);
       });
     },
