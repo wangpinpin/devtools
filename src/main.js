@@ -79,7 +79,10 @@ import {
     DropdownItem,
     Checkbox,
     CheckboxGroup,
-    TimeSelect
+    TimeSelect,
+    Aside,
+    Card,
+    Main
 } from "element-ui";
 
 Vue.use(Button);
@@ -109,6 +112,9 @@ Vue.use(DropdownItem);
 Vue.use(Checkbox);
 Vue.use(CheckboxGroup);
 Vue.use(TimeSelect);
+Vue.use(Aside);
+Vue.use(Card);
+Vue.use(Main);
 
 Vue.prototype.$loading = Loading;
 Vue.prototype.$message = Message;

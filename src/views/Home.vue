@@ -89,6 +89,7 @@ export default {
         { path: "/MessageBoard", text: "留言板" },
         { path: "/Music", text: "听一听" },
         { path: "/v", text: "看一看" },
+        { path: "/Note", text: "舔狗笔记" },
         { path: "/EveryDayText", text: "每日一文" },
         { path: "/wallpaper", text: "必应壁纸" },
         { path: "/adarkroom", text: "小黑屋" },

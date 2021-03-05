@@ -193,6 +193,16 @@ const routes = [{
     },
     component: () =>
         import("../views/auth/Info.vue")
+},
+{
+    path: "/note",
+    name: "note",
+    meta: {
+        title: "笔记本",
+        requireAuth: true
+    },
+    component: () =>
+        import("../views/auth/Note.vue")
 }
 ];
 
