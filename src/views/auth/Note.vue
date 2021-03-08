@@ -12,12 +12,12 @@
                 @click="handleAdd"
                 >新建笔记</el-button
               >
-              <i class="el-icon-s-fold"></i>
+              <!-- <i class="el-icon-s-fold"></i> -->
             </div>
             <el-input
-              placeholder="搜索"
+              v-model="searchNoteStr"
               prefix-icon="el-icon-search"
-              v-model="noteName"
+              placeholder="搜索"
             >
             </el-input>
           </div>
@@ -28,15 +28,34 @@
               :hide-horizontal="true"
               resize
             >
-              <div class="" v-for="item in notes" :key="item.id">
-                <el-card class="note-card" :data-id="item.id" @click="showNote">
-                  <h3 class="note-name">{{ item.title }}</h3>
-                  <p class="note-content">{{ item.content | toText }}</p>
-                  <time class="note-time">{{ item.createTime }}</time>
-                  <el-button type="text" class="button" @click="handleDelete"
-                    ><i class="el-icon-delete"></i
-                  ></el-button>
-                </el-card>
+              <div>
+                <draggable
+                  v-model="searchNotes"
+                  v-bind="dragOptions"
+                  @end="onDrag"
+                >
+                  <transition-group type="transition" name="flip-list">
+                    <div
+                      class="note-item"
+                      v-for="(item, index) in searchNotes"
+                      :key="item.id"
+                      :data-index="index"
+                      :data-id="item.id"
+                      :ref="`note${item.id}`"
+                      @click="showNote(item.id)"
+                    >
+                      <h3 class="note-name">{{ item.title }}</h3>
+                      <p class="note-content">{{ item.content | toText }}</p>
+                      <time class="note-time">{{ item.createTime }}</time>
+                      <el-button
+                        type="text"
+                        class="button"
+                        @click="handleDelete(item.id)"
+                        ><i class="el-icon-delete"></i
+                      ></el-button>
+                    </div>
+                  </transition-group>
+                </draggable>
               </div>
             </happy-scroll>
           </div>
@@ -44,40 +63,65 @@
       </div>
       <div id="resize"></div>
       <div class="note-right">
-        <el-main class="note-main">
-          <div class="note-top">
-            <el-input class="note-title" v-model="note.title"></el-input>
-            <el-button class="save" @click="handleSave">保存</el-button>
-          </div>
-          <vue-tinymce v-model="note.content" :setting="setting" />
-        </el-main>
+        <div class="note-edit" v-if="note.id">
+          <el-main class="note-main">
+            <div class="note-top">
+              <el-input
+                class="note-title"
+                v-model="note.title"
+                id="title"
+              ></el-input>
+              <el-button class="save" @click="handleSave(true)">保存</el-button>
+            </div>
+            <vue-tinymce
+              v-if="!isDestroy"
+              v-model="note.content"
+              :setting="setting"
+            />
+          </el-main>
+        </div>
+        <h2 class="note-desc" v-else>
+          {{ noteDesc }}
+        </h2>
       </div>
     </div>
   </div>
 </template>
 <script>
 import Header from "@/components/Header.vue";
+import draggable from "vuedraggable";
 export default {
   name: "Note",
   components: {
     Header,
   },
-  data: function () {
+  computed: {
+    dragOptions() {
+      return {
+        animation: 200,
+        disabled: false,
+      };
+    },
+  },
+  data: function() {
     return {
-      currentDate: new Date(),
-      noteName: "",
+      draggedNote: [
+        { id: 1, name: "name1" },
+        { id: 2, name: "name2" },
+        { id: 3, name: "name3" },
+      ],
       asideWidth: 250,
+      noteDesc: "记录您的舔狗笔记...",
+      searchNoteStr: "",
+      searchNotes: [],
       notes: [],
-      note: {
-        title: "标题",
-        content: "",
-      },
+      note: {},
       setting: {
         menubar: false,
         statusbar: false,
         resize: false,
         toolbar:
-          "undo redo | fullscreen | formatselect alignleft aligncenter alignright alignjustify | link unlink | numlist bullist | image media table | fontselect fontsizeselect forecolor backcolor | bold italic underline strikethrough | indent outdent | removeformat |",
+          "undo redo | fullscreen | formatselect alignleft aligncenter alignright alignjustify | link unlink | numlist bullist | image media table | fontselect fontsizeselect forecolor backcolor | bold italic underline strikethrough | indent outdent | superscript subscript | removeformat |",
         toolbar_drawer: "sliding",
         quickbars_selection_toolbar:
           "removeformat | bold italic underline strikethrough | fontsizeselect forecolor backcolor",
@@ -85,7 +129,17 @@ export default {
         language: "zh_CN", //本地化设置
         height: "100%",
       },
+      isDestroy: false, // 销毁编辑器
     };
+  },
+  watch: {
+    searchNoteStr(curVal, oldVal) {
+      let timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        this.searchNote(curVal);
+      }, 500);
+    },
   },
   filters: {
     toText(html) {
@@ -99,23 +153,23 @@ export default {
   },
   methods: {
     // 侧边栏拉伸
-    dragControllerDiv: function () {
+    dragControllerDiv: function() {
       // 保留this引用
       let data = this;
       let resize = document.getElementById("resize");
-      resize.onmousedown = function (e) {
+      resize.onmousedown = function(e) {
         // 颜色改变提醒
         resize.style.background = "#ccc";
         let startX = e.clientX;
         resize.left = resize.offsetLeft;
-        document.onmousemove = function (e) {
+        document.onmousemove = function(e) {
           // 计算并应用位移量
           let endX = e.clientX;
           let moveLen = endX - startX;
           startX = endX;
           data.asideWidth += moveLen;
         };
-        document.onmouseup = function () {
+        document.onmouseup = function() {
           // 颜色恢复
           resize.style.background = "";
           document.onmousemove = null;
@@ -124,39 +178,80 @@ export default {
         return false;
       };
     },
+    searchNote(queryString) {
+      if (queryString)
+        this.searchNotes = this.notes.filter((note) => {
+          return (
+            note.title.toLowerCase().indexOf(queryString.toLowerCase()) >= 0
+          );
+        });
+      else this.searchNotes = this.notes;
+    },
     // 获取用户笔记
-    getNote() {
+    getNote(isDel) {
       this.$http.get("user/findNotebookList").then((res) => {
-        this.notes = res;
+        this.notes = res.reverse();
+        this.searchNotes = res;
+        if (isDel) this.note = {};
       });
     },
     // 新建笔记
-    handleAdd() {},
+    handleAdd() {
+      this.note = {
+        title: "标题",
+        content: "",
+      };
+      this.handleSave();
+    },
     // 保存笔记
-    handleSave() {
+    handleSave(isSave) {
       this.$http.post("user/saveNotebook", this.note).then((res) => {
-        this.$message({
-          message: "保存成功",
-          type: "success",
-        });
+        if (isSave)
+          this.$message({
+            message: "保存成功",
+            type: "success",
+          });
+        this.getNote();
       });
     },
     // 删除笔记
-    handleDelete() {
-      this.$http.post("user/delNotebook", { id: "" }).then((res) => {
-        this.$message({
-          message: "删除成功",
-          type: "success",
+    handleDelete(id) {
+      if (id) {
+        var formData = new FormData();
+        formData.append("id", id);
+        this.$http.post("user/delNotebook", formData).then((res) => {
+          this.$message({
+            message: "删除成功",
+            type: "success",
+          });
+          this.getNote(true);
         });
-      });
+      }
     },
     // 显示笔记内容
-    showNote(e) {},
+    showNote(noteid) {
+      if (noteid) {
+        this.isDestroy = true;
+        this.note = this.searchNotes.filter((item) => {
+          return item.id === noteid;
+        })[0];
+        this.$nextTick(() => {
+          this.isDestroy = false;
+        });
+      }
+    },
+    // 拖拽笔记
+    onDrag(e) {
+      var sizeIndex = this.searchNotes.length - 1;
+      var formData = new FormData();
+      formData.append("id", e.item.dataset.id);
+      formData.append("oldIndex", sizeIndex - e.oldIndex);
+      formData.append("newIndex ", sizeIndex - e.item.dataset.index);
+      this.$http.post("/user/updateNotebookIndex", formData).then((res) => {});
+    },
   },
   mounted() {
     this.dragControllerDiv();
-  },
-  created() {
     this.getNote();
   },
 };
@@ -187,6 +282,7 @@ export default {
 .note-right {
   height: 100%;
   flex: 1;
+  position: relative;
 }
 
 .note-aside {
@@ -224,12 +320,14 @@ export default {
       width: 100% !important;
     }
   }
-  .note-card {
+  .note-item {
+    padding: 0.05rem 0.15rem;
+    margin-bottom: 1px;
     font-size: 0;
+    line-height: 1.5;
+    background-color: #fff;
     position: relative;
-    /deep/.el-card__body {
-      padding: 0.05rem 0.15rem;
-    }
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     .note-name {
       margin: 0.5em 0;
       font-size: 0.2rem;
@@ -290,8 +388,24 @@ export default {
 
 /deep/.tox-tinymce {
   border: 0;
+  height: calc(100% - 1rem) !important;
   .tox-edit-area__iframe {
     background-color: transparent;
   }
+}
+.note-edit {
+  width: 100%;
+  height: 100%;
+}
+.note-desc {
+  font-size: 0.5rem;
+  text-align: center;
+  color: #74c0ef;
+  position: relative;
+  top: 40%;
+  transform: translateY(-50%);
+}
+.ghost {
+  border: 1px solid #74c0ef;
 }
 </style>

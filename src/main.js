@@ -81,8 +81,8 @@ import {
     CheckboxGroup,
     TimeSelect,
     Aside,
-    Card,
-    Main
+    Main,
+    Autocomplete
 } from "element-ui";
 
 Vue.use(Button);
@@ -113,8 +113,8 @@ Vue.use(Checkbox);
 Vue.use(CheckboxGroup);
 Vue.use(TimeSelect);
 Vue.use(Aside);
-Vue.use(Card);
 Vue.use(Main);
+Vue.use(Autocomplete);
 
 Vue.prototype.$loading = Loading;
 Vue.prototype.$message = Message;
