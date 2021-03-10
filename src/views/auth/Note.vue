@@ -105,11 +105,7 @@ export default {
   },
   data: function() {
     return {
-      draggedNote: [
-        { id: 1, name: "name1" },
-        { id: 2, name: "name2" },
-        { id: 3, name: "name3" },
-      ],
+      sortSize: 0,
       asideWidth: 250,
       noteDesc: "记录您的舔狗笔记...",
       searchNoteStr: "",
@@ -192,6 +188,7 @@ export default {
       this.$http.get("user/findNotebookList").then((res) => {
         this.notes = res.reverse();
         this.searchNotes = res;
+        this.sortSize = res.length;
         if (isDel) this.note = this.notes[0] || null;
       });
     },
@@ -200,6 +197,7 @@ export default {
       this.note = {
         title: "标题",
         content: "",
+        sort: this.sortSize,
       };
       this.handleSave();
     },
@@ -231,13 +229,13 @@ export default {
     // 显示笔记内容
     showNote(noteid) {
       if (noteid) {
-        this.isDestroy = true;
+        // this.isDestroy = true;
         this.note = this.searchNotes.filter((item) => {
           return item.id === noteid;
         })[0];
-        this.$nextTick(() => {
-          this.isDestroy = false;
-        });
+        // this.$nextTick(() => {
+        //   this.isDestroy = false;
+        // });
       }
     },
     // 拖拽笔记
@@ -245,8 +243,8 @@ export default {
       var sizeIndex = this.searchNotes.length - 1;
       var formData = new FormData();
       formData.append("id", e.item.dataset.id);
-      formData.append("oldIndex", sizeIndex - e.oldIndex);
-      formData.append("newIndex ", sizeIndex - e.item.dataset.index);
+      formData.append("oldIndex", sizeIndex - e.item.dataset.index);
+      formData.append("newIndex ", sizeIndex - e.oldIndex);
       this.$http.post("/user/updateNotebookIndex", formData).then((res) => {});
     },
   },
