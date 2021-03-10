@@ -10,7 +10,7 @@
             <el-input v-model="form.timestamp.value"></el-input>
           </el-col>
           <el-col :span="4">
-            <el-select v-model="form.timestamp.type">
+            <el-select v-model="form.timestamp.type" @change="toDatetime">
               <el-option
                 v-for="item in timeOptions"
                 :key="item.value"
@@ -43,7 +43,7 @@
             ><el-input v-model="form.datetime.result"></el-input
           ></el-col>
           <el-col :span="4">
-            <el-select v-model="form.datetime.type">
+            <el-select v-model="form.datetime.type" @change="toTimestamp">
               <el-option
                 v-for="item in timeOptions"
                 :key="item.value"
@@ -146,6 +146,7 @@ export default {
   }
   .content {
     margin: 3%;
+    margin-top: 7%;
     .form {
       width: 80%;
       margin: 0 auto;
