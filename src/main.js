@@ -82,7 +82,8 @@ import {
     TimeSelect,
     Aside,
     Main,
-    Autocomplete
+    Autocomplete,
+    Col
 } from "element-ui";
 
 Vue.use(Button);
@@ -115,6 +116,7 @@ Vue.use(TimeSelect);
 Vue.use(Aside);
 Vue.use(Main);
 Vue.use(Autocomplete);
+Vue.use(Col);
 
 Vue.prototype.$loading = Loading;
 Vue.prototype.$message = Message;

@@ -97,6 +97,7 @@ export default {
         { path: "/QRcodeCreate", text: "二维码生成" },
         { path: "/ImageToTxt", text: "图片文字提取" },
         { path: "/JsonFormat", text: "JSON格式化" },
+        { path: "/TimeFormat", text: "时间戳转换" },
         { path: "/Base64", text: "图片转Base64" },
 
         { path: "/ColorTransfer", text: "颜色代码转换" }

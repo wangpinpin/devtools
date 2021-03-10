@@ -63,7 +63,7 @@
       </div>
       <div id="resize"></div>
       <div class="note-right">
-        <div class="note-edit" v-if="note.id">
+        <div class="note-edit" v-if="note">
           <el-main class="note-main">
             <div class="note-top">
               <el-input
@@ -80,7 +80,7 @@
             />
           </el-main>
         </div>
-        <h2 class="note-desc" v-else>
+        <h2 v-else class="note-desc" @click="handleAdd">
           {{ noteDesc }}
         </h2>
       </div>
@@ -115,7 +115,7 @@ export default {
       searchNoteStr: "",
       searchNotes: [],
       notes: [],
-      note: {},
+      note: null,
       setting: {
         menubar: false,
         statusbar: false,
@@ -192,7 +192,7 @@ export default {
       this.$http.get("user/findNotebookList").then((res) => {
         this.notes = res.reverse();
         this.searchNotes = res;
-        if (isDel) this.note = {};
+        if (isDel) this.note = this.notes[0] || null;
       });
     },
     // 新建笔记
@@ -404,6 +404,7 @@ export default {
   position: relative;
   top: 40%;
   transform: translateY(-50%);
+  cursor: pointer;
 }
 .ghost {
   border: 1px solid #74c0ef;

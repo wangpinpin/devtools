@@ -203,6 +203,15 @@ const routes = [{
     },
     component: () =>
         import("../views/auth/Note.vue")
+},
+{
+    path: "/timeformat",
+    name: "timeformat",
+    meta: {
+        title: "时间戳转换",
+    },
+    component: () =>
+        import("../views/unauth/TimeFormat.vue")
 }
 ];
 
