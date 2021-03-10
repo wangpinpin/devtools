@@ -44,9 +44,11 @@
                       :ref="`note${item.id}`"
                       @click="showNote(item.id)"
                     >
-                      <h3 class="note-name">{{ item.title }}</h3>
+                      <h3 class="note-name">
+                        {{ item.title }}
+                      </h3>
                       <p class="note-content">{{ item.content | toText }}</p>
-                      <time class="note-time">{{ item.createTime }}</time>
+                      <time class="note-time">{{ item.updateTime }}</time>
                       <el-button
                         type="text"
                         class="button"
@@ -90,6 +92,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import draggable from "vuedraggable";
+import { formatDate } from "@/util/date";
 export default {
   name: "Note",
   components: {
@@ -105,7 +108,6 @@ export default {
   },
   data: function() {
     return {
-      sortSize: 0,
       asideWidth: 250,
       noteDesc: "记录您的舔狗笔记...",
       searchNoteStr: "",
@@ -183,13 +185,32 @@ export default {
         });
       else this.searchNotes = this.notes;
     },
-    // 获取用户笔记
-    getNote(isDel) {
+    /**
+     * 获取用户笔记（除更新所有笔记外，其他场景不影响未保存笔记）
+     * @param {Int} type 操作场景--1:修改笔记; 2：新增笔记; default: 更新所有笔记
+     */
+    getNote(type) {
       this.$http.get("user/findNotebookList").then((res) => {
-        this.notes = res.reverse();
-        this.searchNotes = res;
-        this.sortSize = res.length;
-        if (isDel) this.note = this.notes[0] || null;
+        res.reverse();
+        switch (type) {
+          case 1:
+            let { title, content, updateTime } = res.filter((item) => {
+              return item.id === this.note.id;
+            })[0];
+            this.note.title = title;
+            this.note.content = content;
+            this.note.updateTime = updateTime;
+            break;
+          case 2:
+            this.note = res[0];
+            this.searchNotes.unshift(this.note);
+            break;
+          default:
+            this.notes = res;
+            this.searchNotes = this.notes;
+            this.note = this.notes[0] || null;
+            break;
+        }
       });
     },
     // 新建笔记
@@ -197,19 +218,21 @@ export default {
       this.note = {
         title: "标题",
         content: "",
-        sort: this.sortSize,
+        sort: this.notes.length,
       };
       this.handleSave();
     },
     // 保存笔记
     handleSave(isSave) {
       this.$http.post("user/saveNotebook", this.note).then((res) => {
-        if (isSave)
+        if (isSave) {
           this.$message({
             message: "保存成功",
             type: "success",
           });
-        this.getNote();
+        }
+        let type = isSave ? 1 : 2;
+        this.getNote(type);
       });
     },
     // 删除笔记
@@ -218,24 +241,30 @@ export default {
         var formData = new FormData();
         formData.append("id", id);
         this.$http.post("user/delNotebook", formData).then((res) => {
+          this.searchNotes.splice(
+            this.searchNotes.findIndex((item) => {
+              return item.id === id;
+            }),
+            1
+          );
           this.$message({
             message: "删除成功",
             type: "success",
           });
-          this.getNote(true);
+          this.note = this.searchNotes[0] || null;
         });
       }
     },
     // 显示笔记内容
     showNote(noteid) {
       if (noteid) {
-        // this.isDestroy = true;
+        this.isDestroy = true;
         this.note = this.searchNotes.filter((item) => {
           return item.id === noteid;
         })[0];
-        // this.$nextTick(() => {
-        //   this.isDestroy = false;
-        // });
+        this.$nextTick(() => {
+          this.isDestroy = false;
+        });
       }
     },
     // 拖拽笔记
@@ -243,8 +272,8 @@ export default {
       var sizeIndex = this.searchNotes.length - 1;
       var formData = new FormData();
       formData.append("id", e.item.dataset.id);
-      formData.append("oldIndex", sizeIndex - e.item.dataset.index);
-      formData.append("newIndex ", sizeIndex - e.oldIndex);
+      formData.append("oldIndex", sizeIndex - e.oldIndex);
+      formData.append("newIndex ", sizeIndex - e.item.dataset.index);
       this.$http.post("/user/updateNotebookIndex", formData).then((res) => {});
     },
   },
