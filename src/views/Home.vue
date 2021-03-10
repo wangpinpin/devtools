@@ -81,7 +81,7 @@ export default {
         "background-image: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);",
         "background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);",
         "background-image: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);",
-        "background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);",
+        // "background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);",
         // "background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);",
       ],
       devText: [
@@ -89,7 +89,7 @@ export default {
         { path: "/MessageBoard", text: "留言板" },
         { path: "/Music", text: "听一听" },
         { path: "/v", text: "看一看" },
-        { path: "/Note", text: "舔狗笔记" },
+        // { path: "/Note", text: "舔狗笔记" },
         { path: "/EveryDayText", text: "每日一文" },
         { path: "/wallpaper", text: "必应壁纸" },
         { path: "/adarkroom", text: "小黑屋" },
