@@ -80,7 +80,7 @@ export default {
         timestamp: {
           value: "",
           type: "",
-          result: "2222",
+          result: "",
         },
         datetime: {
           value: "",
@@ -146,13 +146,15 @@ export default {
   }
   .content {
     margin: 3%;
-    .form{
-        width: 80%;
+    .form {
+      width: 80%;
+      margin: 0 auto;
+      /deep/.el-col > * {
+        width: calc(100% - 0.2rem);
         margin: 0 auto;
-        /deep/.el-input{
-            width: calc(100% - 0.2rem);
-            margin: 0 auto;
-        }
+        padding-left: 0;
+        padding-right: 0;
+      }
     }
   }
 }
@@ -170,9 +172,9 @@ export default {
       #e3eeff 100%
     );
     padding-bottom: 1%;
-    /deep/.el-col{
-        float: none;
-        width: 100%;
+    /deep/.el-col {
+      float: none;
+      width: 100%;
     }
     .footer {
       /deep/.container {
