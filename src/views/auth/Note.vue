@@ -123,7 +123,7 @@ export default {
         toolbar_drawer: "sliding",
         quickbars_selection_toolbar:
           "removeformat | bold italic underline strikethrough | fontsizeselect forecolor backcolor",
-        plugins: "link image media table lists fullscreen quickbars",
+        plugins: "image media table lists fullscreen quickbars",
         language: "zh_CN", //本地化设置
         height: "100%",
       },

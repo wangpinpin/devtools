@@ -95,7 +95,7 @@ export default {
     this.form.timestamp.type = this.timeOptions[0].value;
     this.form.datetime.type = this.timeOptions[1].value;
     this.form.timestamp.value = Math.round(new Date().getTime() / 1000);
-    this.form.datetime.value = new Date();
+    this.form.datetime.value =  new Date(Date.parse(new Date()));
   },
   methods: {
     toDatetime() {
