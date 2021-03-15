@@ -15,6 +15,9 @@
         playsinline
       ></video>
       <div class="next" id="next">
+        <el-button type="success" @click="auto = !auto"
+          >连续：{{ auto ? "开" : "关" }}</el-button
+        >
         <el-button type="success" @click="getVideo">换一个</el-button>
       </div>
     </div>
@@ -47,27 +50,36 @@ export default {
   name: "V",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
       title: "看一看",
-      src: "https://www.nihaowua.com/v/video.php"
+      src: "https://www.nihaowua.com/v/video.php",
+      auto: true,
     };
   },
   created() {
     _this = this;
+    this.getVideo();
   },
-  mounted() {},
+  mounted() {
+    //判断视频播放完毕
+    document.getElementById("player").addEventListener("ended", function () {
+      if (_this.auto) {
+        _this.getVideo();
+      }
+    });
+  },
   methods: {
     getVideo() {
       this.src = "https://www.nihaowua.com/v/video.php?_t=" + Math.random();
       document.getElementById("player").play();
-      document.getElementById("player").addEventListener("error", function() {
+      document.getElementById("player").addEventListener("error", function () {
         _this.getVideo();
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less">
@@ -88,7 +100,7 @@ export default {
   .title {
     font-size: 0.4rem;
     color: #7c96b1;
-    margin-top: .2rem;
+    margin-top: 0.2rem;
   }
   .advertisement {
     position: absolute;
