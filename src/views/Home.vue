@@ -81,7 +81,7 @@ export default {
         "background-image: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);",
         "background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);",
         "background-image: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);",
-        // "background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);",
+        "background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);"
         // "background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);",
       ],
       devText: [
@@ -99,8 +99,8 @@ export default {
         { path: "/JsonFormat", text: "JSON格式化" },
         { path: "/TimeFormat", text: "时间戳转换" },
         { path: "/Base64", text: "图片转Base64" },
-        { path: "/ColorTransfer", text: "颜色代码转换" }
-        // { path: "/", text: "正在开发" },
+        { path: "/ColorTransfer", text: "颜色代码转换" },
+        { path: "/PreviewFont", text: "字体预览" }
         // { path: "/", text: "正在开发" },
       ]
     };

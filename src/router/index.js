@@ -212,6 +212,15 @@ const routes = [{
     },
     component: () =>
         import("../views/unauth/TimeFormat.vue")
+},
+{
+    path: "/previewfont",
+    name: "previewfont",
+    meta: {
+        title: "字体预览",
+    },
+    component: () =>
+        import("../views/unauth/PreviewFont.vue")
 }
 ];
 
