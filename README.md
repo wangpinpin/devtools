@@ -11,4 +11,4 @@
 
 目前功能： 舔狗日记、听歌音乐抖动粒子、每日一文、壁纸、网易云API、JSON格式化、二维码生成、颜色转换、图片文字提取
 
-在线地址： https://wangpinpin.com/
+在线地址： https://wangpinpin.com/ 服务器到期了，没钱搞了
