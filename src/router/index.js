@@ -221,6 +221,24 @@ const routes = [{
     },
     component: () =>
         import("../views/unauth/PreviewFont.vue")
+},
+{
+    path: "/category",
+    name: "category",
+    meta: {
+        title: "分类页"
+    },
+    component: () =>
+        import("../views/unauth/Category.vue")
+},
+{
+    path: "/saolei",
+    name: "saolei",
+    meta: {
+        title: "扫雷"
+    },
+    component: () =>
+        import("../views/unauth/Saolei.vue")
 }
 ];
 

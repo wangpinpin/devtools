@@ -12,7 +12,11 @@
           <div class="sub-title">网站每周更新功能, 欢迎收藏关注转发</div>
           <div class="sub-title">
             代码已在github开源
-            <a href="https://github.com/wangpinpin/devtools-server" target="_blank">点击这里</a>
+            <a
+              href="https://github.com/wangpinpin/devtools-server"
+              target="_blank"
+              >点击这里</a
+            >
           </div>
 
           <!-- 搜索框 -->
@@ -37,7 +41,9 @@
       </div>
     </div>
     <Footer />
-    <remote-js src="https://widget.heweather.net/simple/static/js/he-simple-common.js?v=1.1"></remote-js>
+    <remote-js
+      src="https://widget.heweather.net/simple/static/js/he-simple-common.js?v=1.1"
+    ></remote-js>
   </div>
 </template>
 
@@ -54,13 +60,13 @@ export default {
     "remote-js": {
       render(createElement) {
         return createElement("script", {
-          attrs: { type: "text/javascript", src: this.src }
+          attrs: { type: "text/javascript", src: this.src },
         });
       },
       props: {
-        src: { type: String, required: true }
-      }
-    }
+        src: { type: String, required: true },
+      },
+    },
   },
   data() {
     return {
@@ -76,12 +82,12 @@ export default {
         "background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);",
         "background-image: linear-gradient(to top, #d299c2 0%, #fef9d7 100%);",
         "background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);",
-        "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
-        "background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);",
-        "background-image: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);",
-        "background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);",
-        "background-image: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);",
-        "background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);"
+        // "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
+        // "background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);",
+        // "background-image: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);",
+        // "background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);",
+        // "background-image: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);",
+        // "background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);"
         // "background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);",
       ],
       devText: [
@@ -92,17 +98,26 @@ export default {
         // { path: "/Note", text: "舔狗笔记" },
         { path: "/EveryDayText", text: "每日一文" },
         { path: "/wallpaper", text: "必应壁纸" },
-        { path: "/adarkroom", text: "小黑屋" },
+        {
+          path: "/category",
+          text: "摸鱼游戏",
+          children: [
+            {
+              poster: require("@/assets/imgs/games/adarkhome.jpeg"),
+              name: "小黑屋",
+              path: "/adarkroom",
+            },
+            {
+              poster: require("@/assets/imgs/games/saolei.jpeg"),
+              name: "扫雷",
+              path: "/saolei",
+            },
+          ],
+        },
+        { path: "/category", text: "工具合集", children: [] },
         { path: "/Wyy", text: "网易云音乐API" },
-        { path: "/QRcodeCreate", text: "二维码生成" },
-        { path: "/ImageToTxt", text: "图片文字提取" },
-        { path: "/JsonFormat", text: "JSON格式化" },
-        { path: "/TimeFormat", text: "时间戳转换" },
-        { path: "/Base64", text: "图片转Base64" },
-        { path: "/ColorTransfer", text: "颜色代码转换" },
-        { path: "/PreviewFont", text: "字体预览" }
         // { path: "/", text: "正在开发" },
-      ]
+      ],
     };
   },
   beforeCreate() {},
@@ -135,13 +150,12 @@ export default {
           _this.inputText += inputText;
         }
       }, 800);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped lang="less">
-
 .home-container {
   margin: 0.4rem auto 0;
   text-align: center;
@@ -226,9 +240,9 @@ export default {
   }
 }
 @media screen and (max-width: 900px) {
-  .home{
-  height: 90%;
-}
+  .home {
+    height: 90%;
+  }
   /deep/#he-plugin-simple {
     display: none;
   }

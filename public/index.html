@@ -22,7 +22,7 @@
 <body>
     <noscript>
         <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
-            Please enable it to continue.</strong>
+                Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
@@ -56,7 +56,8 @@
     };
     window.onload = function () {
         var now = new Date();
-        if (now >= new Date('2020/12/13') && now < new Date('2020/12/14')) {
+        if (now.getMonth() == '11' && now.getDate() == '13') {
+            //  12月13日国家公祭日
             document.getElementsByTagName('html')[0].style.filter = 'grayscale(100%)'
         }
     }
