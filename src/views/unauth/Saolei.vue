@@ -23,27 +23,45 @@
       </ul>
       <Footer class="footer" />
     </div>
-    <div v-else class="saolei-content">
+    <div v-else class="saolei-content" oncontextmenu="return(false)">
       <div class="game-header">
         <div class="timecount">
-          <i class="iconfont">&#xe61c;</i><span>{{ timeSeconds }}</span>
+          <i class="iconfont">&#xe61c;</i
+          ><span>{{ timeSeconds | formateTime }}</span>
         </div>
         <div class="minecount">
-          <i class="iconfont">&#xe635;</i
-          ><span>{{ mode[modeIndex].mine }}</span>
+          <i class="iconfont">&#xe635;</i><span>{{ curMode.mine }}</span>
         </div>
       </div>
       <table class="game-board">
-        <tr v-for="(row, rowIdx) in mode[modeIndex].boardHeight" :key="rowIdx">
+        <tr v-for="(row, i) in mineBoardArr" :key="i">
           <td
-            v-for="(col, colIdx) in mode[modeIndex].boardWidth"
-            :key="colIdx"
-            @click="clickArea(rowIdx, colIdx)"
+            v-for="(col, j) in row"
+            :key="j"
+            :data-row="i"
+            :data-col="j"
+            @click="clickArea"
+            @mousedown="signMine"
+            :class="[
+              col.isShow ? 'td-show' : '',
+              col.isSign ? 'td-sign' : '',
+              col.isUnknown ? 'td-unknown' : '',
+            ]"
           >
-            <i v-if="mineBoardArr[rowIdx][colIdx] === '雷'" class="iconfont"
-              >&#xe635;</i
-            >
-            <span v-else>{{ getNineGridMine(rowIdx, colIdx) }}</span>
+            <template v-if="col.isMine">
+              <i v-if="col.isShow || status === 3" class="iconfont icon-mine"
+                >&#xe635;</i
+              >
+            </template>
+            <template v-else>
+              <span class="emptyArea" v-if="col.isShow">{{ col.value }}</span>
+              <template v-else>
+                <i class="iconfont icon-flag" v-if="col.isSign">&#xe60e;</i>
+                <i class="iconfont icon-question" v-if="col.isUnknown"
+                  >&#xe715;</i
+                >
+              </template>
+            </template>
           </td>
         </tr>
       </table>
@@ -83,7 +101,7 @@
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
-let that = "";
+let time = null;
 export default {
   name: "Saolei",
   components: {
@@ -94,7 +112,7 @@ export default {
     return {
       title: "扫雷",
       isShowGame: true, // 是否显示游戏界面
-      status: 0, // 状态 0-未开始；1-游戏中
+      status: 0, // 状态 0-未开始；1-游戏中；2-游戏成功；3-游戏失败
       mode: [
         {
           boardWidth: 9,
@@ -115,7 +133,7 @@ export default {
           mine: 99,
         },
       ],
-      modeIndex: null,
+      curMode: null,
       devBackgroundFamily: [
         "background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);",
         "background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);",
@@ -129,9 +147,9 @@ export default {
         "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
         "background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);",
       ],
+      areaCount: 0, // 区域总量
       timeSeconds: "0", // 游戏计时-秒
       mineBoardArr: [], // 扫雷盘区域二维数组
-      result: null, // 游戏结果 true 成功
     };
   },
   watch: {
@@ -140,40 +158,23 @@ export default {
       document.title = title;
     },
   },
-  created() {
-    that = this;
-  },
   mounted() {
     this.$nextTick(() => {
       this.fastKey();
     });
   },
   destroyed() {
-    document.onkeyup = function () {};
+    document.onkeyup = function() {};
   },
   filters: {
-    // 计算雷区地雷数量
-    getMineNum(location) {
-      let row = location[0];
-      let col = location[1];
-      let num = 0;
-      if (that.mineBoardArr[row][col] === 1) {
-        return "雷";
+    formateTime(t) {
+      let hours = Math.floor(t / 60 / 60);
+      let secs = t % 60;
+      let mins = (t - hours * 60 * 60 - secs) / 60;
+      function fixedTwo(num) {
+        return num < 10 ? "0" + num : num;
       }
-      that.mineBoardArr.forEach((rowArr, i) => {
-        rowArr.forEach((mine, j) => {
-          if (
-            i >= row - 1 &&
-            i <= row + 1 &&
-            j >= col - 1 &&
-            j <= col + 1 &&
-            mine === "雷"
-          ) {
-            num++;
-          }
-        });
-      });
-      return num === 0 ? "" : num;
+      return `${fixedTwo(hours)}:${fixedTwo(mins)}:${fixedTwo(secs)}`;
     },
   },
   methods: {
@@ -181,9 +182,9 @@ export default {
     fastKey() {
       let that = this;
       let keyMap = ["escape", "", "r"];
-      document.onkeyup = function (e) {
+      document.onkeyup = function(e) {
         let key = e.key.toLowerCase().replace(/ /g, "");
-        if (keyMap.indexOf(key) > -1 && that.status === 1) {
+        if (keyMap.indexOf(key) > -1 && that.status !== 0) {
           switch (key) {
             case "escape":
               that.exitGame();
@@ -205,8 +206,7 @@ export default {
      */
     // 模式选择
     selectMode(index) {
-      this.modeIndex = index;
-      this.status = 1;
+      this.curMode = this.mode[index];
       this.initGame();
     },
     /**
@@ -214,33 +214,52 @@ export default {
      */
     // 游戏初始化，分配地址
     initGame() {
-      let curMode = this.mode[this.modeIndex];
-      let row = curMode.boardHeight;
-      let col = curMode.boardWidth;
-      let minesArr = this.getRandomMines(row, col, curMode.mine);
+      let row = this.curMode.boardHeight;
+      let col = this.curMode.boardWidth;
+      let minesArr = this.getRandomMines(row, col, this.curMode.mine);
+      // 初始化数据
+      this.areaCount = this.curMode.boardWidth * this.curMode.boardHeight;
+      this.timeCount(2);
+      this.status = 1;
       this.mineBoardArr = [];
       for (let i = 0; i < row; i++) {
         this.mineBoardArr[i] = [];
         for (let j = 0; j < col; j++) {
+          this.mineBoardArr[i][j] = {
+            value: "",
+            isMine: false,
+            isShow: false,
+            isSign: false,
+            isUnknown: false,
+          };
           let isMine = minesArr.filter((mine) => {
             return mine[0] === i && mine[1] === j;
           });
-          this.mineBoardArr[i][j] = isMine && isMine.length > 0 ? "雷" : "";
+          if (isMine && isMine.length > 0) {
+            this.mineBoardArr[i][j].isMine = true;
+            this.mineBoardArr[i][j].value = null;
+          }
         }
       }
+      this.mineBoardArr.forEach((rowArr, i) => {
+        rowArr.forEach((area, j) => {
+          if (!area.isMine) {
+            area.value = this.getNineGridMine(i, j);
+          }
+        });
+      });
     },
     // 计算九宫格区域内地雷数量
     getNineGridMine(row, col) {
       let num = 0;
-      if (this.mineBoardArr[row][col] === "雷") return "雷";
       this.mineBoardArr.forEach((rowArr, i) => {
-        rowArr.forEach((mine, j) => {
+        rowArr.forEach((area, j) => {
           if (
             i >= row - 1 &&
             i <= row + 1 &&
             j >= col - 1 &&
             j <= col + 1 &&
-            mine === "雷"
+            area.isMine
           )
             num++;
         });
@@ -275,26 +294,110 @@ export default {
       this.status = 0;
     },
     // 扫雷区域点击
-    clickArea(row, col) {
-      if (this.mineBoardArr[row][col] === "雷") {
+    clickArea(e) {
+      let data = e.currentTarget.dataset;
+      let area = this.mineBoardArr[data.row][data.col];
+      if (
+        this.areaCount ===
+        this.curMode.boardWidth * this.curMode.boardHeight
+      ) {
+        this.timeCount(1);
+      }
+      // 游戏已结束或者已标记或者已显示的区域点击无效
+      if (this.status > 1 || area.isSign || area.isShow) {
+        return;
+      }
+      // 中雷，游戏结束
+      if (area.isMine) {
+        area.isShow = true;
+        this.$forceUpdate();
         this.gameFail();
+        return;
+      }
+      // 非雷区，显示
+      if (area.value > 0) {
+        area.isShow = true;
+        this.areaCount--;
+      }
+      this.showAround(data.row, data.col);
+      // // 清雷，游戏成功
+      // if (this.areaCount == this.curMode.mine) {
+      //   this.gameSuccess();
+      // }
+      this.$forceUpdate();
+    },
+    // 空白区域显示
+    showAround(row, col) {
+      row = row * 1;
+      col = col * 1;
+      console.log("点击:" + row + " " + col);
+      let clickarea = this.mineBoardArr[row][col];
+      if (clickarea.value == "" && !clickarea.isShow) {
+        clickarea.isShow = true;
+        for (let i = row - 1; i <= row + 1; i++) {
+          for (let j = col - 1; j <= col + 1; j++) {
+            if (
+              i < 0 ||
+              i >= this.curMode.boardHeight ||
+              j < 0 ||
+              j >= this.curMode.boardWidth ||
+              (i == row && j == col)
+            )
+              continue;
+            this.mineBoardArr[i][j].isShow = true;
+            // this.areaCount--;
+            console.log(i, j);
+            this.showAround(i, j);
+          }
+        }
+      }
+    },
+    // 鼠标右击事件标记
+    signMine(e) {
+      let data = e.currentTarget.dataset;
+      let area = this.mineBoardArr[data.row][data.col];
+      if (e.button == 2 && this.status < 2 && !area.isShow) {
+        let sign = !area.isSign && !area.isUnknown ? true : false;
+        let unknown = area.isSign && !area.isUnknown ? true : false;
+        area.isSign = sign;
+        area.isUnknown = unknown;
+        this.$forceUpdate();
+      }
+    },
+    // 计时
+    timeCount(flag) {
+      if (flag === 1) {
+        time = setInterval(() => {
+          this.timeSeconds++;
+        }, 1000);
+      } else if (flag === 2) {
+        if (time) clearInterval(time);
+        this.timeSeconds = 0;
+      } else {
+        clearInterval(time);
       }
     },
     /**
      * 游戏结束
      */
     // 成功
+    gameSuccess() {
+      this.status = 2;
+      this.timeCount(0);
+      this.$message({
+        message: "恭喜你，扫雷成功",
+        type: "success",
+      });
+    },
     // 失败
-    gameFail() {},
+    gameFail() {
+      this.status = 3;
+      this.timeCount(0);
+      this.$message.error("游戏结束");
+    },
   },
 };
 </script>
-<style lang="less">
-canvas {
-  position: absolute;
-  top: 0;
-}
-</style>
 <style lang="less" scoped>
 .container {
   width: 100%;
@@ -334,6 +437,7 @@ canvas {
       display: flex;
       align-content: center;
       justify-content: center;
+      flex-wrap: wrap;
       padding: 0;
       list-style: none;
       color: #fff;
@@ -396,14 +500,48 @@ canvas {
         border-radius: 1px;
         box-shadow: -2px -2px 2px #4b86ab inset;
         text-align: center;
+        color: #7c96b1;
+        font-weight: bold;
         .iconfont {
           font-size: 0.2rem;
+          color: #222;
         }
         &:hover {
           opacity: 0.5;
         }
+        i,
+        span {
+          cursor: default;
+        }
+      }
+      .td-show {
+        background: none;
+        box-shadow: none;
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+      .td-sign {
+        background: #ffbda9;
+        box-shadow: -2px -2px 2px #bd7b68 inset;
+        .iconfont {
+          color: red;
+        }
+      }
+      .td-unknown {
+        background: #2ba02b;
+        box-shadow: -2px -2px 2px #1b751b inset;
+        .iconfont {
+          color: #0f6b0f;
+        }
       }
     }
+  }
+}
+@media screen and (max-width: 900px) {
+  .container .saolei-home .mode li {
+    width: 80%;
+    font-size: 0.3rem;
   }
 }
 </style>
