@@ -43,24 +43,31 @@
             @click="clickArea"
             @mousedown="signMine"
             :class="[
-              col.isShow ? 'td-show' : '',
-              col.isSign ? 'td-sign' : '',
-              col.isUnknown ? 'td-unknown' : '',
+              (status === 3) & col.isMine
+                ? 'td-show'
+                : col.isShow
+                ? 'td-show'
+                : col.isSign
+                ? 'td-sign'
+                : col.isUnknown
+                ? 'td-unknown'
+                : '',
+              col.isDestroyed ? 'td-destroyed' : '',
             ]"
           >
-            <template v-if="col.isMine">
-              <i v-if="col.isShow || status === 3" class="iconfont icon-mine"
-                >&#xe635;</i
-              >
+            <template v-if="(status === 3) & col.isMine">
+              <i class="iconfont icon-mine">&#xe635;</i>
             </template>
             <template v-else>
-              <span class="emptyArea" v-if="col.isShow">{{ col.value }}</span>
-              <template v-else>
-                <i class="iconfont icon-flag" v-if="col.isSign">&#xe60e;</i>
+              <template v-if="col.isShow">
+                <span class="emptyArea">{{ col.value }}</span>
+              </template>
+              <template v-else
+                ><i class="iconfont icon-flag" v-if="col.isSign">&#xe60e;</i>
                 <i class="iconfont icon-question" v-if="col.isUnknown"
                   >&#xe715;</i
-                >
-              </template>
+                ></template
+              >
             </template>
           </td>
         </tr>
@@ -226,11 +233,12 @@ export default {
         this.mineBoardArr[i] = [];
         for (let j = 0; j < col; j++) {
           this.mineBoardArr[i][j] = {
-            value: "",
-            isMine: false,
-            isShow: false,
-            isSign: false,
-            isUnknown: false,
+            value: "", // 九宫格内地雷数量
+            isMine: false, // 是否是地雷
+            isShow: false, // 是否显示
+            isSign: false, // 是否标记旗
+            isUnknown: false, // 是否标记问号
+            isDestroyed: false, // 是否是点中雷
           };
           let isMine = minesArr.filter((mine) => {
             return mine[0] === i && mine[1] === j;
@@ -309,31 +317,29 @@ export default {
       }
       // 中雷，游戏结束
       if (area.isMine) {
-        area.isShow = true;
+        area.isDestroyed = true;
+        this.areaCount--;
         this.$forceUpdate();
         this.gameFail();
         return;
       }
       // 非雷区，显示
-      if (area.value > 0) {
-        area.isShow = true;
-        this.areaCount--;
-      }
       this.showAround(data.row, data.col);
-      // // 清雷，游戏成功
-      // if (this.areaCount == this.curMode.mine) {
-      //   this.gameSuccess();
-      // }
+      // 清雷，游戏成功
+      if (this.areaCount == this.curMode.mine) {
+        this.gameSuccess();
+      }
       this.$forceUpdate();
     },
     // 空白区域显示
     showAround(row, col) {
       row = row * 1;
       col = col * 1;
-      console.log("点击:" + row + " " + col);
       let clickarea = this.mineBoardArr[row][col];
-      if (clickarea.value == "" && !clickarea.isShow) {
-        clickarea.isShow = true;
+      if (clickarea.isShow) return;
+      clickarea.isShow = true;
+      this.areaCount--;
+      if (clickarea.value == "") {
         for (let i = row - 1; i <= row + 1; i++) {
           for (let j = col - 1; j <= col + 1; j++) {
             if (
@@ -344,9 +350,6 @@ export default {
               (i == row && j == col)
             )
               continue;
-            this.mineBoardArr[i][j].isShow = true;
-            // this.areaCount--;
-            console.log(i, j);
             this.showAround(i, j);
           }
         }
@@ -534,6 +537,9 @@ export default {
         .iconfont {
           color: #0f6b0f;
         }
+      }
+      .td-destroyed {
+        background-color: red;
       }
     }
   }
