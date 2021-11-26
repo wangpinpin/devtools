@@ -156,6 +156,11 @@ export default {
         "background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);",
         "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
         "background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);",
+        "background-image: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);",
+        "background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);",
+        "background-image: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);",
+        "background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);",
+        "background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);",
       ],
       timeSeconds: "0", // 游戏计时-秒
       mineBoardArr: [], // 扫雷盘区域二维数组
@@ -518,6 +523,12 @@ export default {
         i,
         span {
           cursor: default;
+          -webkit-touch-callout: none; /*系统默认菜单被禁用*/
+          -webkit-user-select: none; /*webkit浏览器*/
+          -khtml-user-select: none; /*早期浏览器*/
+          -moz-user-select: none; /*火狐*/
+          -ms-user-select: none; /*IE10*/
+          user-select: none;
         }
       }
       .td-show {

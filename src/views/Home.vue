@@ -104,17 +104,29 @@ export default {
           children: [
             {
               poster: require("@/assets/imgs/games/adarkhome.jpeg"),
-              name: "小黑屋",
+              text: "小黑屋",
               path: "/adarkroom",
             },
             {
               poster: require("@/assets/imgs/games/saolei.jpeg"),
-              name: "扫雷",
+              text: "扫雷",
               path: "/saolei",
             },
           ],
         },
-        { path: "/category", text: "工具合集", children: [] },
+        {
+          path: "/category",
+          text: "工具合集",
+          children: [
+            { path: "/QRcodeCreate", text: "二维码生成" },
+            { path: "/ImageToTxt", text: "图片文字提取" },
+            { path: "/JsonFormat", text: "JSON格式化" },
+            { path: "/TimeFormat", text: "时间戳转换" },
+            { path: "/Base64", text: "图片转Base64" },
+            { path: "/ColorTransfer", text: "颜色代码转换" },
+            { path: "/PreviewFont", text: "字体预览" },
+          ],
+        },
         { path: "/Wyy", text: "网易云音乐API" },
         // { path: "/", text: "正在开发" },
       ],
