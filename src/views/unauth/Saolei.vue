@@ -32,6 +32,9 @@
         <div class="minecount">
           <i class="iconfont">&#xe635;</i><span>{{ curMode.mine }}</span>
         </div>
+        <div>
+          <i class="iconfont">&#xe797;</i><span>{{ clearNum }}</span>
+        </div>
       </div>
       <table class="game-board">
         <tr v-for="(row, i) in mineBoardArr" :key="i">
@@ -154,9 +157,9 @@ export default {
         "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
         "background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);",
       ],
-      areaCount: 0, // 区域总量
       timeSeconds: "0", // 游戏计时-秒
       mineBoardArr: [], // 扫雷盘区域二维数组
+      clearNum: 0,
     };
   },
   watch: {
@@ -224,8 +227,9 @@ export default {
       let row = this.curMode.boardHeight;
       let col = this.curMode.boardWidth;
       let minesArr = this.getRandomMines(row, col, this.curMode.mine);
+      console.log(minesArr);
       // 初始化数据
-      this.areaCount = this.curMode.boardWidth * this.curMode.boardHeight;
+      this.clearNum = 0;
       this.timeCount(2);
       this.status = 1;
       this.mineBoardArr = [];
@@ -277,19 +281,19 @@ export default {
     // 随机分配地雷
     getRandomMines(row, col, num) {
       let minesArr = [];
-      for (let i = 0; i < num; i++) {
-        minesArr[i] = getUnique(minesArr);
-      }
+      do {
+        let mine = getUnique(minesArr);
+        if (mine) minesArr.push(mine);
+      } while (minesArr.length < num);
       function getUnique(arr) {
-        let location = [
-          Math.floor(Math.random() * row),
-          Math.floor(Math.random() * col),
-        ];
-        if (location.indexOf(arr) > -1) {
-          getUnique(arr);
-          return;
+        let i = Math.floor(Math.random() * row);
+        let j = Math.floor(Math.random() * col);
+        let idx = arr.findIndex((item) => {
+          return item[0] == i && item[1] == j;
+        });
+        if (idx === -1) {
+          return [i, j];
         }
-        return location;
       }
       return minesArr;
     },
@@ -305,10 +309,7 @@ export default {
     clickArea(e) {
       let data = e.currentTarget.dataset;
       let area = this.mineBoardArr[data.row][data.col];
-      if (
-        this.areaCount ===
-        this.curMode.boardWidth * this.curMode.boardHeight
-      ) {
+      if (this.clearNum == 0) {
         this.timeCount(1);
       }
       // 游戏已结束或者已标记或者已显示的区域点击无效
@@ -318,7 +319,6 @@ export default {
       // 中雷，游戏结束
       if (area.isMine) {
         area.isDestroyed = true;
-        this.areaCount--;
         this.$forceUpdate();
         this.gameFail();
         return;
@@ -326,7 +326,10 @@ export default {
       // 非雷区，显示
       this.showAround(data.row, data.col);
       // 清雷，游戏成功
-      if (this.areaCount == this.curMode.mine) {
+      if (
+        this.clearNum ==
+        this.curMode.boardWidth * this.curMode.boardHeight - this.curMode.mine
+      ) {
         this.gameSuccess();
       }
       this.$forceUpdate();
@@ -338,7 +341,7 @@ export default {
       let clickarea = this.mineBoardArr[row][col];
       if (clickarea.isShow) return;
       clickarea.isShow = true;
-      this.areaCount--;
+      this.clearNum++;
       if (clickarea.value == "") {
         for (let i = row - 1; i <= row + 1; i++) {
           for (let j = col - 1; j <= col + 1; j++) {
