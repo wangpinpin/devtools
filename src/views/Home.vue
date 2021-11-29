@@ -33,9 +33,7 @@
             :key="index"
             :style="bgf"
           >
-            <a :href="devText[index].path">
-              <div>{{ devText[index].text }}</div>
-            </a>
+            <div @click="goTo(devText[index])">{{ devText[index].text }}</div>
           </div>
         </div>
       </div>
@@ -72,32 +70,22 @@ export default {
     return {
       title: "本站已上线",
       inputText: "",
-      devBackgroundFamily: [
-        "background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);",
-        "background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);",
-        "background-image: linear-gradient(to top, #fad0c4 0%, #fad0c4 1%, #ffd1ff 100%);",
-        "background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);",
-        "background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);",
-        "background-image: linear-gradient(to top, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%);",
-        "background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);",
-        "background-image: linear-gradient(to top, #d299c2 0%, #fef9d7 100%);",
-        "background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);",
-        // "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
-        // "background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);",
-        // "background-image: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);",
-        // "background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);",
-        // "background-image: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);",
-        // "background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);"
-        // "background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);",
-      ],
+      devBackgroundFamily: [],
       devText: [
         { path: "/DoglickingDiary", text: "舔狗日记" },
         { path: "/MessageBoard", text: "留言板" },
-        { path: "/Music", text: "听一听" },
-        { path: "/v", text: "看一看" },
-        // { path: "/Note", text: "舔狗笔记" },
-        { path: "/EveryDayText", text: "每日一文" },
-        { path: "/wallpaper", text: "必应壁纸" },
+        { path: "/Note", text: "舔狗笔记" },
+        {
+          path: "/category",
+          text: "影音图文",
+          children: [
+            { path: "/v", text: "看一看" },
+            { path: "/Music", text: "听一听" },
+            { path: "/wallpaper", text: "必应壁纸" },
+            { path: "/EveryDayText", text: "每日一文" },
+            { path: "/Wyy", text: "网易云音乐API" },
+          ],
+        },
         {
           path: "/category",
           text: "摸鱼游戏",
@@ -127,7 +115,6 @@ export default {
             { path: "/PreviewFont", text: "字体预览" },
           ],
         },
-        { path: "/Wyy", text: "网易云音乐API" },
         // { path: "/", text: "正在开发" },
       ],
     };
@@ -136,6 +123,10 @@ export default {
   created() {
     this.title = this.title + this.getDay() + "天";
 
+    this.devBackgroundFamily = this.$store.state.devBackgroundFamily.splice(
+      0,
+      this.devText.length
+    );
     this.devBackgroundFamily.sort(function() {
       return Math.random() - 0.5;
     });
@@ -143,6 +134,13 @@ export default {
     this.inputAnimation();
   },
   methods: {
+    goTo(obj) {
+      this.$store.commit("setCategory", obj.children || null);
+      this.$router.push({
+        path: obj.path,
+        query: { title: obj.text },
+      });
+    },
     //获取天数
     getDay() {
       let s1 = "2020-08-01";
@@ -231,11 +229,11 @@ export default {
       flex-wrap: wrap;
       color: #fff;
       .card-tool {
-        width: 15%;
-        height: 1.2rem;
-        line-height: 1.2rem;
+        width: 21%;
+        height: 1.5rem;
+        line-height: 1.5rem;
         border-radius: 0.3rem;
-        margin: 0.2rem 0.3rem;
+        margin: 0.2rem 2%;
         font-size: 0.21rem;
         cursor: pointer;
         text-align: center;
@@ -246,7 +244,7 @@ export default {
       .card-tool:hover {
         border: 0.04rem solid #fff;
         box-sizing: border-box;
-        line-height: 1.11rem;
+        line-height: 1.42rem;
       }
     }
   }

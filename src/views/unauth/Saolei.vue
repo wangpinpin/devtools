@@ -7,11 +7,7 @@
         <li
           v-for="(item, index) in mode"
           :key="index"
-          :style="
-            devBackgroundFamily[
-              Math.floor(Math.random() * devBackgroundFamily.length)
-            ]
-          "
+          :style="devBackgroundFamily[index]"
           @click="selectMode(index)"
         >
           <span
@@ -125,18 +121,21 @@ export default {
       status: 0, // 状态 0-未开始；1-游戏中；2-游戏成功；3-游戏失败
       mode: [
         {
+          name: "easy",
           boardWidth: 9,
           boardHeight: 9,
           text: "简单",
           mine: 10, // 地雷数量
         },
         {
+          name: "medium",
           boardWidth: 16,
           boardHeight: 16,
           text: "中等",
           mine: 40,
         },
         {
+          name: "professional",
           boardWidth: 30,
           boardHeight: 16,
           text: "专家",
@@ -144,24 +143,7 @@ export default {
         },
       ],
       curMode: null,
-      devBackgroundFamily: [
-        "background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);",
-        "background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);",
-        "background-image: linear-gradient(to top, #fad0c4 0%, #fad0c4 1%, #ffd1ff 100%);",
-        "background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);",
-        "background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);",
-        "background-image: linear-gradient(to top, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%);",
-        "background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);",
-        "background-image: linear-gradient(to top, #d299c2 0%, #fef9d7 100%);",
-        "background-image: linear-gradient(to top, #9795f0 0%, #fbc8d4 100%);",
-        "background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);",
-        "background-image: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);",
-        "background-image: linear-gradient(120deg, #fccb90 0%, #d57eeb 100%);",
-        "background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);",
-        "background-image: linear-gradient(to top, #fddb92 0%, #d1fdff 100%);",
-        "background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);",
-        "background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);",
-      ],
+      devBackgroundFamily: [],
       timeSeconds: "0", // 游戏计时-秒
       mineBoardArr: [], // 扫雷盘区域二维数组
       clearNum: 0,
@@ -172,6 +154,15 @@ export default {
       let title = curVal ? this.title : "404";
       document.title = title;
     },
+  },
+  created() {
+    this.devBackgroundFamily = this.$store.state.devBackgroundFamily.splice(
+      0,
+      this.mode.length
+    );
+    this.devBackgroundFamily.sort(function() {
+      return Math.random() - 0.5;
+    });
   },
   mounted() {
     this.$nextTick(() => {

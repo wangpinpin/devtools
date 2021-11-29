@@ -1,17 +1,17 @@
 <template>
   <div class="container">
     <Header />
-    <div class="title">{{ title }}</div>
+    <div class="title">{{ $route.query.title }}</div>
     <div class="content">
       <ul class="card">
-        <li
-          class="card-item"
-          v-for="(item, index) in categoryData"
-          :key="index"
-        >
-          <a :href="item.path">
-            <img :src="item.poster" alt="" />
-            <span>{{ item.name }}</span>
+        <li class="card-item" v-for="(item, index) in category" :key="index">
+          <a
+            :class="item.poster ? 'poster-item' : 'bgcolor-item'"
+            :href="item.path"
+            :style="item.poster ? '' : devBackgroundFamily[index]"
+          >
+            <img v-if="item.poster" :src="item.poster" alt="" />
+            <span>{{ item.text }}</span>
           </a>
         </li>
       </ul>
@@ -31,22 +31,20 @@ export default {
   },
   data() {
     return {
-      title: "",
-      categoryData: [
-        {
-          poster: require("@/assets/imgs/games/adarkhome.jpeg"),
-          name: "小黑屋",
-          path: "/adarkroom",
-        },
-        {
-          poster: require("@/assets/imgs/games/saolei.jpeg"),
-          name: "扫雷",
-          path: "/saolei",
-        },
-      ],
+      devBackgroundFamily: [],
+      category: JSON.parse(localStorage.getItem("category")) || [],
     };
   },
-  created() {},
+  created() {
+    document.title = this.$route.query.title;
+    this.devBackgroundFamily = this.$store.state.devBackgroundFamily.splice(
+      0,
+      this.category.length
+    );
+    this.devBackgroundFamily.sort(function() {
+      return Math.random() - 0.5;
+    });
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -59,6 +57,10 @@ export default {
     text-align: center;
     color: #7c96b1;
   }
+  .content {
+    width: 80%;
+    margin: 0 auto;
+  }
   ul.card {
     padding: 0;
     display: flex;
@@ -66,27 +68,37 @@ export default {
     flex-wrap: wrap;
     list-style: none;
     .card-item {
-      margin: 0.1rem 2%;
+      margin: 0.2rem 2%;
       width: 15%;
       text-align: center;
+    }
+    .poster-item {
+      display: block;
+      font-size: 0.24rem;
+      line-height: 1.8;
+      color: #7c96b1;
       img {
         width: 100%;
         border-radius: 0.2rem;
         transition: all 0.3s;
       }
-      a {
-        display: block;
-        font-size: 0.24rem;
-        line-height: 1.8;
-        color: #7c96b1;
-      }
       &:hover {
+        font-weight: bolder;
         img {
           transform: translateY(-0.05rem);
         }
-        a {
-          font-weight: bolder;
-        }
+      }
+    }
+    .bgcolor-item {
+      display: block;
+      font-size: 0.24rem;
+      color: #fff;
+      border-radius: 0.2rem;
+      line-height: 1.5rem;
+      &:hover {
+        box-sizing: border-box;
+        border: 0.04rem solid #fff;
+        line-height: 1.42rem;
       }
     }
   }
