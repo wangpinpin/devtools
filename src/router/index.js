@@ -239,6 +239,15 @@ const routes = [{
     },
     component: () =>
         import("../views/unauth/Saolei.vue")
+},
+{
+    path: "/jigsaws",
+    name: "jigsaws",
+    meta: {
+        title: "拼图"
+    },
+    component: () =>
+        import("../views/unauth/Jigsaws.vue")
 }
 ];
 

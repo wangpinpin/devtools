@@ -100,6 +100,11 @@ export default {
               text: "扫雷",
               path: "/saolei",
             },
+            {
+              poster: require("@/assets/imgs/games/jigsaws.jpg"),
+              text: "拼图",
+              path: "/jigsaws",
+            },
           ],
         },
         {

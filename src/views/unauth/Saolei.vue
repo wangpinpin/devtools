@@ -152,21 +152,21 @@ export default {
       status: 0, // 状态 0-未开始；1-游戏中；2-游戏成功；3-游戏失败
       mode: [
         {
-          name: "easy",
+          name: "first",
           boardWidth: 9,
           boardHeight: 9,
           text: "简单",
           mine: 10, // 地雷数量
         },
         {
-          name: "medium",
+          name: "second",
           boardWidth: 16,
           boardHeight: 16,
           text: "中等",
           mine: 40,
         },
         {
-          name: "professional",
+          name: "third",
           boardWidth: 30,
           boardHeight: 16,
           text: "专家",
@@ -180,7 +180,7 @@ export default {
       clearNum: 0,
       isShowRank: false, // 是否显示排行榜
       rankData: [],
-      activeRank: "medium",
+      activeRank: "first",
     };
   },
   watch: {
@@ -258,7 +258,6 @@ export default {
       let row = this.curMode.boardHeight;
       let col = this.curMode.boardWidth;
       let minesArr = this.getRandomMines(row, col, this.curMode.mine);
-      console.log(minesArr);
       // 初始化数据
       this.clearNum = 0;
       this.timeCount(2);
@@ -439,7 +438,7 @@ export default {
     getRank() {
       this.rankData = [
         {
-          name: "easy",
+          name: "first",
           data: [
             {
               name: "zs",
@@ -459,7 +458,7 @@ export default {
           ],
         },
         {
-          name: "medium",
+          name: "second",
           data: [
             {
               name: "zs2",
@@ -474,7 +473,7 @@ export default {
           ],
         },
         {
-          name: "professional",
+          name: "third",
           data: [
             {
               name: "ls3",
