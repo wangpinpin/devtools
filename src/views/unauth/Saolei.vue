@@ -100,7 +100,38 @@
             ><i class="iconfont">&#xe60b;</i></span
           ></el-tooltip
         >
+        <el-tooltip
+          class="game-rank"
+          effect="dark"
+          content="排行榜"
+          placement="right-start"
+          ><span class="tool-item" @click="showRank"
+            ><i class="iconfont">&#xe634;</i></span
+          ></el-tooltip
+        >
       </div>
+    </div>
+    <div class="pop-rank" v-if="isShowRank" ref="popRank">
+      <div class="mask" @click="hideRank"></div>
+      <el-tabs
+        class="rank-content"
+        tab-position="left"
+        type="border-card"
+        v-model="activeRank"
+      >
+        <el-tab-pane
+          v-for="(item, index) in mode"
+          :key="index"
+          :label="item.text"
+          :name="item.name"
+        >
+          <el-table :data="rankData[index].data" stripe style="width: 100%">
+            <el-table-column prop="name" label="用户名"></el-table-column>
+            <el-table-column prop="score" label="记录"></el-table-column>
+            <el-table-column prop="time" label="时间"></el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -147,6 +178,9 @@ export default {
       timeSeconds: "0", // 游戏计时-秒
       mineBoardArr: [], // 扫雷盘区域二维数组
       clearNum: 0,
+      isShowRank: false, // 是否显示排行榜
+      rankData: [],
+      activeRank: "medium",
     };
   },
   watch: {
@@ -213,6 +247,7 @@ export default {
     // 模式选择
     selectMode(index) {
       this.curMode = this.mode[index];
+      this.activeRank = this.mode[index].name;
       this.initGame();
     },
     /**
@@ -397,6 +432,66 @@ export default {
       this.timeCount(0);
       this.$message.error("游戏结束");
     },
+    /**
+     * 排行榜
+     */
+    // 获取排行榜
+    getRank() {
+      this.rankData = [
+        {
+          name: "easy",
+          data: [
+            {
+              name: "zs",
+              score: "00:00:13",
+              time: "2021/12/12",
+            },
+            {
+              name: "ls",
+              score: "00:00:16",
+              time: "2021/11/12",
+            },
+            {
+              name: "we",
+              score: "00:00:44",
+              time: "2021/10/12",
+            },
+          ],
+        },
+        {
+          name: "medium",
+          data: [
+            {
+              name: "zs2",
+              score: "00:00:13",
+              time: "2021/12/12",
+            },
+            {
+              name: "ls2",
+              score: "00:00:16",
+              time: "2021/11/12",
+            },
+          ],
+        },
+        {
+          name: "professional",
+          data: [
+            {
+              name: "ls3",
+              score: "00:00:16",
+              time: "2021/11/12",
+            },
+          ],
+        },
+      ];
+    },
+    showRank() {
+      this.getRank();
+      this.isShowRank = true;
+    },
+    hideRank() {
+      this.isShowRank = false;
+    },
   },
 };
 </script>
@@ -549,10 +644,42 @@ export default {
     }
   }
 }
+.pop-rank {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  .mask {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .rank-content {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 75%;
+    height: 75vh;
+  }
+}
 @media screen and (max-width: 900px) {
-  .container .saolei-home .mode li {
+  .container {
+    .saolei-home .mode li {
     width: 80%;
     font-size: 0.3rem;
+  }
+    .saolei-content {
+      .game-board{
+        border-spacing: 1px;
+         td{
+           width: 0.15rem;
+           height: 0.15rem;
+           font-size: 0.1rem;
+         }
+      }
+    }
   }
 }
 </style>
