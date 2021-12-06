@@ -16,44 +16,13 @@
       <Footer class="footer" />
     </div>
     <div v-else class="game-content" oncontextmenu="return(false)">
-      <div class="game-tools">
-        <el-tooltip
-          class="game-hide"
-          effect="dark"
-          content="重新再战（快捷键R/r切换）"
-          placement="right-start"
-          ><span class="tool-item" @click="initGame(true)"
-            ><i class="iconfont">&#xe65f;</i></span
-          ></el-tooltip
-        >
-        <el-tooltip
-          class="game-hide"
-          effect="dark"
-          content="一键隐藏（快捷键SPACE切换）"
-          placement="right-start"
-          ><span class="tool-item" @click="hideGame"
-            ><i class="iconfont">&#xe6a3;</i></span
-          ></el-tooltip
-        >
-        <el-tooltip
-          class="game-exit"
-          effect="dark"
-          content="退出游戏（快捷键ESC）"
-          placement="right-start"
-          ><span class="tool-item" @click="exitGame"
-            ><i class="iconfont">&#xe60b;</i></span
-          ></el-tooltip
-        >
-        <el-tooltip
-          class="game-rank"
-          effect="dark"
-          content="排行榜"
-          placement="right-start"
-          ><span class="tool-item" @click="showRank"
-            ><i class="iconfont">&#xe634;</i></span
-          ></el-tooltip
-        >
-      </div>
+      <GameTools
+        :mode="mode"
+        :activeRank="activeRank"
+        @initGame="initGame"
+        @hideGame="hideGame"
+        @exitGame="exitGame"
+      />
       <div class="game-field">
         <div class="field-left">
           <div class="referPic">
@@ -71,7 +40,7 @@
               v-for="(item, index) in gridData"
               :key="index"
               :style="item.style"
-              @click="movePic"
+              @click="movePic(index)"
             ></li>
           </ul>
         </div>
@@ -89,39 +58,20 @@
         </div>
       </div>
     </div>
-    <div class="pop-rank" v-if="isShowRank" ref="popRank">
-      <div class="mask" @click="hideRank"></div>
-      <el-tabs
-        class="rank-content"
-        tab-position="left"
-        type="border-card"
-        v-model="activeRank"
-      >
-        <el-tab-pane
-          v-for="(item, index) in mode"
-          :key="index"
-          :label="item.text"
-          :name="item.name"
-        >
-          <el-table :data="rankData[index].data" stripe style="width: 100%">
-            <el-table-column prop="name" label="用户名"></el-table-column>
-            <el-table-column prop="score" label="记录"></el-table-column>
-            <el-table-column prop="time" label="时间"></el-table-column>
-          </el-table>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
   </div>
 </template>
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import GameTools from "@/components/GameTools.vue";
 let time = null;
+let keyDirs = ["arrowup", "arrowdown", "arrowleft", "arrowright"];
 export default {
   name: "Jigsaws",
   components: {
     Header,
     Footer,
+    GameTools,
   },
   data() {
     return {
@@ -153,8 +103,6 @@ export default {
       selModeIndex: 0,
       timeSeconds: "0", // 游戏计时-秒
       gridData: [], // 拼图分割数组
-      isShowRank: false, // 是否显示排行榜
-      rankData: [],
       activeRank: "first",
     };
   },
@@ -162,6 +110,13 @@ export default {
     isShowGame(curVal) {
       let title = curVal ? this.title : "404";
       document.title = title;
+    },
+    gridData(curVal) {
+      // id和索完全匹配，游戏成功
+      let checkOk = curVal.every((item, index) => {
+        return item.id == index;
+      });
+      if (checkOk) this.gameSuccess();
     },
   },
   created() {},
@@ -194,19 +149,23 @@ export default {
       let keyMap = ["escape", "", "r"];
       document.onkeyup = function(e) {
         let key = e.key.toLowerCase().replace(/ /g, "");
-        if (keyMap.indexOf(key) > -1 && that.status !== 0) {
-          switch (key) {
-            case "escape":
-              that.exitGame();
-              break;
-            case "":
-              that.hideGame();
-              break;
-            case "r":
-              that.initGame(true);
-              break;
-            default:
-              break;
+        if (that.status !== 0) {
+          if (keyMap.indexOf(key) > -1) {
+            switch (key) {
+              case "escape":
+                that.exitGame();
+                break;
+              case "":
+                that.hideGame();
+                break;
+              case "r":
+                that.initGame(true);
+                break;
+              default:
+                break;
+            }
+          } else if (keyDirs.indexOf(key) > -1) {
+            that.moveByKey(key);
           }
         }
       };
@@ -259,9 +218,64 @@ export default {
       this.activeRank = this.mode[index].name;
       this.initGame();
     },
+    // 碎片数组元素交换
+    swapArray(index1, index2) {
+      let size = this.mode[this.selModeIndex].size;
+      if (this.gridData[index2].id == size * size - 1) {
+        if (!time) this.timeCount(1);
+        this.gridData[index1] = this.gridData.splice(
+          index2,
+          1,
+          this.gridData[index1]
+        )[0];
+      }
+    },
+    // 不同方向移动
+    moveForDirs(dir, index, isKey) {
+      let size = this.mode[this.selModeIndex].size;
+      if (dir === keyDirs[0]) {
+        // 上移
+        if (index + size < size * size) {
+          if (isKey) this.swapArray(index + size, index);
+          else this.swapArray(index, index + size);
+        }
+      } else if (dir === keyDirs[1]) {
+        // 下移
+        if (index - size >= 0) {
+          if (isKey) this.swapArray(index - size, index);
+          else this.swapArray(index, index - size);
+        }
+      } else if (dir === keyDirs[2]) {
+        // 左移
+        if (index % size < size - 1) {
+          if (isKey) this.swapArray(index + 1, index);
+          else this.swapArray(index, index + 1);
+        }
+      } else {
+        // 右移
+        if (index % size > 0) {
+          if (isKey) this.swapArray(index - 1, index);
+          else this.swapArray(index, index - 1);
+        }
+      }
+    },
     // 移动碎片
-    movePic() {
+    movePic(index) {
       if (this.status !== 1) return;
+      keyDirs.forEach((dir) => {
+        this.moveForDirs(dir, index);
+      });
+    },
+    // 键盘控制碎片移动
+    moveByKey(dir) {
+      let size = this.mode[this.selModeIndex].size;
+      let emptyIdx = null;
+      this.gridData.some((item, index) => {
+        if (item.id == size * size - 1) {
+          emptyIdx = index;
+        }
+      });
+      this.moveForDirs(dir, emptyIdx, true);
     },
     // 隐藏游戏
     hideGame() {
@@ -279,6 +293,7 @@ export default {
         }, 1000);
       } else if (flag === 2) {
         if (time) clearInterval(time);
+        time = null;
         this.timeSeconds = 0;
       } else {
         clearInterval(time);
@@ -291,76 +306,32 @@ export default {
     gameSuccess() {
       this.status = 2;
       this.timeCount(0);
-      this.$message({
-        message: "恭喜你，挑战成功",
-        type: "success",
-      });
-    },
-    // 失败
-    gameFail() {
-      this.status = 3;
-      this.timeCount(0);
-      this.$message.error("游戏结束");
-    },
-    /**
-     * 排行榜
-     */
-    // 获取排行榜
-    getRank() {
-      this.rankData = [
-        {
-          name: "first",
-          data: [
-            {
-              name: "zs",
-              score: "00:00:13",
-              time: "2021/12/12",
-            },
-            {
-              name: "ls",
-              score: "00:00:16",
-              time: "2021/11/12",
-            },
-            {
-              name: "we",
-              score: "00:00:44",
-              time: "2021/10/12",
-            },
-          ],
-        },
-        {
-          name: "second",
-          data: [
-            {
-              name: "zs2",
-              score: "00:00:13",
-              time: "2021/12/12",
-            },
-            {
-              name: "ls2",
-              score: "00:00:16",
-              time: "2021/11/12",
-            },
-          ],
-        },
-        {
-          name: "third",
-          data: [
-            {
-              name: "ls3",
-              score: "00:00:16",
-              time: "2021/11/12",
-            },
-          ],
-        },
-      ];
-    },
-    showRank() {
-      this.getRank();
-      this.isShowRank = true;
-    },
-    hideRank() {
-      this.isShowRank = false;
+      if (this.$store.state.username) {
+        this.$message({
+          message: "恭喜你，挑战成功",
+          type: "success",
+        });
+        return;
+      }
+      this.$prompt("请留下你的昵称", "恭喜你，挑战成功", {
+        confirmButtonText: "确定",
+        cancelButtonText: "不想留随机取名",
+      })
+        .then(({ value }) => {
+          this.$message({
+            type: "success",
+            message: "你的昵称是: " + value,
+          });
+          this.$store.commit("setUserName", value);
+        })
+        .catch(() => {
+          let name = "用户123";
+          this.$message({
+            type: "success",
+            message: "你的默认昵称是: " + name,
+          });
+          this.$store.commit("setUserName", name);
+        });
     },
   },
 };
@@ -374,30 +345,6 @@ export default {
     font-size: 0.4rem;
     color: #7c96b1;
     text-align: center;
-  }
-  .game-tools {
-    position: fixed;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    .tool-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 0.8rem;
-      height: 0.8rem;
-      margin: 0.2rem;
-      border-radius: 50%;
-      background-color: #7c96b16b;
-      cursor: pointer;
-      .iconfont {
-        font-size: 0.4rem;
-        color: #fff;
-      }
-      &:hover {
-        background-color: #7c96b1;
-      }
-    }
   }
   .game-home {
     .pics {
@@ -520,26 +467,6 @@ export default {
         }
       }
     }
-  }
-}
-.pop-rank {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  .mask {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  .rank-content {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 75%;
-    height: 75vh;
   }
 }
 @media screen and (max-width: 900px) {

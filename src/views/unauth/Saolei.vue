@@ -72,78 +72,27 @@
         </tr>
       </table>
 
-      <div class="game-tools">
-        <el-tooltip
-          class="game-hide"
-          effect="dark"
-          content="重新再战（快捷键R/r切换）"
-          placement="right-start"
-          ><span class="tool-item" @click="initGame"
-            ><i class="iconfont">&#xe65f;</i></span
-          ></el-tooltip
-        >
-        <el-tooltip
-          class="game-hide"
-          effect="dark"
-          content="一键隐藏（快捷键SPACE切换）"
-          placement="right-start"
-          ><span class="tool-item" @click="hideGame"
-            ><i class="iconfont">&#xe6a3;</i></span
-          ></el-tooltip
-        >
-        <el-tooltip
-          class="game-exit"
-          effect="dark"
-          content="退出游戏（快捷键ESC）"
-          placement="right-start"
-          ><span class="tool-item" @click="exitGame"
-            ><i class="iconfont">&#xe60b;</i></span
-          ></el-tooltip
-        >
-        <el-tooltip
-          class="game-rank"
-          effect="dark"
-          content="排行榜"
-          placement="right-start"
-          ><span class="tool-item" @click="showRank"
-            ><i class="iconfont">&#xe634;</i></span
-          ></el-tooltip
-        >
-      </div>
-    </div>
-    <div class="pop-rank" v-if="isShowRank" ref="popRank">
-      <div class="mask" @click="hideRank"></div>
-      <el-tabs
-        class="rank-content"
-        tab-position="left"
-        type="border-card"
-        v-model="activeRank"
-      >
-        <el-tab-pane
-          v-for="(item, index) in mode"
-          :key="index"
-          :label="item.text"
-          :name="item.name"
-        >
-          <el-table :data="rankData[index].data" stripe style="width: 100%">
-            <el-table-column prop="name" label="用户名"></el-table-column>
-            <el-table-column prop="score" label="记录"></el-table-column>
-            <el-table-column prop="time" label="时间"></el-table-column>
-          </el-table>
-        </el-tab-pane>
-      </el-tabs>
+      <GameTools
+        :mode="mode"
+        :activeRank="activeRank"
+        @initGame="initGame"
+        @hideGame="hideGame"
+        @exitGame="exitGame"
+      />
     </div>
   </div>
 </template>
 <script>
 import Header from "@/components/Header.vue";
 import Footer from "@/components/Footer.vue";
+import GameTools from "@/components/GameTools.vue";
 let time = null;
 export default {
   name: "Saolei",
   components: {
     Header,
     Footer,
+    GameTools,
   },
   data() {
     return {
@@ -178,8 +127,6 @@ export default {
       timeSeconds: "0", // 游戏计时-秒
       mineBoardArr: [], // 扫雷盘区域二维数组
       clearNum: 0,
-      isShowRank: false, // 是否显示排行榜
-      rankData: [],
       activeRank: "first",
     };
   },
@@ -189,6 +136,14 @@ export default {
       document.title = title;
     },
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.fastKey();
+    });
+  },
+  destroyed() {
+    document.onkeyup = function() {};
+  },
   created() {
     this.devBackgroundFamily = this.$store.state.devBackgroundFamily.splice(
       0,
@@ -197,14 +152,6 @@ export default {
     this.devBackgroundFamily.sort(function() {
       return Math.random() - 0.5;
     });
-  },
-  mounted() {
-    this.$nextTick(() => {
-      this.fastKey();
-    });
-  },
-  destroyed() {
-    document.onkeyup = function() {};
   },
   filters: {
     formateTime(t) {
@@ -420,76 +367,38 @@ export default {
     gameSuccess() {
       this.status = 2;
       this.timeCount(0);
-      this.$message({
-        message: "恭喜你，扫雷成功",
-        type: "success",
-      });
+      if (this.$store.state.username) {
+        this.$message({
+          message: "恭喜你，扫雷成功",
+          type: "success",
+        });
+        return;
+      }
+      this.$prompt("请留下你的昵称", "恭喜你，扫雷成功", {
+        confirmButtonText: "确定",
+        cancelButtonText: "不想留随机取名",
+      })
+        .then(({ value }) => {
+          this.$message({
+            type: "success",
+            message: "你的昵称是: " + value,
+          });
+          this.$store.commit("setUserName", value);
+        })
+        .catch(() => {
+          let name = "用户123";
+          this.$message({
+            type: "success",
+            message: "你的默认昵称是: " + name,
+          });
+          this.$store.commit("setUserName", name);
+        });
     },
     // 失败
     gameFail() {
       this.status = 3;
       this.timeCount(0);
       this.$message.error("游戏结束");
-    },
-    /**
-     * 排行榜
-     */
-    // 获取排行榜
-    getRank() {
-      this.rankData = [
-        {
-          name: "first",
-          data: [
-            {
-              name: "zs",
-              score: "00:00:13",
-              time: "2021/12/12",
-            },
-            {
-              name: "ls",
-              score: "00:00:16",
-              time: "2021/11/12",
-            },
-            {
-              name: "we",
-              score: "00:00:44",
-              time: "2021/10/12",
-            },
-          ],
-        },
-        {
-          name: "second",
-          data: [
-            {
-              name: "zs2",
-              score: "00:00:13",
-              time: "2021/12/12",
-            },
-            {
-              name: "ls2",
-              score: "00:00:16",
-              time: "2021/11/12",
-            },
-          ],
-        },
-        {
-          name: "third",
-          data: [
-            {
-              name: "ls3",
-              score: "00:00:16",
-              time: "2021/11/12",
-            },
-          ],
-        },
-      ];
-    },
-    showRank() {
-      this.getRank();
-      this.isShowRank = true;
-    },
-    hideRank() {
-      this.isShowRank = false;
     },
   },
 };
@@ -503,30 +412,6 @@ export default {
     font-size: 0.4rem;
     color: #7c96b1;
     text-align: center;
-  }
-  .game-tools {
-    position: fixed;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    .tool-item {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 0.8rem;
-      height: 0.8rem;
-      margin: 0.2rem;
-      border-radius: 50%;
-      background-color: #7c96b16b;
-      cursor: pointer;
-      .iconfont {
-        font-size: 0.4rem;
-        color: #fff;
-      }
-      &:hover {
-        background-color: #7c96b1;
-      }
-    }
   }
   .saolei-home {
     .mode {
@@ -643,40 +528,20 @@ export default {
     }
   }
 }
-.pop-rank {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  .mask {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  .rank-content {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 75%;
-    height: 75vh;
-  }
-}
 @media screen and (max-width: 900px) {
   .container {
     .saolei-home .mode li {
-    width: 80%;
-    font-size: 0.3rem;
-  }
+      width: 80%;
+      font-size: 0.3rem;
+    }
     .saolei-content {
-      .game-board{
+      .game-board {
         border-spacing: 1px;
-         td{
-           width: 0.15rem;
-           height: 0.15rem;
-           font-size: 0.1rem;
-         }
+        td {
+          width: 0.15rem;
+          height: 0.15rem;
+          font-size: 0.1rem;
+        }
       }
     }
   }

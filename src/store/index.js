@@ -6,6 +6,7 @@ export default new Vuex.Store({
     state: {
         user: JSON.parse(localStorage.getItem("user")) || "",
         userInfo: JSON.parse(localStorage.getItem("userInfo")) || "",
+        username: "",
         category: [],
         devBackgroundFamily: [
             "background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);",
@@ -53,7 +54,16 @@ export default new Vuex.Store({
                 localStorage.removeItem('category')
                 state.user = ""
             }
-        }
+        },
+        setUserName(state, x) {
+            if (x) {
+                localStorage.setItem('username', x)
+                state.username = x
+            } else {
+                localStorage.removeItem('username')
+                state.username = ""
+            }
+        },
     },
     actions: {},
     modules: {},
