@@ -75,6 +75,7 @@
       <GameTools
         :mode="mode"
         :activeRank="activeRank"
+        :code="code"
         @initGame="initGame"
         @hideGame="hideGame"
         @exitGame="exitGame"
@@ -97,6 +98,8 @@ export default {
   data() {
     return {
       title: "扫雷",
+      code: "e1fbaadb-5669-11ec-b098-5254000e620b",
+      userid: "",
       isShowGame: true, // 是否显示游戏界面
       status: 0, // 状态 0-未开始；1-游戏中；2-游戏成功；3-游戏失败
       mode: [
@@ -282,12 +285,19 @@ export default {
     exitGame() {
       this.status = 0;
     },
+    // 开始游戏计时开始
+    beginGame() {
+      this.timeCount(1);
+      this.$http.post("game/playGame", { playGameBo: "test" }).then((res) => {
+        this.userid = res;
+      });
+    },
     // 扫雷区域点击
     clickArea(e) {
       let data = e.currentTarget.dataset;
       let area = this.mineBoardArr[data.row][data.col];
       if (this.clearNum == 0) {
-        this.timeCount(1);
+        this.beginGame();
       }
       // 游戏已结束或者已标记或者已显示的区域点击无效
       if (this.status > 1 || area.isSign || area.isShow) {
@@ -367,32 +377,12 @@ export default {
     gameSuccess() {
       this.status = 2;
       this.timeCount(0);
-      if (this.$store.state.username) {
+      this.$http.post("game/gameEnd/" + this.userid).then((res) => {
         this.$message({
-          message: "恭喜你，扫雷成功",
+          message: "恭喜你，挑战成功",
           type: "success",
         });
-        return;
-      }
-      this.$prompt("请留下你的昵称", "恭喜你，扫雷成功", {
-        confirmButtonText: "确定",
-        cancelButtonText: "不想留随机取名",
-      })
-        .then(({ value }) => {
-          this.$message({
-            type: "success",
-            message: "你的昵称是: " + value,
-          });
-          this.$store.commit("setUserName", value);
-        })
-        .catch(() => {
-          let name = "用户123";
-          this.$message({
-            type: "success",
-            message: "你的默认昵称是: " + name,
-          });
-          this.$store.commit("setUserName", name);
-        });
+      });
     },
     // 失败
     gameFail() {

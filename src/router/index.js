@@ -145,7 +145,7 @@ const routes = [{
         title: "小黑屋"
     },
     component: () =>
-        import("../views/unauth/Adarkroom.vue")
+        import("../views/games/Adarkroom.vue")
 },
 {
     path: "/sponsor",
@@ -238,7 +238,7 @@ const routes = [{
         title: "扫雷"
     },
     component: () =>
-        import("../views/unauth/Saolei.vue")
+        import("../views/games/Saolei.vue")
 },
 {
     path: "/jigsaws",
@@ -247,7 +247,16 @@ const routes = [{
         title: "拼图"
     },
     component: () =>
-        import("../views/unauth/Jigsaws.vue")
+        import("../views/games/Jigsaws.vue")
+},
+{
+    path: "/filetransfer",
+    name: "filetransfer",
+    meta: {
+        title: "小破传"
+    },
+    component: () =>
+        import("../views/unauth/FileTransfer.vue")
 }
 ];
 

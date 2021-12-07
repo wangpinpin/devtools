@@ -19,6 +19,7 @@
       <GameTools
         :mode="mode"
         :activeRank="activeRank"
+        :code="code"
         @initGame="initGame"
         @hideGame="hideGame"
         @exitGame="exitGame"
@@ -76,6 +77,8 @@ export default {
   data() {
     return {
       title: "拼图",
+      code: "14f5ea6a-566a-11ec-b098-5254000e620b",
+      userid: "",
       isShowGame: true, // 是否显示游戏界面
       status: 0, // 状态 0-未开始；1-游戏中；2-游戏成功；3-游戏失败
       pics: [
@@ -222,7 +225,7 @@ export default {
     swapArray(index1, index2) {
       let size = this.mode[this.selModeIndex].size;
       if (this.gridData[index2].id == size * size - 1) {
-        if (!time) this.timeCount(1);
+        if (!time) this.beginGame();
         this.gridData[index1] = this.gridData.splice(
           index2,
           1,
@@ -285,6 +288,13 @@ export default {
     exitGame() {
       this.status = 0;
     },
+    // 开始游戏
+    beginGame() {
+      this.timeCount(1);
+      this.$http.post("game/playGame", { playGameBo: "test" }).then((res) => {
+        this.userid = res;
+      });
+    },
     // 计时
     timeCount(flag) {
       if (flag === 1) {
@@ -306,32 +316,12 @@ export default {
     gameSuccess() {
       this.status = 2;
       this.timeCount(0);
-      if (this.$store.state.username) {
+      this.$http.post("game/gameEnd/" + this.userid).then((res) => {
         this.$message({
           message: "恭喜你，挑战成功",
           type: "success",
         });
-        return;
-      }
-      this.$prompt("请留下你的昵称", "恭喜你，挑战成功", {
-        confirmButtonText: "确定",
-        cancelButtonText: "不想留随机取名",
-      })
-        .then(({ value }) => {
-          this.$message({
-            type: "success",
-            message: "你的昵称是: " + value,
-          });
-          this.$store.commit("setUserName", value);
-        })
-        .catch(() => {
-          let name = "用户123";
-          this.$message({
-            type: "success",
-            message: "你的默认昵称是: " + name,
-          });
-          this.$store.commit("setUserName", name);
-        });
+      });
     },
   },
 };

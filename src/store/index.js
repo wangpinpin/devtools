@@ -6,7 +6,7 @@ export default new Vuex.Store({
     state: {
         user: JSON.parse(localStorage.getItem("user")) || "",
         userInfo: JSON.parse(localStorage.getItem("userInfo")) || "",
-        username: "",
+        username: localStorage.getItem("username") || "",
         category: [],
         devBackgroundFamily: [
             "background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);",

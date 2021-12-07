@@ -69,9 +69,12 @@ export default {
     mode: {
       type: Array,
     },
+    code: {
+      type: String,
+    },
     activeRank: {
       type: String,
-    }
+    },
   },
   data() {
     return {
@@ -79,6 +82,35 @@ export default {
       rankData: [],
       activeRankName: this.activeRank,
     };
+  },
+  mounted() {
+    if (!this.$store.state.username) {
+      this.$prompt("请留下你的昵称", "", {
+        confirmButtonText: "确定",
+        cancelButtonText: "返回上页",
+        closeOnClickModal: false,
+        closeOnPressEscape: false,
+        inputValidator: function(v) {
+          v = v.trim();
+          if (v.length == 0) {
+            return "昵称不能为空";
+          }
+          if (v.length > 15) {
+            return "昵称不能超过15位";
+          }
+        },
+      })
+        .then(({ value }) => {
+          this.$message({
+            type: "success",
+            message: "你的昵称是: " + value,
+          });
+          this.$store.commit("setUserName", value);
+        })
+        .catch(() => {
+          this.$router.go(-1);
+        });
+    }
   },
   methods: {
     // 重新开始游戏
@@ -98,53 +130,9 @@ export default {
      */
     // 获取排行榜
     getRank() {
-      this.rankData = [
-        {
-          name: "first",
-          data: [
-            {
-              name: "zs",
-              score: "00:00:13",
-              time: "2021/12/12",
-            },
-            {
-              name: "ls",
-              score: "00:00:16",
-              time: "2021/11/12",
-            },
-            {
-              name: "we",
-              score: "00:00:44",
-              time: "2021/10/12",
-            },
-          ],
-        },
-        {
-          name: "second",
-          data: [
-            {
-              name: "zs2",
-              score: "00:00:13",
-              time: "2021/12/12",
-            },
-            {
-              name: "ls2",
-              score: "00:00:16",
-              time: "2021/11/12",
-            },
-          ],
-        },
-        {
-          name: "third",
-          data: [
-            {
-              name: "ls3",
-              score: "00:00:16",
-              time: "2021/11/12",
-            },
-          ],
-        },
-      ];
+      this.$http.post("game/gameRank/" + this.code).then((res) => {
+        this.rankData = res;
+      });
     },
     showRank() {
       this.getRank();

@@ -111,6 +111,7 @@ export default {
           path: "/category",
           text: "工具合集",
           children: [
+            { path: "/Filetransfer", text: "小破传" },
             { path: "/QRcodeCreate", text: "二维码生成" },
             { path: "/ImageToTxt", text: "图片文字提取" },
             { path: "/JsonFormat", text: "JSON格式化" },
@@ -140,11 +141,17 @@ export default {
   },
   methods: {
     goTo(obj) {
-      this.$store.commit("setCategory", obj.children || null);
-      this.$router.push({
-        path: obj.path,
-        query: { title: obj.text },
-      });
+      if (obj.children) {
+        this.$store.commit("setCategory", obj.children);
+        this.$router.push({
+          path: obj.path,
+          query: { title: obj.text },
+        });
+      } else {
+        this.$router.push({
+          path: obj.path,
+        });
+      }
     },
     //获取天数
     getDay() {
