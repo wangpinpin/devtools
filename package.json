@@ -15,7 +15,7 @@
     "baidu-aip-sdk": "^2.4.6",
     "core-js": "^3.6.5",
     "element-ui": "^2.13.2",
-    "gsap": "^3.5.0",
+    "gsap": "^3.8.0",
     "lib-flexible": "^0.3.2",
     "moment": "^2.27.0",
     "postcss-px2rem": "^0.3.0",
