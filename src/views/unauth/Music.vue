@@ -172,7 +172,7 @@ export default {
       songIndex: 0,
       isPlaying: false,
       showHistory: false,
-      showMore: false,
+      showMore: true,
       songsHistory: [],
       curSongIndex: -1,
       volume: 0.4,

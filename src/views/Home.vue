@@ -1,18 +1,29 @@
 <template>
   <div class="container">
+    <Header />
     <div id="large-header" class="large-header" @mousemove.prevent="mouseMove">
       <canvas
         id="demo-canvas"
         :width="clientWidth"
         :height="clientHeight"
       ></canvas>
-      <h1 class="main-title">{{ title }}</h1>
+      <div class="slogan">
+        <!-- title -->
+        <h1 class="main-title">
+          {{ title }}<span class="inputText">{{ inputText }}</span>
+        </h1>
+        <div class="sub-title">网站每周更新功能, 欢迎收藏关注转发</div>
+        <div class="sub-title">
+          代码已在github开源
+          <a
+            href="https://github.com/wangpinpin/devtools-server"
+            target="_blank"
+            >点击这里</a
+          >
+        </div>
+      </div>
     </div>
-    <ul class="menu">
-      <li v-for="(item, index) in devText" :key="index">
-        <a :href="item.path">{{ item.text }}</a>
-      </li>
-    </ul>
+    <Footer />
   </div>
 </template>
 
@@ -54,71 +65,20 @@ export default {
   },
   data() {
     return {
-      title: "小破站",
+      title: "本站已上线",
       clientWidth: window.innerWidth,
       clientHeight: window.innerHeight,
       target: { x: window.innerWidth / 2, y: window.innerHeight / 2 },
       points: [],
       inputText: "",
-      devBackgroundFamily: [],
-      devText: [
-        { path: "/DoglickingDiary", text: "舔狗日记" },
-        { path: "/MessageBoard", text: "留言板" },
-        { path: "/Note", text: "舔狗笔记" },
-        {
-          path: "/category",
-          text: "影音图文",
-          children: [
-            { path: "/v", text: "看一看" },
-            { path: "/Music", text: "听一听" },
-            { path: "/wallpaper", text: "必应壁纸" },
-            { path: "/EveryDayText", text: "每日一文" },
-            { path: "/Wyy", text: "网易云音乐API" },
-          ],
-        },
-        {
-          path: "/category",
-          text: "摸鱼游戏",
-          children: [
-            {
-              poster: require("@/assets/imgs/games/adarkhome.jpeg"),
-              text: "小黑屋",
-              path: "/adarkroom",
-            },
-            {
-              poster: require("@/assets/imgs/games/saolei.jpeg"),
-              text: "扫雷",
-              path: "/saolei",
-            },
-            {
-              poster: require("@/assets/imgs/games/jigsaws.jpg"),
-              text: "拼图",
-              path: "/jigsaws",
-            },
-          ],
-        },
-        {
-          path: "/category",
-          text: "工具合集",
-          children: [
-            { path: "/Filetransfer", text: "小破传" },
-            { path: "/QRcodeCreate", text: "二维码生成" },
-            { path: "/ImageToTxt", text: "图片文字提取" },
-            { path: "/JsonFormat", text: "JSON格式化" },
-            { path: "/TimeFormat", text: "时间戳转换" },
-            { path: "/Base64", text: "图片转Base64" },
-            { path: "/ColorTransfer", text: "颜色代码转换" },
-            { path: "/PreviewFont", text: "字体预览" },
-          ],
-        },
-        // { path: "/", text: "正在开发" },
-      ],
     };
   },
   mounted() {
     window.onresize = this.resize;
   },
   created() {
+    this.title = this.title + this.getDay() + "天";
+    this.inputAnimation();
     // Main
     this.$nextTick(() => {
       this.initHeader();
@@ -126,6 +86,26 @@ export default {
     });
   },
   methods: {
+    //获取天数
+    getDay() {
+      let s1 = "2020-08-01";
+      s1 = new Date(s1.replace(/-/g, "/"));
+      const s2 = new Date();
+      const days = s2.getTime() - s1.getTime();
+      return parseInt(days / (1000 * 60 * 60 * 24));
+    },
+    //模拟鼠标光标动画
+    inputAnimation() {
+      const _this = this;
+      setInterval(function() {
+        const inputText = "|";
+        if (_this.inputText == inputText) {
+          _this.inputText = "";
+        } else {
+          _this.inputText += inputText;
+        }
+      }, 800);
+    },
     initHeader() {
       const width = window.innerWidth;
       const height = window.innerHeight;
@@ -284,62 +264,6 @@ export default {
 .container {
   height: 100%;
   font-size: 20px;
-  .menu {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 2%;
-    z-index: 1;
-    list-style: none;
-    padding: 0;
-    li {
-      margin: 0.2rem 0;
-      font-size: 0.26rem;
-      line-height: 2;
-    }
-    a {
-      display: block;
-      color: #fff;
-      width: 6em;
-      text-align: center;
-      background-color: rgba(255, 255, 255, 0.27);
-      transition: all 0.5s ease;
-      position: relative;
-      &::before,
-      &::after {
-        content: "";
-        display: block;
-        position: absolute;
-        transition: all 0.2s ease-in-out;
-        width: 0;
-        height: 1px;
-        background-color: #fff;
-      }
-      &::before {
-        top: 0;
-        left: 0;
-      }
-      &::after {
-        bottom: 0;
-        right: 0;
-      }
-      &:hover {
-        text-shadow: 0 0 0.1rem rgba(255, 255, 255, 1),
-          0 0 0.5rem rgba(255, 255, 255, 0.8),
-          0 0 0.75rem rgba(255, 255, 255, 0.6),
-          0 0 0.76rem rgba(255, 255, 255, 0.4),
-          0 0 0.77rem rgba(255, 255, 255, 0.5),
-          0 0 0.78rem rgba(255, 255, 255, 0.4),
-          0 0 0.79rem rgba(255, 255, 255, 0.3),
-          0 0 0.8rem rgba(255, 255, 255, 0.2),
-          0 0 0.85rem rgba(255, 255, 255, 0.1);
-        &::before,
-        &::after {
-          width: 100%;
-        }
-      }
-    }
-  }
 }
 /* Header */
 .large-header {
@@ -354,7 +278,7 @@ export default {
   background-image: url("../assets/imgs/home-bg.jpg");
 }
 
-.main-title {
+.slogan {
   position: absolute;
   margin: 0;
   padding: 0;
@@ -363,9 +287,32 @@ export default {
   top: 25%;
   left: 0;
   right: 0;
-  text-transform: uppercase;
-  font-size: 4.2em;
-  letter-spacing: 0.1em;
+  a {
+    color: #74c0ef;
+  }
+  .main-title {
+    display: inline-block;
+    font-size: 0.48rem;
+    letter-spacing: 0.1em;
+    margin: 0;
+    position: relative;
+    .inputText {
+      position: absolute;
+      right: -0.2rem;
+      top: -0.03rem;
+    }
+  }
+  .sub-title {
+    margin-top: 0.2rem;
+    font-size: 0.16rem;
+    line-height: 0.3rem;
+  }
+}
+/deep/.header-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 @media only screen and (max-width: 768px) {

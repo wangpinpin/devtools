@@ -23,12 +23,9 @@ body {
     font-family: "PingFangSC-Regular", "Helvetica Neue", Helvetica,
       "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial,
       sans-serif;
-    background-image: linear-gradient(
-      to top,
-      #f3e7e9 0%,
-      #e3eeff 99%,
-      #e3eeff 100%
-    );
+    background: url(./assets/imgs/bg.jpg) no-repeat center center;
+    background-size: 100%;
+    color: #fff;
   }
 }
 </style>

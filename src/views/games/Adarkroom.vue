@@ -27,16 +27,14 @@ export default {
     return {};
   },
   created() {},
-  mounted() {
-  },
-  methods: {
-  },
+  mounted() {},
+  methods: {},
 };
 </script>
 <style lang="less" scoped>
-  .container {
-    height: 100%;
-    width: 100%;
-  }
-
+.container {
+  height: 100%;
+  width: 100%;
+  background-color: rgba(218 , 235, 235, 0.8);
+}
 </style>

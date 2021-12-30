@@ -1,89 +1,89 @@
 @font-face {
-    font-family: 'iconfont';  /* Project id 1916117 */
-    src: url('//at.alicdn.com/t/font_1916117_6p0y1g0x8gl.woff2?t=1638499132504') format('woff2'),
-         url('//at.alicdn.com/t/font_1916117_6p0y1g0x8gl.woff?t=1638499132504') format('woff'),
-         url('//at.alicdn.com/t/font_1916117_6p0y1g0x8gl.ttf?t=1638499132504') format('truetype');
-  }
+  font-family: 'iconfont';  /* Project id 1916117 */
+  src: url('//at.alicdn.com/t/font_1916117_0hucw9cpr1v.woff2?t=1640253448741') format('woff2'),
+       url('//at.alicdn.com/t/font_1916117_0hucw9cpr1v.woff?t=1640253448741') format('woff'),
+       url('//at.alicdn.com/t/font_1916117_0hucw9cpr1v.ttf?t=1640253448741') format('truetype');
+}
 
 .iconfont {
-    font-family: "iconfont" !important;
-    font-size: 0.16rem;
-    font-style: normal;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-stroke-width: 0.2px;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: "iconfont" !important;
+  font-size: 0.16rem;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .el-input {
-    line-height: 0 !important;
+  line-height: 0 !important;
 }
 
 .el-message__icon {
-    font-size: 16px !important;
+  font-size: 16px !important;
 }
 
 .hide {
-    display: none;
+  display: none;
 }
 
 .red {
-    color: red;
+  color: red;
 }
 
 .red1 {
-    color: #ff7b7b;
+  color: #ff7b7b;
 }
 
 .errorColor {
-    color: #f1592a !important;
+  color: #f1592a !important;
 }
 
 .weight {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .gang {
-    color: #999;
+  color: #fff;
 }
 
 /* 去除a 标签样式 */
 
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 /*正常的未被访问过的链接*/
 
 a:link {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 /*已经访问过的链接*/
 
 a:visited {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 /*鼠标划过(停留)的链接*/
 
 a:hover {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 /* 正在点击的链接*/
 
 a:active {
-    text-decoration: none;
+  text-decoration: none;
 }
 .zindex1 {
-    z-index: 1 !important;
+  z-index: 1 !important;
 }
 .el-dropdown-menu {
-    text-align: center;
+  text-align: center;
 }
 
 @media screen and (max-width: 900px) {
-    .width9 {
-        width: 90% !important;
-    }
+  .width9 {
+    width: 90% !important;
+  }
 }

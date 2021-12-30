@@ -416,9 +416,6 @@ export default {
 /deep/.tox-tinymce {
   border: 0;
   height: calc(100% - 1rem) !important;
-  .tox-edit-area__iframe {
-    background-color: transparent;
-  }
 }
 .note-edit {
   width: 100%;

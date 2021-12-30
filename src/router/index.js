@@ -250,6 +250,15 @@ const routes = [{
         import("../views/games/Jigsaws.vue")
 },
 {
+    path: "/2048",
+    name: "A2048",
+    meta: {
+        title: "2048"
+    },
+    component: () =>
+        import("../views/games/2048.vue")
+},
+{
     path: "/filetransfer",
     name: "filetransfer",
     meta: {

@@ -40,25 +40,34 @@
     </div>
     <div class="pop-rank" v-if="isShowRank" ref="popRank">
       <div class="mask" @click="hideRank"></div>
-      <el-tabs
-        class="rank-content"
-        tab-position="left"
-        type="border-card"
-        v-model="activeRankName"
-      >
-        <el-tab-pane
-          v-for="(item, index) in mode"
-          :key="index"
-          :label="item.text"
-          :name="item.name"
+      <template v-if="mode">
+        <el-tabs
+          class="rank-content"
+          tab-position="left"
+          type="border-card"
+          v-model="activeRankName"
         >
-          <el-table :data="rankData[index].data" stripe style="width: 100%">
-            <el-table-column prop="name" label="用户名"></el-table-column>
-            <el-table-column prop="score" label="记录"></el-table-column>
-            <el-table-column prop="time" label="时间"></el-table-column>
-          </el-table>
-        </el-tab-pane>
-      </el-tabs>
+          <el-tab-pane
+            v-for="(item, index) in mode"
+            :key="index"
+            :label="item.text"
+            :name="item.name"
+          >
+            <el-table :data="rankData[index].data" stripe style="width: 100%">
+              <el-table-column prop="name" label="用户名"></el-table-column>
+              <el-table-column prop="score" label="记录"></el-table-column>
+              <el-table-column prop="time" label="时间"></el-table-column>
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
+      </template>
+      <template v-else>
+        <el-table :data="rankData.data" stripe style="width: 100%">
+          <el-table-column prop="name" label="用户名"></el-table-column>
+          <el-table-column prop="score" label="记录"></el-table-column>
+          <el-table-column prop="time" label="时间"></el-table-column>
+        </el-table>
+      </template>
     </div>
   </div>
 </template>

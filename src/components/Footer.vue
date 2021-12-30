@@ -45,25 +45,31 @@ export default {
 
 <style scoped lang="less">
 .container {
+  width: 50%;
   margin: 0 auto;
   text-align: center;
   position: absolute;
   bottom: 0.2rem;
   left: 0;
   right: 0;
-  color: #333;
+  color: #fff;
   font-size: 0.1rem;
   display: flex;
   flex-direction: row;
   text-align: center;
   justify-content: center;
   flex-wrap: wrap;
-  div {
-    margin: 0 0.1rem;
+  z-index: 2;
+  & > div {
+    margin: 0 0.15rem;
   }
   a {
-    color: #333 !important;
+    color: #fff;
     cursor: pointer;
+    transition: all 0.2s;
+    &:hover{
+      color: #333;
+    }
   }
 }
 </style>

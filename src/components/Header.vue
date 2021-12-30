@@ -1,73 +1,51 @@
 <template>
   <div>
-    <div class="container">
+    <div class="header-container">
       <div class="left">
-        <div
-          class="item home"
-          id="home"
-        >
-          <a href="/"><i class="iconfont">&#xe632;</i></a>
+        <div class="item home" id="home">
+          <a href="/"><i class="iconfont">&#xe7b9;</i></a>
         </div>
+      </div>
+      <div class="center">
+        <ul class="menu">
+          <li
+            :class="item.children ? 'multinav' : ''"
+            v-for="(item, index) in devText"
+            :key="index"
+          >
+            <a v-if="item.path" :href="item.path">{{ item.text }}</a>
+            <a v-else>
+              {{ item.text }}
+              <ul class="nav-list">
+                <li v-for="(nav, i) in item.children" :key="i">
+                  <a :href="nav.path">{{ nav.text }}</a>
+                </li>
+              </ul>
+            </a>
+          </li>
+        </ul>
       </div>
       <div class="right">
-        <div
-          class="item"
-          :style="{ backgroundImage: `url(${img})` }"
-        >
-          <a href="MessageBoard">留言板</a>
+        <div class="login un-login" v-if="!this.$store.state.user">
+          <a href="/login"><i class="iconfont">&#xe60f;</i></a>
         </div>
-        <div
-          class="item"
-          :style="{ backgroundImage: `url(${img})` }"
-        >
-          <a href="subscribe">女神日记</a>
+        <div class="login" v-if="this.$store.state.user">
+          <el-dropdown>
+            <span class="el-dropdown-link">
+              <i class="iconfont">&#xe60f;</i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item><a href="/info">个人信息</a></el-dropdown-item>
+              <el-dropdown-item disabled>记事本</el-dropdown-item>
+              <el-dropdown-item
+                ><a href="/subscribe">我的订阅</a></el-dropdown-item
+              >
+              <a @click="signOut">
+                <el-dropdown-item divided>退出</el-dropdown-item>
+              </a>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
-        <div
-          class="item"
-          :style="{ backgroundImage: `url(${img})` }"
-        >
-          <a href="v">看一看</a>
-        </div>
-        <div
-          class="item"
-          :style="{ backgroundImage: `url(${img})` }"
-        >
-          <a
-            href="adarkroom"
-            target="_blank"
-          >小黑屋</a>
-        </div>
-        <div
-          class="item"
-          :style="{ backgroundImage: `url(${img})` }"
-          style="visibility: hidden;"
-        >
-          菜单6
-        </div>
-      </div>
-      <div
-        class="login"
-        v-if="this.$store.state.user"
-      >
-        <el-dropdown>
-          <span class="el-dropdown-link">
-            <i class="iconfont">&#xe666;</i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><a href="/info">个人信息</a></el-dropdown-item>
-            <el-dropdown-item disabled>记事本</el-dropdown-item>
-            <el-dropdown-item><a href="/subscribe">我的订阅</a></el-dropdown-item>
-            <a @click="signOut">
-              <el-dropdown-item divided>退出</el-dropdown-item>
-            </a>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-      <div
-        class="login un-login"
-        v-if="!this.$store.state.user"
-      >
-        <a href="/login"><i class="iconfont">&#xe666;</i></a>
       </div>
     </div>
   </div>
@@ -83,6 +61,60 @@ export default {
     return {
       img: require("@/assets/imgs/cloud.png"),
       login: this.$store.state.user,
+      devText: [
+        { path: "/DoglickingDiary", text: "舔狗日记" },
+        { path: "/MessageBoard", text: "留言板" },
+        { path: "/Note", text: "舔狗笔记" },
+        {
+          text: "摸鱼游戏",
+          children: [
+            {
+              poster: require("@/assets/imgs/games/adarkhome.jpeg"),
+              text: "小黑屋",
+              path: "/adarkroom",
+            },
+            {
+              poster: require("@/assets/imgs/games/saolei.jpeg"),
+              text: "扫雷",
+              path: "/saolei",
+            },
+            {
+              poster: require("@/assets/imgs/games/jigsaws.jpg"),
+              text: "拼图",
+              path: "/jigsaws",
+            },
+            {
+              poster: require("@/assets/imgs/games/jigsaws.jpg"),
+              text: "2048",
+              path: "/2048",
+            },
+          ],
+        },
+        {
+          text: "影音图文",
+          children: [
+            { path: "/v", text: "看一看" },
+            { path: "/Music", text: "听一听" },
+            { path: "/wallpaper", text: "必应壁纸" },
+            { path: "/EveryDayText", text: "每日一文" },
+            { path: "/Wyy", text: "网易云音乐API" },
+          ],
+        },
+        {
+          text: "工具合集",
+          children: [
+            { path: "/Filetransfer", text: "小破传" },
+            { path: "/QRcodeCreate", text: "二维码生成" },
+            { path: "/ImageToTxt", text: "图片文字提取" },
+            { path: "/JsonFormat", text: "JSON格式化" },
+            { path: "/TimeFormat", text: "时间戳转换" },
+            { path: "/Base64", text: "图片转Base64" },
+            { path: "/ColorTransfer", text: "颜色代码转换" },
+            { path: "/PreviewFont", text: "字体预览" },
+          ],
+        },
+        // { path: "/", text: "正在开发" },
+      ],
     };
   },
   created() {},
@@ -95,11 +127,12 @@ export default {
 };
 </script>
 <style scoped lang="less">
-.container {
-  width: 100%;
+.header-container {
+  width: 80%;
   height: 1.2rem;
+  margin: 0 auto;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   color: #333;
   font-size: 0.18rem;
@@ -115,13 +148,14 @@ export default {
     color: #7c96b1;
   }
   .left {
-    width: 10%;
     font-size: 0.2rem;
     font-weight: bold;
     .home {
       i {
         font-size: 0.4rem;
         color: #74c0ef;
+        display: block;
+        animation: spin 1.5s infinite linear;
       }
     }
     .item {
@@ -132,14 +166,106 @@ export default {
       }
     }
   }
+  .center {
+    .menu {
+      padding: 0;
+      list-style: none;
+      & > li {
+        display: inline-block;
+        font-size: 0.22rem;
+        line-height: 2;
+        margin: 0 1em;
+        position: relative;
+        &::after {
+          content: "";
+          display: block;
+          width: 0;
+          height: 1px;
+          opacity: 0;
+          margin: 0 auto;
+          background-color: #74c0ef;
+          transition: all 0.1s;
+        }
+        &::before {
+          content: "";
+          display: block;
+          position: absolute;
+          top: 2em;
+          left: 50%;
+          width: 1px;
+          height: 0;
+          background-color: #74c0ef;
+        }
+        a {
+          color: #fff;
+          transition: all 0.1s;
+          cursor: pointer;
+        }
+        .nav-list {
+          position: absolute;
+          font-size: 0.2rem;
+          width: 100%;
+          list-style: none;
+          padding-left: 100%;
+          padding-top: 0.3rem;
+          box-sizing: border-box;
+          &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0.5rem;
+            left: 50%;
+            width: 0;
+            height: 1px;
+            background-color: #74c0ef;
+          }
+          li {
+            width: 10em;
+            padding-left: 0.5em;
+            opacity: 0;
+            transform: scaleY(0);
+            position: relative;
+            z-index: 2;
+            a {
+              &:hover {
+                text-shadow: 0 0 0.1rem rgba(255, 255, 255, 1),
+                  0 0 0.5rem rgba(255, 255, 255, 0.8);
+              }
+            }
+          }
+        }
+        &:hover {
+          a {
+            color: #74c0ef;
+          }
+          &::after {
+            opacity: 1;
+            width: 100%;
+          }
+        }
+        &.multinav {
+          &:hover {
+            &::before {
+              height: 0.5rem;
+              transition: height 0.1s linear 0.1s;
+            }
+            .nav-list {
+              &::before {
+                width: 50%;
+                transition: width 0.1s linear 0.2s;
+              }
+              li {
+                opacity: 1;
+                transform: scaleY(1);
+                transition: all 0.1s linear 0.2s;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   .right {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    height: 0.8rem;
-    line-height: 0.9rem;
-    text-align: center;
-    color: #fff;
     div {
       cursor: pointer;
     }
@@ -157,21 +283,33 @@ export default {
     }
   }
   .login {
-    height: 30px;
-    position: absolute;
-    right: 1rem;
-    top: 0.5rem;
-    cursor: pointer;
     i {
-      font-size: 0.3rem;
+      font-size: 0.32rem;
       color: #74c0ef;
     }
   }
   .un-login {
     i {
-      font-size: 0.3rem;
+      font-size: 0.32rem;
       color: #757575;
     }
+  }
+}
+@-webkit-keyframes spin {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 /deep/.el-dropdown-menu__item {
@@ -180,7 +318,7 @@ export default {
   }
 }
 @media screen and (max-width: 900px) {
-  .container {
+  .header-container {
     padding-left: 5%;
     .left {
       font-size: 0.22rem;
