@@ -160,7 +160,7 @@ export default {
       if (Math.abs(endX - this.startX) > 10) {
         //滑动方向
         if (Math.abs(endY - this.startY) > 30) {
-          // console.log("y方向偏移太多，不让你滑了")
+          console.log("y方向偏移太多，不让你滑了")
           return;
         } else {
           direction = endX - this.startX > 0 ? "right" : "left";
@@ -169,14 +169,14 @@ export default {
         return;
       }
       //用户做了合法的滑动操作
-      // console.log('方向'+direction)
+      console.log('方向'+direction)
       if (direction === "left") {
         if (this.currents + 1 === this.list.length) {
           return;
         } else {
           this.currents++;
           //触发事件
-          this.$emit("getData");
+          // this.$emit("getData");
         }
       }
       if (direction === "right") {
@@ -185,7 +185,7 @@ export default {
         } else {
           this.currents--;
           //触发事件
-          this.$emit("getData");
+          // this.$emit("getData");
         }
       }
     },
@@ -222,8 +222,18 @@ export default {
       arr.splice(i + 1, 1);
       arr.push(0);
       this.score += this.numArr[arr[i] - 1];
-      if (i > 10) {
-        this.gameSuccess();
+      if (arr[i] > 10) {
+        this.$confirm(
+          "恭喜您已成功挑战" + this.numArr[arr[i]] + "，是否继续游戏？",
+          "",
+          {
+            confirmButtonText: "结束游戏",
+            cancelButtonText: "继续游戏",
+            center: true,
+          }
+        ).then(() => {
+          this.gameSuccess();
+        });
       }
       return arr;
     },
@@ -343,7 +353,7 @@ export default {
       this.status = 2;
       this.$http.post("game/gameEnd/" + this.userid).then((res) => {
         this.$message({
-          message: "恭喜你，挑战成功",
+          message: "已为您保存记录" + this.score,
           type: "success",
         });
       });

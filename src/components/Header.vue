@@ -209,6 +209,8 @@ export default {
           padding-left: 100%;
           padding-top: 0.3rem;
           box-sizing: border-box;
+          opacity: 0;
+          transform: scaleY(0);
           &::before {
             content: "";
             display: block;
@@ -222,8 +224,6 @@ export default {
           li {
             width: 10em;
             padding-left: 0.5em;
-            opacity: 0;
-            transform: scaleY(0);
             position: relative;
             z-index: 2;
             a {
@@ -250,14 +250,12 @@ export default {
               transition: height 0.1s linear 0.1s;
             }
             .nav-list {
+              opacity: 1;
+              transform: scaleY(1);
+              transition: opacity 0.1s linear 0.2s;
               &::before {
                 width: 50%;
                 transition: width 0.1s linear 0.2s;
-              }
-              li {
-                opacity: 1;
-                transform: scaleY(1);
-                transition: all 0.1s linear 0.2s;
               }
             }
           }

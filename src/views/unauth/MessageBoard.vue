@@ -27,24 +27,21 @@
                 ref="{{item.id}}"
               >
                 <div class="name">
-                  <img :src="
-                      require('../../assets/imgs/head/' +
-                        getHeadImgIndex(index) +
-                        '.png')
-                    " />
+                  <img
+                    :src="
+                      item.headImg
+                        ? item.headImg
+                        : require('../../assets/imgs/head/' +
+                            getHeadImgIndex(index) +
+                            '.png')
+                    "
+                  />
                 </div>
-                <div
-                  class="text"
-                  v-html="item.content"
-                ></div>
+                <div class="text" v-html="item.content"></div>
 
                 <!-- 操作 -->
                 <div class="operation">
-                  <div
-                    class="reply"
-                    id="reply"
-                    @click="dialogForm(item.id)"
-                  >
+                  <div class="reply" id="reply" @click="dialogForm(item.id)">
                     回复
                   </div>
                   <div
@@ -61,10 +58,7 @@
                   </div>
                 </div>
                 <!-- 回复 -->
-                <div
-                  class="reply-list"
-                  v-if="item.reply"
-                >
+                <div class="reply-list" v-if="item.reply">
                   <div
                     class="reply-item"
                     v-for="(replyIitem, replyIndex) in item.reply"
@@ -72,11 +66,13 @@
                     ref="{{replyIitem.id}}"
                   >
                     <div class="name">
-                      <img :src="
+                      <img
+                        :src="
                           require('../../assets/imgs/head/' +
                             getHeadImgIndex(replyIndex) +
                             '.png')
-                        " />
+                        "
+                      />
                     </div>
                     <div class="reply">{{ replyIitem.content }}</div>
                     <div class="operation">
@@ -97,27 +93,15 @@
                 </div>
               </li>
             </ul>
-            <p
-              v-if="loading"
-              class="loading"
-            >加载中...</p>
-            <p
-              v-if="noMore"
-              class="no-more"
-            >没有更多了</p>
+            <p v-if="loading" class="loading">加载中...</p>
+            <p v-if="noMore" class="no-more">没有更多了</p>
           </happy-scroll>
         </div>
       </div>
       <div class="message">
-        <el-button
-          type="primary"
-          @click="dialogForm(null)"
-        >点击留言</el-button>
+        <el-button type="primary" @click="dialogForm(null)">点击留言</el-button>
       </div>
-      <el-dialog
-        title="请输入留言"
-        :visible.sync="dialogFormVisible"
-      >
+      <el-dialog title="请输入留言" :visible.sync="dialogFormVisible">
         <el-form>
           <el-form-item label>
             <!-- 回复框 -->
@@ -128,29 +112,19 @@
               autocomplete="off"
             ></el-input>
             <!-- 留言框 -->
-            <vue-tinymce
-              v-else
-              v-model="text"
-              :setting="setting"
-            />
+            <vue-tinymce v-else v-model="text" :setting="setting" />
           </el-form-item>
         </el-form>
-        <div
-          slot="footer"
-          class="dialog-footer"
-        >
+        <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="addMsg"
-            id="add-message"
-          >确 定</el-button>
+          <el-button type="primary" @click="addMsg" id="add-message"
+            >确 定</el-button
+          >
         </div>
       </el-dialog>
     </div>
     <Footer />
   </div>
-
 </template>
 <script>
 import Header from "@/components/Header.vue";
@@ -187,9 +161,7 @@ export default {
       },
     };
   },
-  created() {
-
-  },
+  created() {},
   computed: {
     disabled() {
       return this.loading || this.noMore;
@@ -277,8 +249,8 @@ export default {
   }
 
   .content {
-    width: 45%;
-    height: 62%;
+    width: 50%;
+    height: 60%;
     margin: 0 auto;
     .cr {
       width: 100%;
@@ -303,28 +275,25 @@ export default {
           line-height: 0.49rem;
         }
         .list {
-          width: 88%;
           margin: 0;
           padding: 0;
-          padding-left: 0.45rem;
+          padding-left: 0.6rem;
           .list-item {
-            position: relative;
-            margin-top: 0.45rem;
-            padding-bottom: 0.1rem;
-            padding-left: 0.06rem;
-            margin-right: 0.2rem;
-            width: 100%;
+            width: calc(100% - 0.6rem);
             list-style-type: none;
-            &:first-of-type {
-              margin-top: 0.2rem;
-            }
+            background: rgba(255, 255, 255, 0.8);
+            padding: 0.1rem;
+            margin-bottom: 0.2rem;
+            border-radius: 0.1rem;
+            position: relative;
             .name {
               font-size: 0.2rem;
               img {
-                width: 0.4rem;
+                width: 0.48rem;
                 position: absolute;
-                left: -0.42rem;
-                top: -0.1rem;
+                left: -0.6rem;
+                top: 0;
+                border-radius: 50%;
               }
             }
             .text {
@@ -353,11 +322,12 @@ export default {
               }
             }
             .reply-list {
-              padding: 0% 0.2rem 0% 0.65rem;
+              padding: 0% 0.2rem 0% 0.8rem;
               margin-top: 0.1rem;
               box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12),
                 0 0 6px rgba(0, 0, 0, 0.04);
               padding-top: 0.2rem;
+              border-radius: 0.1rem;
               .reply-item {
                 padding: 0.05rem 0;
                 position: relative;
@@ -381,7 +351,7 @@ export default {
     .message {
       margin: 0 auto;
       text-align: center;
-      margin-top: 0.3rem;
+      margin-top: 0.25rem;
       line-height: 0;
       button {
         width: 2rem;
